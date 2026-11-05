@@ -78,7 +78,7 @@ L'architecture retenue est une architecture **Web Intranet 3-Tiers Centralisée 
 | M2 | Congés, Absences, Circuits de Validation & Portails (Lot 2) | Congés, workflows de validation, soldes atomiques, anti-concurrence, portails par rôle et tableaux de bord | M1 | COMPLETED (PASS unanime) |
 | M3 | Carrières, Promotions, Formation & Solde (Lot 3) | Avancement, promotions, positions statutaires, qualifications, notation, éléments de solde et exports | M1 | COMPLETED (PASS unanime) |
 | M4 | Planning Opérationnel, Discipline Cloisonnée & Documents (Lot 4) | Planning en brigades, remplacements, discipline étanche, aptitude administrative sans données médicales, génération PDF | M1, M2 | COMPLETED (PASS unanime) |
-| M5 | Recette E2E, Durcissement & Livraison Finale | Phase 1 (100% tests E2E Tiers 1-4), Phase 2 (Hardening Tier 5), guides docs/10 à docs/14, backup/restore testé | M1, M2, M3, M4 | IN_PROGRESS |
+| M5 | Recette E2E, Durcissement & Livraison Finale | Phase 1 (100% tests E2E Tiers 1-4), Phase 2 (Hardening Tier 5), guides docs/10 à docs/14, backup/restore testé | M1, M2, M3, M4 | COMPLETED (PASS unanime) |
 
 ---
 
