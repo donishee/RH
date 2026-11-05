@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Direction des Ressources Humaines — Portail RH — SIRH Police Djiboutienne</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="en-tete-republicain">
+    <div class="marque-institution">
+      <div class="logo-police">PND</div>
+      <div class="titre-systeme">
+        <h1>Police Nationale de Djibouti</h1>
+        <p>Direction Générale — Direction des Ressources Humaines (DRH)</p>
+      </div>
+    </div>
+    <div id="profil-utilisateur-connecte" class="bloc-profil"></div>
+  </header>
+
+  <div class="disposition-principale">
+    <nav id="menu-navigation-laterale" class="barre-navigation"></nav>
+
+    <main class="contenu-principal">
+      <div class="entete-page">
+        <div>
+          <h2>Administration Centrale des Congés et des Effectifs</h2>
+          <p>Supervision nationale des présences, validation finale des congés et gestion des soldes statutaires</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <a href="/maquette_planning_commandement_m4.html" class="bouton bouton-secondaire bouton-petit" style="text-decoration: none;">📅 Planning 24/7</a>
+          <a href="/maquette_discipline_cloisonnee_m4.html" class="bouton bouton-primaire bouton-petit" style="text-decoration: none; background: #6b1426;">⚖️ Discipline</a>
+          <a href="/maquette_aptitude_documents_m4.html" class="bouton bouton-secondaire bouton-petit" style="text-decoration: none;">📋 Aptitude & Documents</a>
+        </div>
+      </div>
+
+      <!-- 1. Tableaux de bord macroscopiques nationaux -->
+      <div class="grille-indicateurs">
+        <div class="carte-indicateur" style="border-top: 3px solid var(--police-primaire);">
+          <span class="libelle">Effectif national actif</span>
+          <span id="rh-kpi-effectif-national" class="valeur">-</span>
+          <span class="sous-texte">Policiers en service sur le territoire</span>
+        </div>
+        <div class="carte-indicateur" style="border-top: 3px solid var(--police-secondaire);">
+          <span class="libelle">Agents en congé ce jour</span>
+          <span id="rh-kpi-en-conge-national" class="valeur">-</span>
+          <span class="sous-texte">Toutes catégories confondues</span>
+        </div>
+        <div class="carte-indicateur" style="border-top: 3px solid var(--alerte-texte);">
+          <span class="libelle">En attente de validation RH</span>
+          <span id="rh-kpi-en-attente-rh" class="valeur" style="color: var(--alerte-texte);">-</span>
+          <span class="sous-texte">Demandes déjà visées par les chefs</span>
+        </div>
+        <div class="carte-indicateur" style="border-top: 3px solid var(--succes-texte);">
+          <span class="libelle">Taux de présence national</span>
+          <span id="rh-kpi-taux-national" class="valeur" style="color: var(--succes-texte);">-</span>
+          <span class="sous-texte">Capacité opérationnelle globale</span>
+        </div>
+      </div>
+
+      <!-- Graphiques CSS purs : Répartition nationale des absences -->
+      <div class="panneau">
+        <div class="panneau-entete">
+          <h3>Ventilation des absences par typologie légale (Effectifs nationaux)</h3>
+        </div>
+        <div class="diagramme-barres-repartition">
+          <div class="element-barre">
+            <div class="en-tete-barre">
+              <span>Congés annuels ordinaires de repos (30 j)</span>
+              <strong id="barre-pct-annuel">70%</strong>
+            </div>
+            <div class="piste-barre">
+              <div id="remplissage-annuel" class="remplissage-barre" style="width: 70%; background-color: var(--police-secondaire);"></div>
+            </div>
+          </div>
+          <div class="element-barre">
+            <div class="en-tete-barre">
+              <span>Congés de maladie ordinaire (Arrêt médical 48h)</span>
+              <strong id="barre-pct-maladie">15%</strong>
+            </div>
+            <div class="piste-barre">
+              <div id="remplissage-maladie" class="remplissage-barre" style="width: 15%; background-color: var(--alerte-texte);"></div>
+            </div>
+          </div>
+          <div class="element-barre">
+            <div class="en-tete-barre">
+              <span>Événements familiaux statutaires</span>
+              <strong id="barre-pct-famille">10%</strong>
+            </div>
+            <div class="piste-barre">
+              <div id="remplissage-famille" class="remplissage-barre" style="width: 10%; background-color: var(--police-or);"></div>
+            </div>
+          </div>
+          <div class="element-barre">
+            <div class="en-tete-barre">
+              <span>Permissions exceptionnelles de courte durée</span>
+              <strong id="barre-pct-permission">5%</strong>
+            </div>
+            <div class="piste-barre">
+              <div id="remplissage-permission" class="remplissage-barre" style="width: 5%; background-color: var(--texte-clair);"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. File nationale de validation définitive des congés -->
+      <div class="panneau">
+        <div class="panneau-entete">
+          <h3>Demandes visées en attente d'arbitrage et de validation définitive DRH (<span id="compteur-file-rh">0</span>)</h3>
+          <button class="bouton bouton-secondaire bouton-petit" onclick="chargerFileValidationRH()">🔄 Actualiser la file</button>
+        </div>
+
+        <div id="alerte-concurrence-rh" class="alerte alerte-avertissement" style="display: none; margin-bottom: 1rem;"></div>
+
+        <div class="tableau-conteneur">
+          <table class="tableau-donnees">
+            <thead>
+              <tr>
+                <th>Date avis chef</th>
+                <th>Unité territoriale</th>
+                <th>Policier demandeur</th>
+                <th>Type d'absence</th>
+                <th>Période</th>
+                <th>Durée</th>
+                <th>Motif circonstancié</th>
+                <th>Version</th>
+                <th>Décision définitive</th>
+              </tr>
+            </thead>
+            <tbody id="corps-tableau-file-rh">
+              <tr>
+                <td colspan="9" style="text-align: center; color: var(--texte-clair); padding: 1.5rem;">
+                  Chargement des demandes en attente de validation RH...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 3. Module de recherche et consultation des soldes par agent -->
+      <div class="panneau">
+        <div class="panneau-entete">
+          <h3>Recherche et consultation des soldes individuels par agent</h3>
+        </div>
+        <div style="display: flex; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap;">
+          <input type="text" id="recherche-solde-agent" class="champ-saisie" placeholder="Saisir un identifiant ou matricule (ex. agt-001)..." style="max-width: 400px;" value="agt-001">
+          <button class="bouton bouton-secondaire" onclick="rechercherSoldeAgent()">Consulter les compteurs</button>
+        </div>
+        <div id="resultat-recherche-solde" style="display: none;"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modale de validation finale RH avec gestion de la concurrence -->
+  <div id="modale-validation-rh" class="fond-modale" style="display: none;">
+    <div class="boite-modale">
+      <div class="entete-modale">
+        <h3 id="titre-modale-rh">Validation définitive du congé (DRH)</h3>
+        <button class="bouton-fermer-modale" onclick="fermerModaleRH()">✕</button>
+      </div>
+      <div class="corps-modale">
+        <div id="details-demande-rh" style="background:#F8FAFC; border:1px solid var(--bordure); padding:0.75rem; border-radius:4px; margin-bottom:1rem; font-size:0.9rem;"></div>
+        
+        <div class="groupe-formulaire">
+          <label>Décision finale de la DRH *</label>
+          <div style="display: flex; gap: 1rem; margin-top: 0.35rem;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="radio" name="decision-rh" value="VALIDE" checked onchange="toggleMotifRefusRH(false)">
+              <span style="color: var(--succes-texte); font-weight: 700;">Validation Définitive &amp; Débit du solde</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="radio" name="decision-rh" value="REFUS" onchange="toggleMotifRefusRH(true)">
+              <span style="color: var(--erreur-texte); font-weight: 700;">Refus DRH (Restitution du solde)</span>
+            </label>
+          </div>
+        </div>
+
+        <div id="zone-motif-refus-rh" class="groupe-formulaire" style="display: none;">
+          <label for="select-motif-statutaire-rh">Motif réglementaire de refus *</label>
+          <select id="select-motif-statutaire-rh" class="champ-selection" style="margin-bottom: 0.5rem;">
+            <option value="NÉCESSITÉ IMPÉRIEUSE DE SERVICE NATIONAL">Nécessité impérieuse de service national</option>
+            <option value="INCOHÉRENCE STATUTAIRE OU PIÈCE MANQUANTE">Incohérence statutaire ou pièce manquante</option>
+            <option value="DÉPASSEMENT DES QUOTAS ANNUELS">Dépassement des quotas annuels autorisés</option>
+            <option value="DÉCISION DU DIRECTEUR GÉNÉRAL">Décision expresse du Directeur Général de la Police</option>
+          </select>
+          <label for="texte-justification-refus-rh">Commentaire motivé obligatoire *</label>
+          <textarea id="texte-justification-refus-rh" class="champ-texte" rows="3" placeholder="Justifiez obligatoirement la décision de rejet de la DRH..."></textarea>
+        </div>
+      </div>
+      <div class="pied-modale">
+        <button class="bouton bouton-secondaire" onclick="fermerModaleRH()">Abandonner</button>
+        <button id="bouton-confirmer-validation-rh" class="bouton bouton-primaire" onclick="executerValidationRH()">
+          Confirmer la décision DRH
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+  <script>
+    let demandeSelectionneeRH = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await chargerIndicateursNationaux();
+      await chargerFileValidationRH();
+      await rechercherSoldeAgent();
+    });
+
+    async function chargerIndicateursNationaux() {
+      try {
+        const res = await window.SIRH_API.obtenirStatistiquesConges();
+        const s = res.statistiques || {};
+
+        document.getElementById('rh-kpi-effectif-national').textContent = s.effectif_total || 5;
+        document.getElementById('rh-kpi-en-conge-national').textContent = s.en_conge || 0;
+        document.getElementById('rh-kpi-en-attente-rh').textContent = s.en_attente_validation_rh || 0;
+        document.getElementById('rh-kpi-taux-national').textContent = `${s.taux_presence_pct || 100}%`;
+      } catch (err) {
+        console.error('Erreur chargement indicateurs nationaux :', err);
+      }
+    }
+
+    async function chargerFileValidationRH() {
+      const tbody = document.getElementById('corps-tableau-file-rh');
+      const compteur = document.getElementById('compteur-file-rh');
+
+      try {
+        const res = await window.SIRH_API.listerDemandesConges({ statut: 'APPROUVE_CHEF_SERVICE' });
+        const demandes = res.demandes || [];
+        compteur.textContent = demandes.length;
+
+        if (demandes.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="9" style="text-align: center; color: var(--texte-clair); padding: 1.5rem;">
+                Aucune demande en attente de validation RH définitive.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = demandes.map(d => `
+          <tr>
+            <td>${formaterDateFr(d.date_decision_chef || d.cree_le)}</td>
+            <td><strong>${d.unite_nom || 'Unité territoriale'}</strong></td>
+            <td>
+              <strong>${d.prenom_agent || ''} ${d.nom_agent || ''}</strong><br>
+              <small style="color: var(--texte-clair); font-size: 0.75rem;">Matricule : ${d.matricule || d.agent_id}</small>
+            </td>
+            <td>${d.type_conge_libelle || d.type_conge_code}</td>
+            <td>Du ${formaterDateFr(d.date_debut)} au ${formaterDateFr(d.date_fin)}</td>
+            <td><strong>${Number(d.nombre_jours).toFixed(1)} j</strong></td>
+            <td style="max-width: 200px; font-size: 0.85rem;">${d.motif || '-'}</td>
+            <td><span class="badge-role" style="font-size: 0.75rem;">v${d.version_concurrence || d.version_optimiste}</span></td>
+            <td>
+              <button class="bouton bouton-primaire bouton-petit" onclick="ouvrirModaleRH('${d.id}', ${d.version_concurrence || d.version_optimiste})">
+                Arbitrer (DRH)
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="9" style="text-align: center; color: var(--erreur-texte); padding: 1.5rem;">
+              Impossible de charger la file DRH : ${err.message}
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    function formaterDateFr(chaine) {
+      if (!chaine) return '-';
+      try {
+        const d = new Date(chaine);
+        return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      } catch (e) {
+        return chaine;
+      }
+    }
+
+    async function ouvrirModaleRH(demandeId, versionConcurrence) {
+      demandeSelectionneeRH = { id: demandeId, version: versionConcurrence };
+      const zoneDetails = document.getElementById('details-demande-rh');
+      zoneDetails.innerHTML = 'Chargement des détails...';
+
+      try {
+        const res = await window.SIRH_API.listerDemandesConges();
+        const d = (res.demandes || []).find(item => item.id === demandeId);
+        if (d) {
+          demandeSelectionneeRH.version = d.version_concurrence || d.version_optimiste;
+          zoneDetails.innerHTML = `
+            <strong>Demandeur :</strong> ${d.prenom_agent || ''} ${d.nom_agent || ''} (${d.matricule || d.agent_id})<br>
+            <strong>Unité :</strong> ${d.unite_nom || '-'}<br>
+            <strong>Période demandée :</strong> Du ${formaterDateFr(d.date_debut)} au ${formaterDateFr(d.date_fin)} (${Number(d.nombre_jours).toFixed(1)} jours)<br>
+            <strong>Statut actuel :</strong> Visé favorablement par le Chef de service (v${demandeSelectionneeRH.version})
+          `;
+        }
+      } catch (e) {
+        zoneDetails.innerHTML = `Demande Réf: DEM-${demandeId.slice(0, 8)} (v${versionConcurrence})`;
+      }
+
+      document.querySelector('input[name="decision-rh"][value="VALIDE"]').checked = true;
+      toggleMotifRefusRH(false);
+      document.getElementById('texte-justification-refus-rh').value = '';
+
+      document.getElementById('modale-validation-rh').style.display = 'flex';
+    }
+
+    function fermerModaleRH() {
+      demandeSelectionneeRH = null;
+      document.getElementById('modale-validation-rh').style.display = 'none';
+    }
+
+    function toggleMotifRefusRH(afficherRefus) {
+      document.getElementById('zone-motif-refus-rh').style.display = afficherRefus ? 'block' : 'none';
+    }
+
+    async function executerValidationRH() {
+      if (!demandeSelectionneeRH) return;
+
+      const decision = document.querySelector('input[name="decision-rh"]:checked').value;
+      const motifStatutaire = document.getElementById('select-motif-statutaire-rh').value;
+      const explication = document.getElementById('texte-justification-refus-rh').value.trim();
+
+      let motifRefusComplet = undefined;
+      if (decision === 'REFUS') {
+        if (!explication) {
+          alert('Le motif de refus est obligatoire pour toute décision de rejet de la DRH.');
+          return;
+        }
+        motifRefusComplet = `${motifStatutaire} : ${explication}`;
+      }
+
+      const btn = document.getElementById('bouton-confirmer-validation-rh');
+      btn.disabled = true;
+      btn.textContent = 'Enregistrement en cours...';
+
+      const zoneAlerte = document.getElementById('alerte-concurrence-rh');
+      zoneAlerte.style.display = 'none';
+
+      try {
+        await window.SIRH_API.validerDemandeCongeRH(demandeSelectionneeRH.id, {
+          decision,
+          motif_refus: motifRefusComplet,
+          version_concurrence: demandeSelectionneeRH.version
+        });
+
+        fermerModaleRH();
+        await chargerIndicateursNationaux();
+        await chargerFileValidationRH();
+        await rechercherSoldeAgent();
+      } catch (err) {
+        fermerModaleRH();
+
+        // Gestion transparente du conflit de concurrence HTTP 409
+        if (err.status === 409 || err.code === 409 || (err.message && err.message.includes('409'))) {
+          zoneAlerte.className = 'alerte alerte-avertissement';
+          zoneAlerte.innerHTML = `
+            <strong>⚠️ Conflit de concurrence détecté :</strong>
+            Cette demande de congé a déjà été instruite par un autre gestionnaire RH. La file d'attente a été actualisée automatiquement sans altération de données.
+          `;
+          zoneAlerte.style.display = 'block';
+        } else {
+          zoneAlerte.className = 'alerte alerte-erreur';
+          zoneAlerte.textContent = err.message || 'Une erreur est survenue lors de la validation.';
+          zoneAlerte.style.display = 'block';
+        }
+
+        await chargerFileValidationRH();
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Confirmer la décision DRH';
+      }
+    }
+
+    async function rechercherSoldeAgent() {
+      const saisie = document.getElementById('recherche-solde-agent').value.trim();
+      const zoneResultat = document.getElementById('resultat-recherche-solde');
+
+      if (!saisie) return;
+
+      try {
+        const res = await window.SIRH_API.obtenirSoldesConges(saisie);
+        const s = res.solde;
+        const agt = res.agent;
+
+        if (!s) {
+          zoneResultat.innerHTML = `<div class="alerte alerte-avertissement">Aucun solde trouvé pour cet agent.</div>`;
+          zoneResultat.style.display = 'block';
+          return;
+        }
+
+        const invarianceVerifiee = (Number(s.jours_pris) + Number(s.jours_en_attente) + Number(s.jours_restants)) === (Number(s.jours_acquis) + Number(s.jours_reportes));
+
+        zoneResultat.innerHTML = `
+          <div style="background: #F8FAFC; border: 1px solid var(--bordure); border-radius: var(--rayon-bord); padding: 1.25rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap;">
+              <div>
+                <h4 style="font-size: 1.1rem; color: var(--police-primaire);">${agt?.prenom || ''} ${agt?.nom || 'Agent'} (${agt?.matricule || s.agent_id})</h4>
+                <p style="font-size: 0.85rem; color: var(--texte-secondaire);">Grade : ${agt?.grade_actuel || '-'} | Affectation : ${agt?.unite_actuelle_id || '-'}</p>
+              </div>
+              <div>
+                <span class="pastille-statut ${invarianceVerifiee ? 'statut-actif' : 'statut-inactif'}">
+                  ${invarianceVerifiee ? 'Invariance des soldes validée' : 'Anomalie arithmétique'}
+                </span>
+              </div>
+            </div>
+
+            <div class="grille-indicateurs" style="margin-bottom: 0;">
+              <div class="carte-indicateur">
+                <span class="libelle">Jours acquis</span>
+                <span class="valeur">${Number(s.jours_acquis).toFixed(1)} j</span>
+              </div>
+              <div class="carte-indicateur">
+                <span class="libelle">Jours reportés</span>
+                <span class="valeur">${Number(s.jours_reportes).toFixed(1)} j</span>
+              </div>
+              <div class="carte-indicateur">
+                <span class="libelle">Jours pris</span>
+                <span class="valeur" style="color: var(--texte-secondaire);">${Number(s.jours_pris).toFixed(1)} j</span>
+              </div>
+              <div class="carte-indicateur">
+                <span class="libelle">Jours en attente</span>
+                <span class="valeur" style="color: var(--alerte-texte);">${Number(s.jours_en_attente).toFixed(1)} j</span>
+              </div>
+              <div class="carte-indicateur" style="background: #F0FDF4;">
+                <span class="libelle" style="color: var(--succes-texte);">Solde disponible</span>
+                <span class="valeur" style="color: var(--succes-texte);">${Number(s.jours_restants).toFixed(1)} j</span>
+              </div>
+            </div>
+          </div>
+        `;
+        zoneResultat.style.display = 'block';
+      } catch (err) {
+        zoneResultat.innerHTML = `<div class="alerte alerte-erreur">${err.message || 'Agent introuvable.'}</div>`;
+        zoneResultat.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>

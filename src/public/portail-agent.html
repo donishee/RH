@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espace Policier — Portail Agent — SIRH Police Nationale de Djibouti</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- En-tête supérieur républicain standardisé -->
+  <header class="en-tete-republicain">
+    <div class="marque-institution">
+      <div class="logo-police">PND</div>
+      <div class="titre-systeme">
+        <h1>Police Nationale de Djibouti</h1>
+        <p>Espace Personnel en Libre-Service de l'Agent</p>
+      </div>
+    </div>
+    <div id="profil-utilisateur-connecte" class="bloc-profil"></div>
+  </header>
+
+  <div class="disposition-principale">
+    <nav id="menu-navigation-laterale" class="barre-navigation"></nav>
+
+    <main class="contenu-principal">
+      <div class="entete-page">
+        <div>
+          <h2>Mon Espace Agent</h2>
+          <p>Consultation de ma situation statutaire, de mes soldes et gestion de mes demandes d'absences</p>
+        </div>
+        <div>
+          <a href="/maquette_aptitude_documents_m4.html" class="bouton bouton-secondaire bouton-petit" style="text-decoration: none;">📄 Mes Attestations Officielles (PDF)</a>
+        </div>
+      </div>
+
+      <!-- 1. Fiche signalétique résumée de l'agent connecté -->
+      <div class="panneau" style="border-left: 4px solid var(--police-primaire);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <div class="logo-police" style="width: 54px; height: 54px; font-size: 20px;">PND</div>
+            <div>
+              <h3 id="agent-identite" style="font-size: 1.25rem; color: var(--police-primaire);">-</h3>
+              <p style="font-size: 0.85rem; color: var(--texte-secondaire);">
+                Matricule : <strong id="agent-matricule" class="badge-role" style="font-size: 0.75rem;">-</strong> | 
+                Grade : <span id="agent-grade" style="font-weight: 700;">-</span> | 
+                Échelon : <span id="agent-echelon">-</span>
+              </p>
+              <p style="font-size: 0.85rem; color: var(--texte-clair); margin-top: 0.2rem;">
+                Affectation courante : <strong id="agent-unite" style="color: var(--police-secondaire);">-</strong>
+              </p>
+            </div>
+          </div>
+          <div>
+            <span id="agent-statut" class="pastille-statut statut-actif">En activité</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Compteurs de soldes annuels (Jauges et chiffres clés) -->
+      <div class="grille-indicateurs">
+        <div class="carte-indicateur" style="border-top: 3px solid var(--police-secondaire);">
+          <span class="libelle">Droits annuels acquis</span>
+          <span id="solde-acquis" class="valeur">30,0 j</span>
+          <span class="sous-texte">Base statutaire (2,5 j / mois)</span>
+        </div>
+        <div class="carte-indicateur" style="border-top: 3px solid var(--police-or);">
+          <span class="libelle">Jours reportés (N-1)</span>
+          <span id="solde-reportes" class="valeur">0,0 j</span>
+          <span class="sous-texte">Plafond légal : 15 jours max</span>
+        </div>
+        <div class="carte-indicateur" style="border-top: 3px solid var(--texte-secondaire);">
+          <span class="libelle">Jours pris / validés</span>
+          <span id="solde-pris" class="valeur">0,0 j</span>
+          <span class="sous-texte">Décomptés définitivement</span>
+        </div>
+        <div class="carte-indicateur" style="border-top: 3px solid var(--alerte-texte);">
+          <span class="libelle">Jours en attente</span>
+          <span id="solde-attente" class="valeur">0,0 j</span>
+          <span class="sous-texte">Réservés sur demandes en cours</span>
+        </div>
+        <div class="carte-indicateur" style="border-top: 3px solid var(--succes-texte); background: #F0FDF4;">
+          <span class="libelle" style="color: var(--succes-texte);">Solde disponible restant</span>
+          <span id="solde-restant" class="valeur" style="color: var(--succes-texte);">30,0 j</span>
+          <span class="sous-texte">Disponible immédiatement</span>
+        </div>
+      </div>
+
+      <!-- 3. Formulaire de soumission dématérialisée de congé -->
+      <div class="panneau">
+        <div class="panneau-entete">
+          <h3>Nouvelle demande d'absence ou de congé</h3>
+          <span style="font-size: 0.8rem; color: var(--texte-clair);">Circuit : Visa Chef N+1 ➔ Validation DRH</span>
+        </div>
+
+        <div id="zone-alerte-formulaire" class="alerte" style="display: none;"></div>
+
+        <form id="formulaire-demande-conge">
+          <div class="grille-formulaire">
+            <div class="groupe-formulaire">
+              <label for="demande-type">Type de congé ou d'absence *</label>
+              <select id="demande-type" class="champ-selection" required onchange="adapterFormulaireSelonType()">
+                <option value="ANNUEL">Congé annuel ordinaire de repos (Déductible du solde)</option>
+                <option value="EXCEPTIONNEL">Permission exceptionnelle de courte durée (Max 48h)</option>
+                <option value="EVENEMENT_FAMILIAL">Événement familial statutaire (Mariage, Naissance, Décès)</option>
+                <option value="MALADIE_ORDINAIRE">Congé de maladie ordinaire (Arrêt médical sous 48h)</option>
+                <option value="MATERNITE">Congé de maternité / paternité / adoption</option>
+              </select>
+            </div>
+
+            <div class="groupe-formulaire">
+              <label for="demande-date-debut">Date de début *</label>
+              <input type="date" id="demande-date-debut" class="champ-saisie" required onchange="calculerDureeEstimee()">
+            </div>
+
+            <div class="groupe-formulaire">
+              <label for="demande-date-fin">Date de fin incluse *</label>
+              <input type="date" id="demande-date-fin" class="champ-saisie" required onchange="calculerDureeEstimee()">
+            </div>
+
+            <div class="groupe-formulaire">
+              <label for="demande-nb-jours">Nombre de jours décomptés *</label>
+              <input type="number" id="demande-nb-jours" class="champ-saisie" step="0.5" min="0.5" required>
+              <small id="aide-calcul-duree" style="color: var(--texte-clair); font-size: 0.75rem;">Calcul automatique indicatif</small>
+            </div>
+          </div>
+
+          <div id="avertissement-preavis" class="alerte alerte-avertissement" style="display: none; margin-top: 0.75rem;">
+            ⚠️ Préavis réglementaire : Un préavis minimal de 7 jours ouvrés est normalement requis pour les congés annuels.
+          </div>
+
+          <div class="groupe-formulaire" style="margin-top: 0.5rem;">
+            <label for="demande-motif">Motif circonstancié de la demande *</label>
+            <textarea id="demande-motif" class="champ-texte" rows="2" placeholder="Précisez la raison de votre demande d'absence..." required></textarea>
+          </div>
+
+          <div class="groupe-formulaire" id="zone-piece-jointe">
+            <label for="demande-justificatif">Référence ou intitulé de la pièce justificative numérisée</label>
+            <input type="text" id="demande-justificatif" class="champ-saisie" placeholder="Ex: Certificat médical n° 2026-14 ou Acte d'état civil">
+            <small style="color: var(--texte-clair); font-size: 0.75rem;">Transmission administrative sécurisée. Aucune mention diagnostique médicale autorisée.</small>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem;">
+            <button type="button" class="bouton bouton-secondaire" onclick="sauvegarderBrouillonLocal()">
+              💾 Enregistrer comme brouillon
+            </button>
+            <button type="button" id="bouton-soumettre-conge" class="bouton bouton-primaire" onclick="transmettreNouvelleDemande()">
+              📤 Transmettre la demande pour visa
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 4. Historique complet des demandes de l'agent -->
+      <div class="panneau">
+        <div class="panneau-entete">
+          <h3>Historique et suivi de mes demandes d'absences</h3>
+          <button class="bouton bouton-secondaire bouton-petit" onclick="chargerHistoriqueDemandes()">🔄 Actualiser</button>
+        </div>
+
+        <div class="tableau-conteneur">
+          <table class="tableau-donnees">
+            <thead>
+              <tr>
+                <th>Réf. demande</th>
+                <th>Type d'absence</th>
+                <th>Période demandée</th>
+                <th>Durée</th>
+                <th>Date transmission</th>
+                <th>Statut administratif</th>
+                <th>Motif / Commentaire hiérarchique</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="corps-tableau-mes-demandes">
+              <tr>
+                <td colspan="8" style="text-align: center; color: var(--texte-clair); padding: 1.5rem;">
+                  Chargement des demandes en cours...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modale d'annulation de demande -->
+  <div id="modale-annulation" class="fond-modale" style="display: none;">
+    <div class="boite-modale">
+      <div class="entete-modale">
+        <h3>Annulation d'une demande de congé</h3>
+        <button class="bouton-fermer-modale" onclick="fermerModaleAnnulation()">✕</button>
+      </div>
+      <div class="corps-modale">
+        <p style="margin-bottom: 0.75rem; font-size: 0.9rem;">
+          L'annulation d'une demande entraîne la restitution immédiate et intégrale des jours correspondants sur votre solde disponible.
+        </p>
+        <div class="groupe-formulaire">
+          <label for="champ-motif-annulation">Motif obligatoire de l'annulation *</label>
+          <textarea id="champ-motif-annulation" class="champ-texte" rows="3" placeholder="Indiquez obligatoirement la raison de l'annulation..." required></textarea>
+        </div>
+      </div>
+      <div class="pied-modale">
+        <button class="bouton bouton-secondaire" onclick="fermerModaleAnnulation()">Abandonner</button>
+        <button id="bouton-confirmer-annulation" class="bouton bouton-danger" onclick="confirmerAnnulationDemande()">
+          Confirmer l'annulation
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+  <script>
+    let demandeSelectionneePourAnnulation = null;
+    let soldeCourantRestant = 30.0;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await chargerProfilAgent();
+      await chargerSoldeAgent();
+      await chargerHistoriqueDemandes();
+      restaurerBrouillonLocal();
+    });
+
+    async function chargerProfilAgent() {
+      const session = window.SIRH_API.obtenirSessionLocale();
+      if (!session) return;
+
+      const agentId = session.agent_id || 'agt-001';
+      try {
+        const res = await window.SIRH_API.obtenirAgent(agentId);
+        const agt = res.agent;
+        if (agt) {
+          document.getElementById('agent-identite').textContent = `${agt.prenom} ${agt.nom}`;
+          document.getElementById('agent-matricule').textContent = agt.matricule;
+          document.getElementById('agent-grade').textContent = agt.grade_actuel;
+          document.getElementById('agent-echelon').textContent = `Échelon ${agt.echelon_actuel}`;
+          document.getElementById('agent-unite').textContent = agt.unite_nom || agt.unite_actuelle_id;
+        }
+      } catch (e) {
+        document.getElementById('agent-identite').textContent = session.nom_complet || session.identifiant;
+        document.getElementById('agent-matricule').textContent = session.matricule || 'PND-2020-00142';
+      }
+    }
+
+    async function chargerSoldeAgent() {
+      const session = window.SIRH_API.obtenirSessionLocale();
+      const agentId = session?.agent_id || 'agt-001';
+
+      try {
+        const res = await window.SIRH_API.obtenirSoldesConges(agentId);
+        const s = res.solde;
+        if (s) {
+          soldeCourantRestant = Number(s.jours_restants);
+          document.getElementById('solde-acquis').textContent = Number(s.jours_acquis).toFixed(1).replace('.', ',') + ' j';
+          document.getElementById('solde-reportes').textContent = Number(s.jours_reportes).toFixed(1).replace('.', ',') + ' j';
+          document.getElementById('solde-pris').textContent = Number(s.jours_pris).toFixed(1).replace('.', ',') + ' j';
+          document.getElementById('solde-attente').textContent = Number(s.jours_en_attente).toFixed(1).replace('.', ',') + ' j';
+          document.getElementById('solde-restant').textContent = soldeCourantRestant.toFixed(1).replace('.', ',') + ' j';
+        }
+      } catch (err) {
+        console.error('Erreur chargement solde :', err);
+      }
+    }
+
+    function calculerDureeEstimee() {
+      const d1Val = document.getElementById('demande-date-debut').value;
+      const d2Val = document.getElementById('demande-date-fin').value;
+      const champNb = document.getElementById('demande-nb-jours');
+      const zonePreavis = document.getElementById('avertissement-preavis');
+
+      if (!d1Val || !d2Val) return;
+
+      const d1 = new Date(d1Val);
+      const d2 = new Date(d2Val);
+
+      if (d2 >= d1) {
+        const nbJours = Math.round((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+        champNb.value = nbJours;
+
+        // Contrôle du préavis (7 jours)
+        const aujourdhui = new Date();
+        const diffPreavisMs = d1.getTime() - aujourdhui.getTime();
+        const joursPreavis = Math.floor(diffPreavisMs / (1000 * 60 * 60 * 24));
+        if (joursPreavis < 7) {
+          zonePreavis.style.display = 'block';
+        } else {
+          zonePreavis.style.display = 'none';
+        }
+      } else {
+        champNb.value = '';
+        zonePreavis.style.display = 'none';
+      }
+    }
+
+    function adapterFormulaireSelonType() {
+      const type = document.getElementById('demande-type').value;
+      const zonePJ = document.getElementById('zone-piece-jointe');
+      if (type === 'MALADIE_ORDINAIRE' || type === 'EVENEMENT_FAMILIAL') {
+        zonePJ.style.display = 'block';
+      } else {
+        zonePJ.style.display = 'block';
+      }
+    }
+
+    async function transmettreNouvelleDemande() {
+      const alerte = document.getElementById('zone-alerte-formulaire');
+      const btn = document.getElementById('bouton-soumettre-conge');
+      alerte.style.display = 'none';
+
+      const type = document.getElementById('demande-type').value;
+      const dateDebut = document.getElementById('demande-date-debut').value;
+      const dateFin = document.getElementById('demande-date-fin').value;
+      const nbJours = parseFloat(document.getElementById('demande-nb-jours').value);
+      const motif = document.getElementById('demande-motif').value.trim();
+
+      if (nbJours > soldeCourantRestant && type === 'ANNUEL') {
+        alerte.className = 'alerte alerte-erreur';
+        alerte.textContent = `Solde insuffisant : ${soldeCourantRestant} jours disponibles, ${nbJours} demandés.`;
+        alerte.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Transmission en cours...';
+
+      try {
+        await window.SIRH_API.soumettreDemandeConge({
+          type_conge_id: type,
+          date_debut: dateDebut,
+          date_fin: dateFin,
+          nombre_jours: nbJours,
+          motif
+        });
+
+        alerte.className = 'alerte alerte-succes';
+        alerte.textContent = 'Demande transmise avec succès au chef de service pour visa.';
+        alerte.style.display = 'block';
+
+        document.getElementById('formulaire-demande-conge').reset();
+        window.SIRH_BROUILLONS.purger('demande_conge');
+
+        await chargerSoldeAgent();
+        await chargerHistoriqueDemandes();
+      } catch (err) {
+        alerte.className = 'alerte alerte-erreur';
+        alerte.textContent = err.message || 'Une erreur est survenue lors de la transmission de la demande.';
+        alerte.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '📤 Transmettre la demande pour visa';
+      }
+    }
+
+    async function chargerHistoriqueDemandes() {
+      const tbody = document.getElementById('corps-tableau-mes-demandes');
+      try {
+        const res = await window.SIRH_API.listerDemandesConges();
+        const demandes = res.demandes || [];
+
+        if (demandes.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="8" style="text-align: center; color: var(--texte-clair); padding: 1.5rem;">
+                Aucune demande de congé enregistrée à ce jour.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = demandes.map(d => {
+          let badgeStatut = 'statut-inactif';
+          let libelleStatut = d.statut;
+
+          if (d.statut === 'SOUMIS') {
+            badgeStatut = 'statut-actif';
+            libelleStatut = 'Transmis (En attente chef)';
+          } else if (d.statut === 'APPROUVE_CHEF_SERVICE') {
+            badgeStatut = 'statut-actif';
+            libelleStatut = 'Visé chef (En attente DRH)';
+          } else if (d.statut === 'VALIDE_RH') {
+            badgeStatut = 'statut-actif';
+            libelleStatut = 'Validé définitivement';
+          } else if (d.statut === 'REFUSE') {
+            badgeStatut = 'statut-inactif';
+            libelleStatut = 'Refusé';
+          } else if (d.statut === 'ANNULE') {
+            badgeStatut = 'statut-inactif';
+            libelleStatut = 'Annulé';
+          }
+
+          const peutAnnuler = d.statut !== 'ANNULE' && d.statut !== 'REFUSE';
+
+          const motifRefus = d.motif_refus_rh || d.motif_refus_chef || d.motif_annulation || d.motif || '-';
+
+          return `
+            <tr>
+              <td><strong>DEM-${d.id.slice(0, 8).toUpperCase()}</strong></td>
+              <td>${d.type_conge_libelle || d.type_conge_code}</td>
+              <td>Du ${formaterDateFr(d.date_debut)} au ${formaterDateFr(d.date_fin)}</td>
+              <td><strong>${Number(d.nombre_jours).toFixed(1)} j</strong></td>
+              <td>${formaterDateFr(d.cree_le)}</td>
+              <td><span class="pastille-statut ${badgeStatut}">${libelleStatut}</span></td>
+              <td style="max-width: 250px; font-size: 0.85rem; color: var(--texte-secondaire);">${motifRefus}</td>
+              <td>
+                ${peutAnnuler ? `
+                  <button class="bouton bouton-secondaire bouton-petit" onclick="ouvrirModaleAnnulation('${d.id}')">
+                    Annuler
+                  </button>
+                ` : `<span style="color: var(--texte-clair); font-size: 0.8rem;">Clôturé</span>`}
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" style="text-align: center; color: var(--erreur-texte); padding: 1.5rem;">
+              Impossible de charger l'historique : ${err.message}
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    function formaterDateFr(chaine) {
+      if (!chaine) return '-';
+      try {
+        const d = new Date(chaine);
+        return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      } catch (e) {
+        return chaine;
+      }
+    }
+
+    function sauvegarderBrouillonLocal() {
+      const donnees = {
+        type: document.getElementById('demande-type').value,
+        date_debut: document.getElementById('demande-date-debut').value,
+        date_fin: document.getElementById('demande-date-fin').value,
+        nombre_jours: document.getElementById('demande-nb-jours').value,
+        motif: document.getElementById('demande-motif').value
+      };
+      window.SIRH_BROUILLONS.sauvegarder('demande_conge', donnees);
+      alert('Brouillon enregistré dans la session.');
+    }
+
+    function restaurerBrouillonLocal() {
+      const b = window.SIRH_BROUILLONS.recuperer('demande_conge');
+      if (b) {
+        if (b.type) document.getElementById('demande-type').value = b.type;
+        if (b.date_debut) document.getElementById('demande-date-debut').value = b.date_debut;
+        if (b.date_fin) document.getElementById('demande-date-fin').value = b.date_fin;
+        if (b.nombre_jours) document.getElementById('demande-nb-jours').value = b.nombre_jours;
+        if (b.motif) document.getElementById('demande-motif').value = b.motif;
+      }
+    }
+
+    function ouvrirModaleAnnulation(demandeId) {
+      demandeSelectionneePourAnnulation = demandeId;
+      document.getElementById('champ-motif-annulation').value = '';
+      document.getElementById('modale-annulation').style.display = 'flex';
+    }
+
+    function fermerModaleAnnulation() {
+      demandeSelectionneePourAnnulation = null;
+      document.getElementById('modale-annulation').style.display = 'none';
+    }
+
+    async function confirmerAnnulationDemande() {
+      if (!demandeSelectionneePourAnnulation) return;
+
+      const motif = document.getElementById('champ-motif-annulation').value.trim();
+      if (!motif) {
+        alert("Le motif d'annulation est obligatoire.");
+        return;
+      }
+
+      const btn = document.getElementById('bouton-confirmer-annulation');
+      btn.disabled = true;
+      btn.textContent = 'Annulation en cours...';
+
+      try {
+        await window.SIRH_API.annulerDemandeConge(demandeSelectionneePourAnnulation, motif);
+        fermerModaleAnnulation();
+        await chargerSoldeAgent();
+        await chargerHistoriqueDemandes();
+      } catch (err) {
+        alert(err.message || "Erreur lors de l'annulation de la demande.");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Confirmer l'annulation";
+      }
+    }
+  </script>
+</body>
+</html>

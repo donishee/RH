@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dossier Individuel Policier — SIRH Police Nationale de Djibouti</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="en-tete-republicain">
+    <div class="marque-institution">
+      <div class="logo-police">PND</div>
+      <div class="titre-systeme">
+        <h1>Police Nationale de Djibouti</h1>
+        <p>Dossier Administratif et Fiche Statutaire Individuelle</p>
+      </div>
+    </div>
+    <div id="profil-utilisateur-connecte" class="bloc-profil"></div>
+  </header>
+
+  <div class="disposition-principale">
+    <nav id="menu-navigation-laterale" class="barre-navigation"></nav>
+
+    <main class="contenu-principal">
+      <div class="entete-page">
+        <div>
+          <h2>Fiche Individuelle du Policier</h2>
+          <p id="sous-titre-fiche">Consultation des états de service et carrières</p>
+        </div>
+        <div id="actions-fiche" style="display: flex; gap: 0.5rem;">
+          <a href="/agents.html" class="bouton bouton-secondaire">Annuaire</a>
+        </div>
+      </div>
+
+      <div id="zone-erreur" class="alerte alerte-erreur" style="display: none;"></div>
+
+      <!-- En-tête de la fiche agent -->
+      <div class="panneau" style="background: linear-gradient(to right, #FFFFFF, #F8FAFC); border-left: 4px solid var(--police-primaire);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; gap: 1.5rem; align-items: center;">
+            <div class="logo-police" style="width: 64px; height: 64px; font-size: 24px;">PND</div>
+            <div>
+              <h2 id="fiche-nom-prenom" style="color: var(--police-primaire); font-size: 1.5rem;">-</h2>
+              <div style="display: flex; gap: 0.75rem; align-items: center; margin-top: 0.35rem; flex-wrap: wrap;">
+                <span id="fiche-matricule" class="badge-role" style="font-size: 0.85rem;">-</span>
+                <span id="fiche-grade" style="font-weight: 700; color: var(--texte-principal);">-</span>
+                <span style="color: var(--bordure);">|</span>
+                <span id="fiche-unite" style="color: var(--police-secondaire); font-weight: 600;">-</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <span id="fiche-statut" class="pastille-statut statut-actif">-</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Informations détaillées -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+        <!-- Identité civile -->
+        <div class="panneau">
+          <div class="panneau-entete">
+            <h3>Identité civile et état civil</h3>
+          </div>
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+            <tr><td style="padding: 0.4rem 0; color: var(--texte-clair); width: 45%;">Date de naissance</td><td id="det-naissance" style="font-weight: 600;">-</td></tr>
+            <tr><td style="padding: 0.4rem 0; color: var(--texte-clair);">Genre républicain</td><td id="det-genre" style="font-weight: 600;">-</td></tr>
+            <tr><td style="padding: 0.4rem 0; color: var(--texte-clair);">NID / Carte nationale</td><td id="det-nid" style="font-weight: 600;">-</td></tr>
+            <tr><td style="padding: 0.4rem 0; color: var(--texte-clair);">Situation familiale</td><td id="det-famille" style="font-weight: 600;">-</td></tr>
+            <tr><td style="padding: 0.4rem 0; color: var(--texte-clair);">Enfants à charge</td><td id="det-enfants" style="font-weight: 600;">-</td></tr>
+          </table>
+        </div>
+
+        <!-- Carrière policière -->
+        <div class="panneau">
+          <div class="panneau-entete">
+            <h3>Carrière policière et solde</h3>
+          </div>
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+            <tr><td style="padding: 0.4rem 0; color: var(--texte-clair); width: 45%;">Date d'incorporation</td><td id="det-recrutement" style="font-weight: 600;">-</td></tr>
+            <tr><td style="padding: 0.4rem 0; color: var(--texte-clair);">Corps de police</td><td id="det-corps" style="font-weight: 600;">-</td></tr>
+            <tr><td style="padding: 0.4rem 0; color: var(--texte-clair);">Échelon / Indice</td><td id="det-indice" style="font-weight: 600;">-</td></tr>
+            <tr><td style="padding: 0.4rem 0; color: var(--texte-clair);">Courriel officiel</td><td id="det-email" style="font-weight: 600;">-</td></tr>
+            <tr><td style="padding: 0.4rem 0; color: var(--texte-clair);">Téléphone officiel</td><td id="det-tel" style="font-weight: 600;">-</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Historique Immuable des Affectations & Mutations -->
+      <div class="panneau">
+        <div class="panneau-entete">
+          <h3>Historique immuable des affectations & mutations</h3>
+          <span style="font-size: 0.8rem; color: var(--texte-clair);">Table inaltérable scellée en base</span>
+        </div>
+        <div class="tableau-conteneur">
+          <table class="tableau-donnees">
+            <thead>
+              <tr>
+                <th>Date d'effet</th>
+                <th>Date de fin</th>
+                <th>Unité de commandement</th>
+                <th>Poste budgétaire</th>
+                <th>Arrêté / Référence officielle</th>
+                <th>Motif du mouvement</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody id="corps-tableau-affectations">
+              <tr>
+                <td colspan="7" style="text-align: center; color: var(--texte-clair); padding: 1.5rem;">
+                  Chargement de l'historique...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Soldes de congés & Champs dynamiques -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+        <!-- Soldes annuels -->
+        <div class="panneau">
+          <div class="panneau-entete">
+            <h3>Compteurs et soldes de congés</h3>
+          </div>
+          <div id="conteneur-soldes">
+            <p style="color: var(--texte-clair); font-size: 0.9rem;">Chargement des soldes...</p>
+          </div>
+        </div>
+
+        <!-- Champs personnalisés Form Builder -->
+        <div class="panneau">
+          <div class="panneau-entete">
+            <h3>Champs personnalisés (Form Builder)</h3>
+          </div>
+          <div id="conteneur-champs-dynamiques">
+            <p style="color: var(--texte-clair); font-size: 0.9rem;">Aucun champ personnalisé renseigné pour ce dossier.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+  <script>
+    async function chargerDossier() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const agentId = urlParams.get('id');
+      const zoneErr = document.getElementById('zone-erreur');
+
+      if (!agentId) {
+        zoneErr.textContent = "Aucun identifiant d'agent spécifié dans l'adresse URL.";
+        zoneErr.style.display = 'block';
+        return;
+      }
+
+      try {
+        const res = await window.SIRH_API.obtenirAgent(agentId);
+        const a = res.agent;
+
+        document.getElementById('fiche-nom-prenom').textContent = `${a.nom.toUpperCase()} ${a.prenom}`;
+        document.getElementById('fiche-matricule').textContent = a.matricule;
+        document.getElementById('fiche-grade').textContent = a.grade_actuel;
+        document.getElementById('fiche-unite').textContent = `${a.nom_unite || a.unite_actuelle_id} (${a.region_administrative || 'DJIBOUTI'})`;
+        document.getElementById('fiche-statut').textContent = a.statut_administratif.replace(/_/g, ' ');
+
+        document.getElementById('det-naissance').textContent = `${a.date_naissance.split('T')[0]} à ${a.lieu_naissance}`;
+        document.getElementById('det-genre').textContent = a.genre === 'MASCULIN' ? 'Masculin' : 'Féminin';
+        document.getElementById('det-nid').textContent = a.numero_carte_nationale;
+        document.getElementById('det-famille').textContent = a.situation_familiale;
+        document.getElementById('det-enfants').textContent = `${a.nombre_enfants} enfant(s)`;
+
+        document.getElementById('det-recrutement').textContent = a.date_recrutement.split('T')[0];
+        document.getElementById('det-corps').textContent = a.corps.replace(/_/g, ' ');
+        document.getElementById('det-indice').textContent = `Échelon ${a.echelon_actuel} (Indice ${a.indice_solde})`;
+        document.getElementById('det-email').textContent = a.email_professionnel || 'Non renseigné';
+        document.getElementById('det-tel').textContent = a.telephone_professionnel || 'Non renseigné';
+
+        // Bouton de mutation si GESTIONNAIRE_RH
+        const session = window.SIRH_API.obtenirSessionLocale();
+        if (session && session.role === 'GESTIONNAIRE_RH') {
+          const btnMuter = document.createElement('a');
+          btnMuter.href = `/mutations.html?agent_id=${encodeURIComponent(a.id)}`;
+          btnMuter.className = 'bouton bouton-primaire';
+          btnMuter.textContent = '🔄 Muter cet agent';
+          document.getElementById('actions-fiche').appendChild(btnMuter);
+        }
+
+        // Tableau des affectations
+        const affectations = a.affectations || [];
+        const tbodyAff = document.getElementById('corps-tableau-affectations');
+        if (affectations.length === 0) {
+          tbodyAff.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 1.5rem;">Aucune affectation passée.</td></tr>';
+        } else {
+          tbodyAff.innerHTML = affectations.map(aff => `
+            <tr>
+              <td><strong>${aff.date_debut.split('T')[0]}</strong></td>
+              <td>${aff.date_fin ? aff.date_fin.split('T')[0] : '<em style="color:#047857;">En cours</em>'}</td>
+              <td><strong>${aff.nom_unite || aff.unite_id}</strong></td>
+              <td>${aff.intitule_poste || 'Poste opérationnel'}</td>
+              <td><code>${aff.reference_arrete_ou_decision}</code></td>
+              <td>${aff.motif_mouvement}</td>
+              <td>
+                <span class="pastille-statut ${aff.est_affectation_courante ? 'statut-actif' : 'statut-archive'}">
+                  ${aff.est_affectation_courante ? 'Courante' : 'Archivée'}
+                </span>
+              </td>
+            </tr>
+          `).join('');
+        }
+
+        // Soldes de congés
+        const soldes = a.soldes || [];
+        const conteneurSoldes = document.getElementById('conteneur-soldes');
+        if (soldes.length === 0) {
+          conteneurSoldes.innerHTML = '<p style="color: var(--texte-clair);">Aucun compteur annuel initialisé.</p>';
+        } else {
+          conteneurSoldes.innerHTML = soldes.map(s => `
+            <div style="background:#F8FAFC; border:1px solid var(--bordure); border-radius:4px; padding:0.75rem; margin-bottom:0.5rem;">
+              <div style="display:flex; justify-content:space-between; font-weight:700;">
+                <span>${s.libelle_type_conge || 'Congé Annuel Ordinaire'}</span>
+                <span style="color:var(--police-secondaire);">${s.annee}</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-top:0.35rem; color:var(--texte-secondaire);">
+                <span>Acquis : <strong>${s.jours_acquis} j</strong></span>
+                <span>Pris : <strong>${s.jours_pris} j</strong></span>
+                <span>Restants : <strong style="color:var(--succes-texte);">${s.jours_restants} j</strong></span>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        // Champs dynamiques
+        const champsDyn = a.champs_dynamiques || [];
+        const conteneurChamps = document.getElementById('conteneur-champs-dynamiques');
+        if (champsDyn.length === 0) {
+          conteneurChamps.innerHTML = '<p style="color: var(--texte-clair); font-size: 0.9rem;">Aucun champ personnalisé renseigné pour ce policier.</p>';
+        } else {
+          conteneurChamps.innerHTML = `
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+              ${champsDyn.map(cd => {
+                let val = cd.valeur_texte || cd.valeur_nombre || cd.valeur_date || (cd.valeur_booleen !== null ? (cd.valeur_booleen ? 'Oui' : 'Non') : '-');
+                return `<tr><td style="padding: 0.35rem 0; color: var(--texte-clair); width: 50%;">${cd.libelle}</td><td style="font-weight: 600;">${val}</td></tr>`;
+              }).join('')}
+            </table>
+          `;
+        }
+      } catch (err) {
+        zoneErr.textContent = `Accès refusé ou anomalie : ${err.message}`;
+        zoneErr.style.display = 'block';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', chargerDossier);
+  </script>
+</body>
+</html>

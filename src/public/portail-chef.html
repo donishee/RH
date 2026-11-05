@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commandement Opérationnel — Portail Chef de Service — SIRH Police Djiboutienne</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="en-tete-republicain">
+    <div class="marque-institution">
+      <div class="logo-police">PND</div>
+      <div class="titre-systeme">
+        <h1>Police Nationale de Djibouti</h1>
+        <p>Portail de Commandement d'Unité et d'Instruction des Demandes</p>
+      </div>
+    </div>
+    <div id="profil-utilisateur-connecte" class="bloc-profil"></div>
+  </header>
+
+  <div class="disposition-principale">
+    <nav id="menu-navigation-laterale" class="barre-navigation"></nav>
+
+    <main class="contenu-principal">
+      <div class="entete-page">
+        <div>
+          <h2>Poste de Commandement — <span id="nom-unite-commandement">Unité Territoriale</span></h2>
+          <p>Pilotage des effectifs opérationnels et instruction hiérarchique (N+1) des demandes de congés</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+          <span class="badge-role" style="font-size: 0.85rem; padding: 0.4rem 0.8rem;">Périmètre d'Unité Strict</span>
+          <a href="/maquette_planning_commandement_m4.html" class="bouton bouton-primaire bouton-petit" style="text-decoration: none;">📅 Planning 24/7 & Remplacements</a>
+        </div>
+      </div>
+
+      <!-- 1. Tableau de bord opérationnel de l'unité (Effectifs et Jauge CSS) -->
+      <div class="panneau" style="padding: 1.5rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; align-items: center;">
+          <!-- Indicateurs de présence -->
+          <div class="grille-indicateurs" style="margin-bottom: 0;">
+            <div class="carte-indicateur">
+              <span class="libelle">Effectif sous autorité</span>
+              <span id="kpi-effectif-total" class="valeur">-</span>
+              <span class="sous-texte">Agents affectés à l'unité</span>
+            </div>
+            <div class="carte-indicateur" style="border-left: 4px solid var(--succes-texte);">
+              <span class="libelle">Présents en service actif</span>
+              <span id="kpi-effectif-present" class="valeur" style="color: var(--succes-texte);">-</span>
+              <span class="sous-texte">Opérationnels ce jour</span>
+            </div>
+            <div class="carte-indicateur" style="border-left: 4px solid var(--police-secondaire);">
+              <span class="libelle">En congé autorisé</span>
+              <span id="kpi-effectif-conge" class="valeur" style="color: var(--police-secondaire);">-</span>
+              <span class="sous-texte">Absences régulières validées</span>
+            </div>
+            <div class="carte-indicateur" style="border-left: 4px solid var(--alerte-texte);">
+              <span class="libelle">En attente de visa</span>
+              <span id="kpi-effectif-attente" class="valeur" style="color: var(--alerte-texte);">-</span>
+              <span class="sous-texte">Dossiers à instruire</span>
+            </div>
+          </div>
+
+          <!-- Jauge de présence circulaire en pur CSS3 -->
+          <div style="background: #F8FAFC; border: 1px solid var(--bordure); border-radius: var(--rayon-bord); padding: 1.25rem; text-align: center;">
+            <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--texte-secondaire); margin-bottom: 0.75rem;">
+              Capacité opérationnelle de la brigade
+            </h4>
+            <div class="jauge-circulaire-conteneur">
+              <div id="jauge-presence-unite" class="jauge-circulaire" style="background: conic-gradient(var(--succes-texte) 0% 100%, var(--bordure) 100% 100%);">
+                <div class="jauge-circulaire-centre">
+                  <span id="valeur-taux-presence" class="jauge-valeur">100%</span>
+                  <span class="jauge-etiquette">Présence</span>
+                </div>
+              </div>
+            </div>
+            <div id="statut-seuil-securite" style="margin-top: 0.75rem;">
+              <span class="pastille-statut statut-actif">Capacité opérationnelle optimale</span>
+            </div>
+            <small style="color: var(--texte-clair); font-size: 0.75rem; display: block; margin-top: 0.35rem;">
+              Seuil minimal de sécurité réglementaire : 40%
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Bannière de conformité anti-auto-approbation -->
+      <div id="banniere-anti-auto-approbation" class="alerte alerte-info" style="margin-bottom: 1rem;">
+        <span>ℹ️</span>
+        <div>
+          <strong>Règle régalienne de commandement :</strong>
+          L'auto-approbation est formellement interdite. Si vous avez déposé une demande personnelle, celle-ci est adressée à votre supérieur hiérarchique direct (Direction Générale / DRH) et les boutons d'approbation sont automatiquement désactivés pour votre propre dossier.
+        </div>
+      </div>
+
+      <!-- 3. File d'attente d'instruction des demandes (Visa N+1) -->
+      <div class="panneau">
+        <div class="panneau-entete">
+          <h3>File des demandes de congés en attente de visa hiérarchique (<span id="compteur-demandes-visa">0</span>)</h3>
+          <button class="bouton bouton-secondaire bouton-petit" onclick="chargerDemandesAViser()">🔄 Actualiser la file</button>
+        </div>
+
+        <div id="zone-alerte-chef" class="alerte" style="display: none;"></div>
+
+        <div class="tableau-conteneur">
+          <table class="tableau-donnees">
+            <thead>
+              <tr>
+                <th>Date dépôt</th>
+                <th>Fonctionnaire demandeur</th>
+                <th>Grade</th>
+                <th>Type de congé</th>
+                <th>Période demandée</th>
+                <th>Durée</th>
+                <th>Motif circonstancié</th>
+                <th>Instruction hiérarchique</th>
+              </tr>
+            </thead>
+            <tbody id="corps-tableau-file-visa">
+              <tr>
+                <td colspan="8" style="text-align: center; color: var(--texte-clair); padding: 1.5rem;">
+                  Chargement de la file des demandes...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modale d'instruction hiérarchique (Visa / Refus motivé) -->
+  <div id="modale-instruction-chef" class="fond-modale" style="display: none;">
+    <div class="boite-modale">
+      <div class="entete-modale">
+        <h3 id="titre-modale-instruction">Instruction de la demande de congé</h3>
+        <button class="bouton-fermer-modale" onclick="fermerModaleInstruction()">✕</button>
+      </div>
+      <div class="corps-modale">
+        <div id="recap-demande-instruction" style="background:#F8FAFC; border:1px solid var(--bordure); padding:0.75rem; border-radius:4px; margin-bottom:1rem; font-size:0.9rem;">
+          <!-- Détails de la demande insérés dynamiquement -->
+        </div>
+
+        <div class="groupe-formulaire">
+          <label>Décision du Chef de Service *</label>
+          <div style="display: flex; gap: 1rem; margin-top: 0.35rem;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="radio" name="avis-chef" value="FAVORABLE" checked onchange="toggleMotifRefusChef(false)">
+              <span style="color: var(--succes-texte); font-weight: 700;">Avis FAVORABLE</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="radio" name="avis-chef" value="DEFAVORABLE" onchange="toggleMotifRefusChef(true)">
+              <span style="color: var(--erreur-texte); font-weight: 700;">Avis DÉFAVORABLE (Refus)</span>
+            </label>
+          </div>
+        </div>
+
+        <div id="zone-motif-refus-chef" class="groupe-formulaire" style="display: none;">
+          <label for="select-motif-statutaire-chef">Motif statutaire de refus *</label>
+          <select id="select-motif-statutaire-chef" class="champ-selection" style="margin-bottom: 0.5rem;">
+            <option value="NÉCESSITÉ IMPÉRIEUSE DE SERVICE">Nécessité impérieuse de service</option>
+            <option value="EFFECTIF MINIMAL DE BRIGADE NON ATTEINT">Effectif minimal de brigade non atteint (&lt; 40%)</option>
+            <option value="ALERTE SÉCURITAIRE RENFORCÉE">Alerte sécuritaire renforcée</option>
+            <option value="PÉRIODE DE SERVICE BLOQUÉE">Période de service bloquée</option>
+          </select>
+
+          <label for="texte-justification-refus-chef">Explication motivée obligatoire *</label>
+          <textarea id="texte-justification-refus-chef" class="champ-texte" rows="3" placeholder="Indiquez obligatoirement les motifs précis ayant justifié cet avis défavorable..."></textarea>
+        </div>
+
+        <div class="groupe-formulaire" id="zone-commentaire-chef" style="margin-top: 0.5rem;">
+          <label for="texte-commentaire-chef">Commentaire facultatif</label>
+          <input type="text" id="texte-commentaire-chef" class="champ-saisie" placeholder="Remarques éventuelles sur la planification...">
+        </div>
+      </div>
+      <div class="pied-modale">
+        <button class="bouton bouton-secondaire" onclick="fermerModaleInstruction()">Abandonner</button>
+        <button id="bouton-confirmer-instruction" class="bouton bouton-primaire" onclick="enregistrerVisaChef()">
+          Enregistrer le visa hiérarchique
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+  <script>
+    let demandeEnCoursInstruction = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await chargerTableauDeBordChef();
+      await chargerDemandesAViser();
+    });
+
+    async function chargerTableauDeBordChef() {
+      const session = window.SIRH_API.obtenirSessionLocale();
+      if (!session) return;
+
+      document.getElementById('nom-unite-commandement').textContent = session.unite_id || 'Commissariat Central';
+
+      try {
+        const res = await window.SIRH_API.obtenirStatistiquesConges();
+        const stats = res.statistiques || {};
+
+        const total = stats.effectif_total || 4;
+        const presents = stats.presents !== undefined ? stats.presents : 4;
+        const enConge = stats.en_conge || 0;
+        const enAttente = stats.en_attente_visa_chef || 0;
+        const pct = stats.taux_presence_pct !== undefined ? stats.taux_presence_pct : 100;
+
+        document.getElementById('kpi-effectif-total').textContent = total;
+        document.getElementById('kpi-effectif-present').textContent = presents;
+        document.getElementById('kpi-effectif-conge').textContent = enConge;
+        document.getElementById('kpi-effectif-attente').textContent = enAttente;
+        document.getElementById('valeur-taux-presence').textContent = `${pct}%`;
+
+        const jauge = document.getElementById('jauge-presence-unite');
+        const couleur = pct >= 40 ? 'var(--succes-texte)' : 'var(--erreur-texte)';
+        jauge.style.background = `conic-gradient(${couleur} 0% ${pct}%, var(--bordure) ${pct}% 100%)`;
+
+        const statutSeuil = document.getElementById('statut-seuil-securite');
+        if (pct >= 40) {
+          statutSeuil.innerHTML = `<span class="pastille-statut statut-actif">Capacité opérationnelle optimale</span>`;
+        } else {
+          statutSeuil.innerHTML = `<span class="pastille-statut statut-inactif">ALERTE : Seuil de sécurité violé (&lt; 40%)</span>`;
+        }
+      } catch (err) {
+        console.error('Erreur chargement statistiques chef :', err);
+      }
+    }
+
+    async function chargerDemandesAViser() {
+      const tbody = document.getElementById('corps-tableau-file-visa');
+      const compteur = document.getElementById('compteur-demandes-visa');
+      const session = window.SIRH_API.obtenirSessionLocale();
+      const monAgentId = session?.agent_id;
+
+      try {
+        const res = await window.SIRH_API.listerDemandesConges({ statut: 'SOUMIS' });
+        const demandes = res.demandes || [];
+        compteur.textContent = demandes.length;
+
+        if (demandes.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="8" style="text-align: center; color: var(--texte-clair); padding: 1.5rem;">
+                Aucune demande de congé en attente de visa dans votre unité.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = demandes.map(d => {
+          const estMaPropreDemande = monAgentId && d.agent_id === monAgentId;
+
+          return `
+            <tr>
+              <td>${formaterDateFr(d.cree_le)}</td>
+              <td>
+                <strong>${d.prenom_agent || ''} ${d.nom_agent || ''}</strong><br>
+                <small style="color: var(--texte-clair); font-size: 0.75rem;">Matricule : ${d.matricule || d.agent_id}</small>
+              </td>
+              <td>${d.grade_agent || '-'}</td>
+              <td>${d.type_conge_libelle || d.type_conge_code}</td>
+              <td>Du ${formaterDateFr(d.date_debut)} au ${formaterDateFr(d.date_fin)}</td>
+              <td><strong>${Number(d.nombre_jours).toFixed(1)} j</strong></td>
+              <td style="max-width: 200px; font-size: 0.85rem;">${d.motif || '-'}</td>
+              <td>
+                ${estMaPropreDemande ? `
+                  <span class="badge-role" style="background: #FEF3C7; color: #92400E; font-size: 0.75rem; padding: 0.25rem 0.5rem;" title="Auto-approbation strictement interdite par le statut">
+                    Auto-visa interdit (Transmis N+2/DRH)
+                  </span>
+                ` : `
+                  <button class="bouton bouton-primaire bouton-petit" onclick="ouvrirModaleInstruction('${d.id}')">
+                    Instruire la demande
+                  </button>
+                `}
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" style="text-align: center; color: var(--erreur-texte); padding: 1.5rem;">
+              Impossible de charger la file des demandes : ${err.message}
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    function formaterDateFr(chaine) {
+      if (!chaine) return '-';
+      try {
+        const d = new Date(chaine);
+        return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      } catch (e) {
+        return chaine;
+      }
+    }
+
+    async function ouvrirModaleInstruction(demandeId) {
+      demandeEnCoursInstruction = demandeId;
+      const recap = document.getElementById('recap-demande-instruction');
+      recap.innerHTML = 'Chargement des informations de la demande...';
+
+      try {
+        const res = await window.SIRH_API.listerDemandesConges();
+        const d = (res.demandes || []).find(item => item.id === demandeId);
+        if (d) {
+          recap.innerHTML = `
+            <strong>Demandeur :</strong> ${d.prenom_agent || ''} ${d.nom_agent || ''} (${d.matricule || d.agent_id})<br>
+            <strong>Période :</strong> Du ${formaterDateFr(d.date_debut)} au ${formaterDateFr(d.date_fin)} (${Number(d.nombre_jours).toFixed(1)} jours)<br>
+            <strong>Type d'absence :</strong> ${d.type_conge_libelle || d.type_conge_code}<br>
+            <strong>Motif circonstancié :</strong> ${d.motif || 'Aucun'}
+          `;
+        }
+      } catch (e) {
+        recap.innerHTML = `Demande Réf: DEM-${demandeId.slice(0, 8)}`;
+      }
+
+      document.querySelector('input[name="avis-chef"][value="FAVORABLE"]').checked = true;
+      toggleMotifRefusChef(false);
+      document.getElementById('texte-justification-refus-chef').value = '';
+      document.getElementById('texte-commentaire-chef').value = '';
+
+      document.getElementById('modale-instruction-chef').style.display = 'flex';
+    }
+
+    function fermerModaleInstruction() {
+      demandeEnCoursInstruction = null;
+      document.getElementById('modale-instruction-chef').style.display = 'none';
+    }
+
+    function toggleMotifRefusChef(afficherRefus) {
+      const zoneRefus = document.getElementById('zone-motif-refus-chef');
+      zoneRefus.style.display = afficherRefus ? 'block' : 'none';
+    }
+
+    async function enregistrerVisaChef() {
+      if (!demandeEnCoursInstruction) return;
+
+      const avis = document.querySelector('input[name="avis-chef"]:checked').value;
+      const motifStatutaire = document.getElementById('select-motif-statutaire-chef').value;
+      const explication = document.getElementById('texte-justification-refus-chef').value.trim();
+      const commentaire = document.getElementById('texte-commentaire-chef').value.trim();
+
+      let motifRefusComplet = undefined;
+      if (avis === 'DEFAVORABLE') {
+        if (!explication) {
+          alert('Une explication motivée est obligatoire pour tout avis défavorable.');
+          return;
+        }
+        motifRefusComplet = `${motifStatutaire} : ${explication}`;
+      }
+
+      const btn = document.getElementById('bouton-confirmer-instruction');
+      btn.disabled = true;
+      btn.textContent = 'Enregistrement en cours...';
+
+      try {
+        await window.SIRH_API.viserDemandeConge(demandeEnCoursInstruction, {
+          avis,
+          motif_refus: motifRefusComplet,
+          commentaire
+        });
+
+        fermerModaleInstruction();
+        await chargerTableauDeBordChef();
+        await chargerDemandesAViser();
+      } catch (err) {
+        alert(err.message || "Erreur lors de l'enregistrement du visa hiérarchique.");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Enregistrer le visa hiérarchique';
+      }
+    }
+  </script>
+</body>
+</html>

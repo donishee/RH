@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authentification — SIRH Police Nationale de Djibouti</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="conteneur-connexion">
+    <div class="carte-connexion">
+      <div class="entete-connexion">
+        <div class="logo-police" style="margin: 0 auto 0.75rem auto;">PND</div>
+        <h2>Police Nationale de Djibouti</h2>
+        <p>Système Intranet de Gestion des Ressources Humaines</p>
+      </div>
+
+      <div class="corps-connexion">
+        <div id="boite-alerte" class="alerte alerte-erreur" style="display: none;"></div>
+
+        <form id="formulaire-connexion">
+          <div class="groupe-formulaire">
+            <label for="champ-identifiant">Identifiant républicain ou matricule</label>
+            <input type="text" id="champ-identifiant" class="champ-saisie" placeholder="Ex: gestionnaire_rh ou PND-2020-00142" required autocomplete="username">
+          </div>
+
+          <div class="groupe-formulaire">
+            <label for="champ-mot-de-passe">Mot de passe sécurisé</label>
+            <input type="password" id="champ-mot-de-passe" class="champ-saisie" placeholder="Saisir votre mot de passe" required autocomplete="current-password">
+          </div>
+
+          <div style="margin-top: 1.5rem;">
+            <button type="button" id="bouton-soumettre" class="bouton bouton-primaire" style="width: 100%;" onclick="executerConnexion()">
+              Se connecter au portail
+            </button>
+          </div>
+        </form>
+
+        <div class="raccourcis-demo">
+          <h4>Profils de démonstration statutaires (Mot de passe : Police@2026!)</h4>
+          <div class="grille-profils-demo">
+            <button type="button" class="bouton-demo" onclick="remplirIdentifiants('admin_tech')">
+              <strong>Admin Tech</strong><br><small>Infrastructure & Audit</small>
+            </button>
+            <button type="button" class="bouton-demo" onclick="remplirIdentifiants('admin_fonc')">
+              <strong>Admin Fonct RH</strong><br><small>Form Builder & Listes</small>
+            </button>
+            <button type="button" class="bouton-demo" onclick="remplirIdentifiants('gestionnaire_rh')">
+              <strong>Gestionnaire RH</strong><br><small>Dossiers & Mutations</small>
+            </button>
+            <button type="button" class="bouton-demo" onclick="remplirIdentifiants('chef_cc')">
+              <strong>Chef Commissariat</strong><br><small>Effectifs Commissariat Central</small>
+            </button>
+            <button type="button" class="bouton-demo" onclick="remplirIdentifiants('agent_hassan')">
+              <strong>Agent Hassan</strong><br><small>Portail individuel</small>
+            </button>
+            <button type="button" class="bouton-demo" onclick="remplirIdentifiants('auditeur')">
+              <strong>Auditeur</strong><br><small>Inspection forensique</small>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script>
+    function remplirIdentifiants(login) {
+      document.getElementById('champ-identifiant').value = login;
+      document.getElementById('champ-mot-de-passe').value = 'Police@2026!';
+    }
+
+    async function executerConnexion() {
+      const alerte = document.getElementById('boite-alerte');
+      const btn = document.getElementById('bouton-soumettre');
+      alerte.style.display = 'none';
+
+      const identifiant = document.getElementById('champ-identifiant').value.trim();
+      const motDePasse = document.getElementById('champ-mot-de-passe').value;
+
+      if (!identifiant || !motDePasse) {
+        alerte.textContent = 'Veuillez saisir votre identifiant et votre mot de passe.';
+        alerte.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Authentification en cours...';
+
+      try {
+        const res = await window.SIRH_API.connexion(identifiant, motDePasse);
+        const role = res?.session?.role;
+        if (role === 'AGENT') {
+          window.location.href = '/portail-agent.html';
+        } else if (role === 'CHEF_DE_SERVICE') {
+          window.location.href = '/portail-chef.html';
+        } else if (role === 'GESTIONNAIRE_RH') {
+          window.location.href = '/portail-rh.html';
+        } else {
+          window.location.href = '/tableau-de-bord.html';
+        }
+      } catch (err) {
+        alerte.textContent = err.message || 'Échec de la connexion.';
+        alerte.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Se connecter au portail';
+      }
+    }
+
+    document.getElementById('champ-mot-de-passe').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') executerConnexion();
+    });
+  </script>
+</body>
+</html>

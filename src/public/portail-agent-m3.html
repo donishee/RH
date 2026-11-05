@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ma Carrière &amp; Avancement — Espace Agent — Police Nationale de Djibouti</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/styles_souverains_m3.css">
+</head>
+<body>
+  <!-- En-tête républicain officiel avec ruban national -->
+  <header class="en-tete-republicain">
+    <div class="marque-institution">
+      <div class="logo-police">PND</div>
+      <div class="titre-systeme">
+        <h1>Police Nationale de Djibouti</h1>
+        <p>Espace Personnel en Libre-Service de l'Agent — Jalon M3</p>
+      </div>
+    </div>
+    <div id="profil-utilisateur-connecte" class="bloc-profil">
+      <div style="text-align: right;">
+        <div style="font-weight: 700; font-size: 0.9rem;">Lieutenant Abdillahi Daher Hassan</div>
+        <div style="font-size: 0.75rem; color: #CBD5E0;">Matricule : PND-2018-00452</div>
+      </div>
+      <span class="badge-role">Agent</span>
+    </div>
+  </header>
+  <div class="ruban-republicain"></div>
+
+  <div class="disposition-principale">
+    <nav class="barre-navigation">
+      <a href="/tableau-de-bord.html" class="lien-nav">
+        <span>📊</span>
+        <span>Tableau de bord</span>
+      </a>
+      <a href="/portail-agent.html" class="lien-nav">
+        <span>📝</span>
+        <span>Mes Congés &amp; Absences</span>
+      </a>
+      <a href="maquette_portail_agent_m3.html" class="lien-nav actif">
+        <span>🎖️</span>
+        <span>Ma Carrière &amp; Avancement</span>
+      </a>
+      <a href="/agent-fiche.html" class="lien-nav">
+        <span>📄</span>
+        <span>Mon Dossier Individuel</span>
+      </a>
+    </nav>
+
+    <main class="contenu-principal">
+      <div class="entete-page">
+        <div>
+          <h2>Ma Carrière, Qualifications &amp; Évaluations</h2>
+          <p>Consultation de votre parcours statutaire, de vos habilitations opérationnelles et de vos notes annuelles</p>
+        </div>
+        <div>
+          <span class="badge-position position-activite">● Position : En Activité de Service</span>
+        </div>
+      </div>
+
+      <!-- 1. En-tête de situation statutaire actuelle -->
+      <div class="panneau" style="border-left: 5px solid var(--djibouti-bleu-police);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 1.25rem;">
+            <div class="insigne-qualif" style="width: 58px; height: 58px; font-size: 1.8rem; background: #e0f2fe; border-color: #7dd3fc;">
+              👮
+            </div>
+            <div>
+              <h3 style="font-size: 1.3rem; color: var(--djibouti-bleu-police);">Lieutenant Abdillahi Daher Hassan</h3>
+              <p style="font-size: 0.9rem; color: var(--texte-secondaire); margin-top: 0.2rem;">
+                Corps : <strong>Officiers de Police Subalternes</strong> |
+                Grade : <span style="font-weight: 700; color: var(--djibouti-bleu-survol);">Lieutenant</span> |
+                Échelon actuel : <strong style="color: var(--djibouti-or);">3ème Échelon</strong> (Indice 480)
+              </p>
+              <p style="font-size: 0.85rem; color: var(--texte-clair); margin-top: 0.25rem;">
+                Affectation opérationnelle : <strong>Commissariat Central de Djibouti-Ville — Brigade de Voie Publique</strong>
+              </p>
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 0.8rem; color: var(--texte-clair);">Dernier avancement : <strong>01/01/2024</strong></div>
+            <div style="font-size: 0.8rem; color: var(--djibouti-bleu-ciel); font-weight: 700; margin-top: 0.25rem;">
+              Prochain avancement prévisionnel : <strong>01/01/2026</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation interne par onglets de carrière -->
+      <div class="onglets-navigation-m3">
+        <button id="btn-onglet-frise" class="onglet-btn-m3 actif" onclick="changerVueAgent('frise')">
+          📈 Frise d'Avancement &amp; Promotions
+        </button>
+        <button id="btn-onglet-qualifs" class="onglet-btn-m3" onclick="changerVueAgent('qualifs')">
+          🛡️ Mes Habilitations &amp; Qualifications (<span id="compteur-qualifs-badge">3</span>)
+        </button>
+        <button id="btn-onglet-evaluations" class="onglet-btn-m3" onclick="changerVueAgent('evaluations')">
+          ⭐ Mes Évaluations &amp; Notations Annuelles
+        </button>
+        <button id="btn-onglet-position" class="onglet-btn-m3" onclick="changerVueAgent('position')">
+          🏛️ Ma Position Administrative &amp; Arrêtés
+        </button>
+      </div>
+
+      <!-- VUE 1 : FRISE CHRONOLOGIQUE D'AVANCEMENT D'ÉCHELON ET PROMOTION -->
+      <div id="vue-agent-frise" class="panneau">
+        <div class="panneau-entete">
+          <div>
+            <h3>Parcours Chronologique d'Avancement d'Échelon &amp; de Grade</h3>
+            <p style="font-size: 0.85rem; color: var(--texte-clair);">
+              Historique officiel des arrêtés ministériels et prévisions statutaires régies par la Loi n° 46/AN/04 modifiée
+            </p>
+          </div>
+          <span class="badge-role">Cadence Standard : 24 Mois</span>
+        </div>
+
+        <div id="conteneur-frise-dynamique"></div>
+
+        <div style="background: #f8fafc; border: 1px solid var(--bordure); border-radius: var(--rayon-bord); padding: 1rem; margin-top: 1rem;">
+          <h4 style="font-size: 0.85rem; color: var(--djibouti-bleu-police); margin-bottom: 0.5rem; text-transform: uppercase;">
+            Modalités d'Éligibilité au Prochain Échelon (Échelon 4 — Indice 520)
+          </h4>
+          <ul style="font-size: 0.85rem; color: var(--texte-secondaire); padding-left: 1.25rem; line-height: 1.6;">
+            <li><strong>Au Grand Choix (24 mois)</strong> : Requis : Ancienneté minimale de 2 ans dans l'échelon actuel (atteinte le 01/01/2026) ET Note moyenne triennale ≥ 16,0/20 (votre moyenne actuelle : <strong>17,5/20</strong> — Critère rempli ✅).</li>
+            <li><strong>À l'Ancienneté Maximale (30 mois)</strong> : De droit après accomplissement de 30 mois de service continu sans sanction bloquante.</li>
+            <li><strong>Effet sur le traitement indiciaire</strong> : Gain indiciaire de +40 points (+22 000 DJF bruts mensuels dès signature de l'arrêté).</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- VUE 2 : MES HABILITATIONS & FORMATIONS POLICIÈRES -->
+      <div id="vue-agent-qualifs" class="panneau" style="display: none;">
+        <div class="panneau-entete">
+          <div>
+            <h3>Mes Habilitations Opérationnelles &amp; Certifications ENP</h3>
+            <p style="font-size: 0.85rem; color: var(--texte-clair);">
+              Suivi de la validité de vos agréments judiciaires, brevets de tir et aptitudes de service
+            </p>
+          </div>
+          <span class="pastille-statut statut-actif">Opérationnel Voie Publique</span>
+        </div>
+
+        <div class="grille-cartes-qualifications">
+          <!-- Carte 1 : Carte Officier de Police Judiciaire (OPJ) -->
+          <div class="carte-qualification opj">
+            <div>
+              <div class="en-tete-carte-qualif">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                  <div class="insigne-qualif" style="background:#fef3c7; color:#b45309; border-color:#fde68a;">⚖️</div>
+                  <div>
+                    <h4 style="font-size: 1.05rem; color: var(--djibouti-bleu-police);">Habilitation OPJ</h4>
+                    <span class="badge-opj-officiel">Officier de Police Judiciaire</span>
+                  </div>
+                </div>
+                <span class="pastille-statut statut-actif">Agréé</span>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--texte-secondaire); margin: 0.5rem 0;">
+                Délivrée par le Procureur Général près la Cour d'Appel de Djibouti.
+              </p>
+              <div style="font-size: 0.8rem; color: var(--texte-clair); margin-bottom: 0.5rem;">
+                Carte n° : <strong style="color: var(--texte-principal);">OPJ-DJ-2021-084</strong><br>
+                Date d'agrément initial : <strong>15/06/2021</strong>
+              </div>
+            </div>
+            <div>
+              <div class="delai-recyclage-compteur delai-vert">
+                ✓ Statut permanent actif (Non soumis à péremption annuelle)
+              </div>
+            </div>
+          </div>
+
+          <!-- Carte 2 : Certificat de Tir et d'Armement Réglementaire -->
+          <div class="carte-qualification alerte-proche">
+            <div>
+              <div class="en-tete-carte-qualif">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                  <div class="insigne-qualif" style="background:#fff7ed; color:#c2410c; border-color:#fed7aa;">🎯</div>
+                  <div>
+                    <h4 style="font-size: 1.05rem; color: var(--djibouti-bleu-police);">Tir &amp; Armement Réglementaire</h4>
+                    <span style="font-size: 0.75rem; color: var(--texte-clair);">Pistolet 9mm &amp; Armes de Dotation</span>
+                  </div>
+                </div>
+                <span class="pastille-statut statut-en-attente">Recyclage requis</span>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--texte-secondaire); margin: 0.5rem 0;">
+                Contrôle annuel validé à l'École Nationale de Police (ENP).
+              </p>
+              <div style="font-size: 0.8rem; color: var(--texte-clair); margin-bottom: 0.5rem;">
+                Certificat n° : <strong>TIR-2025-0142</strong><br>
+                Dernier contrôle : <strong>12/12/2025</strong> | Échéance : <strong style="color:#b91c1c;">12/12/2026</strong>
+              </div>
+            </div>
+            <div>
+              <div class="delai-recyclage-compteur delai-orange">
+                ⚠️ Recyclage requis sous 38 jours (Convocation en attente)
+              </div>
+            </div>
+          </div>
+
+          <!-- Carte 3 : Premier Secours Opérationnel Policier -->
+          <div class="carte-qualification">
+            <div>
+              <div class="en-tete-carte-qualif">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                  <div class="insigne-qualif" style="background:#ecfdf5; color:#047857; border-color:#a7f3d0;">🩹</div>
+                  <div>
+                    <h4 style="font-size: 1.05rem; color: var(--djibouti-bleu-police);">Secourisme Opérationnel</h4>
+                    <span style="font-size: 0.75rem; color: var(--texte-clair);">Premier Secours en Intervention (PSC-1)</span>
+                  </div>
+                </div>
+                <span class="pastille-statut statut-actif">Valide</span>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--texte-secondaire); margin: 0.5rem 0;">
+                Formation certifiée délivrée par la Protection Civile et l'ENP.
+              </p>
+              <div style="font-size: 0.8rem; color: var(--texte-clair); margin-bottom: 0.5rem;">
+                Brevet n° : <strong>SEC-2024-0518</strong><br>
+                Date d'obtention : <strong>20/04/2024</strong> | Validité : <strong>2 ans</strong>
+              </div>
+            </div>
+            <div>
+              <div class="delai-recyclage-compteur delai-vert">
+                ✓ Valide jusqu'au 20/04/2027 (167 jours restants)
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VUE 3 : MES ÉVALUATIONS ET NOTATIONS ANNUELLES -->
+      <div id="vue-agent-evaluations" class="panneau" style="display: none;">
+        <div class="panneau-entete">
+          <div>
+            <h3>Fiche Individuelle de Notation &amp; Appréciation Annuelle</h3>
+            <p style="font-size: 0.85rem; color: var(--texte-clair);">
+              Campagne d'évaluation statutaire régie par la Direction des Ressources Humaines
+            </p>
+          </div>
+          <span class="badge-role" style="background:#047857; color:#fff;">Visa Agent Apposé</span>
+        </div>
+
+        <!-- Note de la dernière campagne (2025) -->
+        <div class="bloc-evaluation-annuelle">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <span class="badge-role" style="font-size: 0.8rem;">Campagne Annuelle 2025</span>
+              <h4 style="font-size: 1.2rem; color: var(--djibouti-bleu-police); margin-top: 0.35rem;">
+                Évaluation Définitive — Commissariat Central
+              </h4>
+              <p style="font-size: 0.85rem; color: var(--texte-clair);">
+                Notateur hiérarchique (N+1) : <strong>Commandant Mohamed Ali Warsama</strong> | Notifié le : <strong>18/01/2026</strong>
+              </p>
+            </div>
+            <div class="score-note-geante">
+              <div>
+                <span class="chiffre-note">18,0</span>
+                <span class="bareme-note">/ 20</span>
+              </div>
+              <div style="font-size: 0.85rem;">
+                <strong style="color: var(--djibouti-vert); display: block;">Très Remarquable</strong>
+                <span style="color: var(--texte-clair);">Éligible au Grand Choix</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Détail des 4 critères professionnels républicains -->
+          <div style="margin-top: 1.25rem;">
+            <h5 style="font-size: 0.85rem; text-transform: uppercase; color: var(--texte-secondaire); margin-bottom: 0.75rem;">
+              Détail par Critère Professionnel Harmonisé (Pondération 25% chacun)
+            </h5>
+            <div class="diagramme-barres-repartition">
+              <div class="element-barre">
+                <div class="en-tete-barre">
+                  <span>1. Disponibilité opérationnelle, assiduité et sens du devoir républicain</span>
+                  <strong>18,5 / 20</strong>
+                </div>
+                <div class="piste-barre">
+                  <div class="remplissage-barre" style="width: 92.5%; background-color: var(--djibouti-bleu-survol);"></div>
+                </div>
+              </div>
+              <div class="element-barre">
+                <div class="en-tete-barre">
+                  <span>2. Rigueur professionnelle, probité et respect scrupuleux de la déontologie policière</span>
+                  <strong>18,0 / 20</strong>
+                </div>
+                <div class="piste-barre">
+                  <div class="remplissage-barre" style="width: 90%; background-color: var(--djibouti-vert);"></div>
+                </div>
+              </div>
+              <div class="element-barre">
+                <div class="en-tete-barre">
+                  <span>3. Aptitude au commandement opérationnel, écoute et encadrement des patrouilles</span>
+                  <strong>17,5 / 20</strong>
+                </div>
+                <div class="piste-barre">
+                  <div class="remplissage-barre" style="width: 87.5%; background-color: var(--djibouti-bleu-ciel);"></div>
+                </div>
+              </div>
+              <div class="element-barre">
+                <div class="en-tete-barre">
+                  <span>4. Maîtrise des actes de police judiciaire (OPJ) et compétences procédurales</span>
+                  <strong>18,0 / 20</strong>
+                </div>
+                <div class="piste-barre">
+                  <div class="remplissage-barre" style="width: 90%; background-color: var(--djibouti-or);"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="appreciation-cadre">
+            « Officier subalterne particulièrement engagé, exemplaire sur la voie publique et faisant preuve d'une excellente rigueur procédurale dans ses attributions d'Officier de Police Judiciaire. Très bon encadrement de brigade. Mérite pleinement l'inscription au tableau d'avancement pour le grade de Capitaine au grand choix. »
+          </div>
+        </div>
+
+        <!-- Historique triennal des notes pour éligibilité -->
+        <div style="background: #ffffff; border: 1px solid var(--bordure); border-radius: var(--rayon-bord); padding: 1.25rem;">
+          <h4 style="font-size: 0.95rem; color: var(--djibouti-bleu-police); margin-bottom: 0.75rem;">
+            Historique Triennal de Notation (Base de Calcul pour Promotion au Grand Choix)
+          </h4>
+          <table class="tableau-donnees">
+            <thead>
+              <tr>
+                <th>Année Campagne</th>
+                <th>Grade à l'Époque</th>
+                <th>Note Chiffrée</th>
+                <th>Appréciation Globale</th>
+                <th>Statut du Recours</th>
+                <th>Date Notification</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>2025</strong></td>
+                <td>Lieutenant (Éch. 3)</td>
+                <td><strong style="color:var(--djibouti-vert);">18,0 / 20</strong></td>
+                <td>Très Remarquable</td>
+                <td><span class="pastille-statut statut-actif">Acceptée sans recours</span></td>
+                <td>18/01/2026</td>
+              </tr>
+              <tr>
+                <td><strong>2024</strong></td>
+                <td>Lieutenant (Éch. 3)</td>
+                <td><strong style="color:var(--djibouti-vert);">17,5 / 20</strong></td>
+                <td>Très Satisfaisant</td>
+                <td><span class="pastille-statut statut-actif">Acceptée sans recours</span></td>
+                <td>14/01/2025</td>
+              </tr>
+              <tr>
+                <td><strong>2023</strong></td>
+                <td>Lieutenant (Éch. 2)</td>
+                <td><strong style="color:var(--djibouti-vert);">17,0 / 20</strong></td>
+                <td>Satisfaisant</td>
+                <td><span class="pastille-statut statut-actif">Acceptée sans recours</span></td>
+                <td>20/01/2024</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr style="background:#f8fafc; font-weight:700;">
+                <td colspan="2">Moyenne Triennale Retenue pour la Commission d'Avancement</td>
+                <td style="color:var(--djibouti-bleu-police); font-size:1.1rem;">17,50 / 20</td>
+                <td colspan="3" style="color:var(--succes-texte);">
+                  ✓ Seuil requis pour Grand Choix (≥ 16,0/20) largement atteint
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <!-- VUE 4 : POSITION ADMINISTRATIVE & GESTION DES ARRÊTÉS -->
+      <div id="vue-agent-position" class="panneau" style="display: none;">
+        <div class="panneau-entete">
+          <div>
+            <h3>Situation Administrative &amp; Arrêtés Ministériels</h3>
+            <p style="font-size: 0.85rem; color: var(--texte-clair);">
+              Positions statutaires régies par les Lois n° 46/AN/04 et 48/AN/72
+            </p>
+          </div>
+          <span class="badge-position position-activite">Activité Pleine &amp; Entière</span>
+        </div>
+
+        <div class="grille-indicateurs" style="margin-bottom: 1.25rem;">
+          <div class="carte-indicateur" style="border-top: 3px solid var(--djibouti-vert);">
+            <span class="libelle">Position administrative</span>
+            <span class="valeur" style="font-size: 1.3rem; color: var(--djibouti-vert);">Activité</span>
+            <span class="sous-texte">Service actif territorial</span>
+          </div>
+          <div class="carte-indicateur" style="border-top: 3px solid var(--djibouti-bleu-ciel);">
+            <span class="libelle">Droits à l'avancement</span>
+            <span class="valeur" style="font-size: 1.3rem; color: var(--djibouti-bleu-survol);">Maintenus</span>
+            <span class="sous-texte">Ancienneté comptabilisée à 100%</span>
+          </div>
+          <div class="carte-indicateur" style="border-top: 3px solid var(--djibouti-or);">
+            <span class="libelle">Droits à pension de retraite</span>
+            <span class="valeur" style="font-size: 1.3rem; color: var(--djibouti-or);">Cotisation</span>
+            <span class="sous-texte">Régime général de la CNSS</span>
+          </div>
+        </div>
+
+        <h4 style="font-size: 0.95rem; color: var(--djibouti-bleu-police); margin-bottom: 0.75rem;">
+          Historique des Actes Statutaires et Décrets
+        </h4>
+        <table class="tableau-donnees">
+          <thead>
+            <tr>
+              <th>Date d'effet</th>
+              <th>Nature de l'Acte</th>
+              <th>Référence Officielle</th>
+              <th>Position / Grade</th>
+              <th>Autorité Signataire</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>01/01/2024</td>
+              <td>Arrêté d'avancement d'échelon</td>
+              <td><strong>ARR-2024-0089/DGPN/DRH</strong></td>
+              <td>Passage au 3ème échelon (Lieutenant)</td>
+              <td>Directeur Général de la Police Nationale</td>
+            </tr>
+            <tr>
+              <td>01/01/2022</td>
+              <td>Arrêté d'avancement d'échelon</td>
+              <td><strong>ARR-2022-0041/DGPN/DRH</strong></td>
+              <td>Passage au 2ème échelon (Lieutenant)</td>
+              <td>Directeur Général de la Police Nationale</td>
+            </tr>
+            <tr>
+              <td>01/08/2020</td>
+              <td>Décret de nomination &amp; titularisation</td>
+              <td><strong>DÉC-2020-0312/PR/MI</strong></td>
+              <td>Nomination au grade de Lieutenant (Éch. 1)</td>
+              <td>Président de la République</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/composants_ihm_m3.js"></script>
+  <script>
+    const etapesCarriereExemple = [
+      {
+        grade: 'Sous-Lieutenant',
+        numero_echelon: 1,
+        indice_solde: 380,
+        date_effet: '2018-08-01',
+        reference_arrete: 'DÉC-2018-0190/PR',
+        est_passe: true,
+        est_actuel: false,
+        est_futur: false
+      },
+      {
+        grade: 'Lieutenant',
+        numero_echelon: 1,
+        indice_solde: 420,
+        date_effet: '2020-08-01',
+        reference_arrete: 'DÉC-2020-0312/PR',
+        est_passe: true,
+        est_actuel: false,
+        est_futur: false
+      },
+      {
+        grade: 'Lieutenant',
+        numero_echelon: 2,
+        indice_solde: 450,
+        date_effet: '2022-01-01',
+        reference_arrete: 'ARR-2022-0041/DGPN',
+        est_passe: true,
+        est_actuel: false,
+        est_futur: false
+      },
+      {
+        grade: 'Lieutenant',
+        numero_echelon: 3,
+        indice_solde: 480,
+        date_effet: '2024-01-01',
+        reference_arrete: 'ARR-2024-0089/DGPN',
+        est_passe: false,
+        est_actuel: true,
+        est_futur: false
+      },
+      {
+        grade: 'Lieutenant',
+        numero_echelon: 4,
+        indice_solde: 520,
+        date_effet: '2026-01-01',
+        reference_arrete: 'Prévision Grand Choix',
+        est_passe: false,
+        est_actuel: false,
+        est_futur: true
+      },
+      {
+        grade: 'Capitaine',
+        numero_echelon: 1,
+        indice_solde: 560,
+        date_effet: '2027-01-01',
+        reference_arrete: 'Tableau Avancement 2027',
+        est_passe: false,
+        est_actuel: false,
+        est_futur: true
+      }
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      window.SIRH_M3.rendreFriseCarriere(etapesCarriereExemple, 'conteneur-frise-dynamique');
+    });
+
+    function changerVueAgent(nomVue) {
+      const vues = ['frise', 'qualifs', 'evaluations', 'position'];
+      vues.forEach(v => {
+        const el = document.getElementById(`vue-agent-${v}`);
+        const btn = document.getElementById(`btn-onglet-${v}`);
+        if (el) el.style.display = (v === nomVue) ? 'block' : 'none';
+        if (btn) btn.className = `onglet-btn-m3 ${v === nomVue ? 'actif' : ''}`;
+      });
+    }
+  </script>
+</body>
+</html>

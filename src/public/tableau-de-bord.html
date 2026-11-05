@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tableau de bord — SIRH Police Nationale de Djibouti</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- En-tête supérieur républicain -->
+  <header class="en-tete-republicain">
+    <div class="marque-institution">
+      <div class="logo-police">PND</div>
+      <div class="titre-systeme">
+        <h1>Police Nationale de Djibouti</h1>
+        <p>Direction Générale — Système Intranet de Gestion des Ressources Humaines</p>
+      </div>
+    </div>
+    <div id="profil-utilisateur-connecte" class="bloc-profil"></div>
+  </header>
+
+  <div class="disposition-principale">
+    <!-- Barre de navigation latérale dynamique -->
+    <nav id="menu-navigation-laterale" class="barre-navigation"></nav>
+
+    <!-- Zone principale -->
+    <main class="contenu-principal">
+      <div class="entete-page">
+        <div>
+          <h2>Tableau de bord opérationnel</h2>
+          <p id="sous-titre-tableau">Vue synthétique des effectifs et des structures de la Police Nationale</p>
+        </div>
+        <div id="zone-actions-rapides"></div>
+      </div>
+
+      <!-- Grille d'indicateurs clés -->
+      <div class="grille-indicateurs">
+        <div class="carte-indicateur">
+          <span class="libelle">Unités territoriales</span>
+          <span id="indicateur-unites" class="valeur">17</span>
+          <span class="sous-texte">Directions, commissariats et régions</span>
+        </div>
+        <div class="carte-indicateur">
+          <span class="libelle">Effectifs sous autorité</span>
+          <span id="indicateur-agents" class="valeur">-</span>
+          <span class="sous-texte">Agents actifs au tableau</span>
+        </div>
+        <div class="carte-indicateur">
+          <span class="libelle">Postes budgétaires</span>
+          <span id="indicateur-postes" class="valeur">-</span>
+          <span class="sous-texte">Postes pourvus et vacants</span>
+        </div>
+        <div class="carte-indicateur">
+          <span class="libelle">Intégrité de l'audit</span>
+          <span id="indicateur-audit" class="valeur" style="color: var(--succes-texte);">100%</span>
+          <span class="sous-texte">Chaînage SHA-256 certifié</span>
+        </div>
+      </div>
+
+      <!-- Synthèse des unités et effectifs -->
+      <div class="panneau">
+        <div class="panneau-entete">
+          <h3>Répartition des effectifs par unité de commandement</h3>
+          <a href="/unites.html" class="bouton bouton-secondaire bouton-petit">Voir l'organigramme</a>
+        </div>
+        <div class="tableau-conteneur">
+          <table class="tableau-donnees">
+            <thead>
+              <tr>
+                <th>Code unité</th>
+                <th>Désignation de l'unité</th>
+                <th>Type</th>
+                <th>Région</th>
+                <th>Effectif actif</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tableau-corps-unites">
+              <tr>
+                <td colspan="6" style="text-align: center; color: var(--texte-clair); padding: 1.5rem;">
+                  Chargement des données en cours...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const session = window.SIRH_API.obtenirSessionLocale();
+      if (!session) return;
+
+      const actionsConteneur = document.getElementById('zone-actions-rapides');
+      if (session.role === 'GESTIONNAIRE_RH') {
+        actionsConteneur.innerHTML = `
+          <a href="/agent-creation.html" class="bouton bouton-primaire">➕ Recruter un agent</a>
+          <a href="/mutations.html" class="bouton bouton-secondaire" style="margin-left: 0.5rem;">🔄 Muter un agent</a>
+        `;
+      } else if (session.role === 'ADMIN_FONCTIONNEL_RH') {
+        actionsConteneur.innerHTML = `
+          <a href="/admin-fonctionnel.html" class="bouton bouton-primaire">⚙️ Gérer le Form Builder</a>
+        `;
+      }
+
+      try {
+        // Chargement des unités
+        const resUnites = await window.SIRH_API.listerUnites();
+        const unites = resUnites.unites || [];
+        document.getElementById('indicateur-unites').textContent = unites.length;
+
+        let totalEffectifs = 0;
+        let totalPostes = 0;
+
+        const tbody = document.getElementById('tableau-corps-unites');
+        if (unites.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Aucune unité recensée.</td></tr>';
+        } else {
+          tbody.innerHTML = unites.slice(0, 8).map(u => {
+            const effectif = parseInt(u.effectif_actif || 0, 10);
+            totalEffectifs += effectif;
+            totalPostes += parseInt(u.total_postes || 0, 10);
+            return `
+              <tr>
+                <td><strong>${u.code}</strong></td>
+                <td>${u.nom}</td>
+                <td><span class="badge-role" style="background:#E2E8F0; color:#1A202C;">${u.type_unite}</span></td>
+                <td>${u.region_administrative}</td>
+                <td><strong>${effectif}</strong> agent(s)</td>
+                <td>
+                  <a href="/unites.html?id=${encodeURIComponent(u.id)}" class="bouton bouton-secondaire bouton-petit">Consulter</a>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+
+        // Si rôle AGENT ou CHEF DE SERVICE, ajuster les indicateurs
+        if (session.role === 'GESTIONNAIRE_RH' || session.role === 'AUDITEUR') {
+          const resAgents = await window.SIRH_API.listerAgents({ limite: 1 });
+          document.getElementById('indicateur-agents').textContent = resAgents.total || totalEffectifs;
+        } else {
+          document.getElementById('indicateur-agents').textContent = totalEffectifs;
+        }
+
+        const resPostes = await window.SIRH_API.listerPostes();
+        document.getElementById('indicateur-postes').textContent = (resPostes.postes || []).length;
+      } catch (err) {
+        console.error("Erreur chargement tableau de bord :", err);
+      }
+    });
+  </script>
+</body>
+</html>

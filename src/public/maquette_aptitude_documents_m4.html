@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aptitude Administrative &amp; Actes Officiels PDF — Police Djiboutienne</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/styles_souverains_m4.css">
+</head>
+<body>
+  <!-- En-tête supérieur républicain -->
+  <header class="en-tete-republicain">
+    <div class="marque-institution">
+      <div class="logo-police">PND</div>
+      <div class="titre-systeme">
+        <h1>Police Nationale de Djibouti</h1>
+        <p>Direction des Ressources Humaines — Aptitude Administrative &amp; Actes Officiels PDF — Jalon M4</p>
+      </div>
+    </div>
+    <div id="profil-utilisateur-connecte" class="bloc-profil">
+      <div style="text-align: right;">
+        <div style="font-weight: 700; font-size: 0.9rem;">Commandant Houssein Barkad Robleh</div>
+        <div style="font-size: 0.75rem; color: #CBD5E0;">Directeur des Ressources Humaines (DGPN)</div>
+      </div>
+      <span class="badge-role">Gestionnaire RH</span>
+    </div>
+  </header>
+  <div class="ruban-republicain"></div>
+
+  <div class="disposition-principale">
+    <nav class="barre-navigation">
+      <a href="/portail-rh-m3.html" class="lien-nav">
+        <span>🎖️</span>
+        <span>Carrières &amp; Solde</span>
+      </a>
+      <a href="maquette_planning_commandement_m4.html" class="lien-nav">
+        <span>🕒</span>
+        <span>Planning Opérationnel</span>
+      </a>
+      <a href="maquette_aptitude_documents_m4.html" class="lien-nav actif">
+        <span>📄</span>
+        <span>Aptitude &amp; Actes PDF</span>
+      </a>
+      <a href="/audit.html" class="lien-nav">
+        <span>📜</span>
+        <span>Registre d'Audit SHA-256</span>
+      </a>
+    </nav>
+
+    <main class="contenu-principal">
+      <div class="entete-page">
+        <div>
+          <h2>Aptitude Administrative &amp; Génération d'Actes Officiels PDF</h2>
+          <p>Sanctuarisation absolue du secret médical et scellement cryptographique SHA-256 des actes républicains</p>
+        </div>
+      </div>
+
+      <!-- Navigation par onglets -->
+      <div class="onglets-navigation-m3">
+        <button id="btn-onglet-aptitude" class="onglet-btn-m3 actif" onclick="changerOngletM4('aptitude')">
+          🛡️ Saisie de l'Aptitude Administrative (Intercepteur Anti-Médical)
+        </button>
+        <button id="btn-onglet-documents" class="onglet-btn-m3" onclick="changerOngletM4('documents')">
+          📜 Moteur de Génération d'Actes Officiels PDF Scellés
+        </button>
+      </div>
+
+      <!-- ====================================================================
+           VOLET 1 : SAISIE DE L'APTITUDE ADMINISTRATIVE ET INTERCEPTEUR MÉDICAL
+           ==================================================================== -->
+      <div id="vue-aptitude-administrative">
+        <div class="panneau">
+          <div class="panneau-entete">
+            <div>
+              <h3>Enregistrement d'une Décision Administrative d'Aptitude Opérationnelle</h3>
+              <p style="font-size: 0.85rem; color: var(--texte-clair);">
+                Règle constitutionnelle d'ordre public : Strictement zéro donnée médicale, zéro pathologie, zéro diagnostic.
+              </p>
+            </div>
+          </div>
+
+          <div style="padding: 1.5rem;">
+            <!-- BANNIÈRE D'ALERTE D'INTERCEPTION MÉDICALE EN TEMPS RÉEL -->
+            <div id="alerte-medicale" class="banniere-violation-medicale">
+              <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <span style="font-size: 2rem;">🚫</span>
+                <div>
+                  <h4 style="margin: 0 0 0.25rem 0; font-weight: 800; font-size: 1rem;">
+                    INTERDICTION RÉPUBLICAINE STRICTE : VIOLATION DU SECRET MÉDICAL
+                  </h4>
+                  <p style="margin: 0; font-size: 0.85rem; line-height: 1.4;">
+                    Le terme prohibé « <strong id="mot-medical-fautif" style="text-decoration: underline;"></strong> » a été intercepté en direct.
+                    Le secret médical est absolu au sein de la Police Djiboutienne. Seules les restrictions opérationnelles administratives
+                    (ex: dispense de nuit, exemption temporaire d'arme) sont autorisées, sans aucune mention de santé ou diagnostic.
+                    Le bouton de transmission est verrouillé tant que ce terme n'est pas effacé.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Formulaire de saisie d'aptitude administrative -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-bottom: 1.25rem;">
+              <div>
+                <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.35rem;">
+                  Fonctionnaire de Police :
+                </label>
+                <select class="champ-selection" id="selecteur-agent-aptitude" style="width: 100%;">
+                  <option value="PND-2018-00452">Lieutenant Abdillahi Daher Hassan (PND-2018-00452)</option>
+                  <option value="PND-2016-00214">Sergent-chef Daher Ali (PND-2016-00214)</option>
+                  <option value="PND-2020-00812">Brigadier Moussa Gouled (PND-2020-00812)</option>
+                </select>
+              </div>
+
+              <div>
+                <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.35rem;">
+                  Conclusion Administrative d'Aptitude :
+                </label>
+                <select class="champ-selection" id="decision-aptitude" style="width: 100%;">
+                  <option value="APTE_SERVICE_ACTIF">Apte au service actif sans restriction</option>
+                  <option value="INAPTE_TEMPORAIRE_PORT_ARME">Inapte temporaire au port de l'arme de service</option>
+                  <option value="AMENAGEMENT_POSTE">Aménagement de poste sédentaire (dispense voie publique/nuit)</option>
+                  <option value="INAPTE_TEMPORAIRE_CONDUITE">Inapte temporaire à la conduite de véhicules d'urgence</option>
+                </select>
+              </div>
+
+              <div>
+                <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.35rem;">
+                  Identifiant du Médecin Militaire Référent :
+                </label>
+                <input type="text" class="champ-texte" id="id-medecin-referent" value="MED-MIL-04" style="width: 100%;" readonly>
+                <small style="color: #64748b; font-size: 0.75rem;">Seul le matricule officiel du médecin est consigné.</small>
+              </div>
+
+              <div>
+                <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.35rem;">
+                  Date d'Échéance de la Décision :
+                </label>
+                <input type="date" class="champ-texte" id="date-echeance-aptitude" value="2027-04-30" style="width: 100%;">
+              </div>
+            </div>
+
+            <!-- Champ texte surveillé en temps réel par l'intercepteur -->
+            <div style="margin-bottom: 1.5rem;">
+              <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.35rem;">
+                Détail de la Restriction Opérationnelle Administrative (Zone surveillée) :
+              </label>
+              <textarea
+                id="champ-restriction-administrative"
+                class="champ-texte"
+                rows="3"
+                style="width: 100%;"
+                placeholder="Exemple conforme : Affectation exclusive en brigade sédentaire de jour et exemption de patrouille motorisée..."
+              >Affectation en brigade sédentaire de jour et exemption de patrouille motorisée jusqu'à échéance.</textarea>
+              <small style="color: #64748b; font-size: 0.75rem;">
+                ⚡ Protection active : Tout mot médical (ex: maladie, blessure, ordonnance, diagnostic, traitement, tension) bloquera instantanément la transmission.
+              </small>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+              <button class="bouton bouton-secondaire" onclick="testerMotMedicalInterdit()">
+                🧪 Tester la Détection d'un Mot Médical Interdit
+              </button>
+              <button id="btn-enregistrer-aptitude" class="bouton bouton-primaire" onclick="enregistrerAptitudeAdministrative()">
+                🛡️ Enregistrer la Décision d'Aptitude Administrative
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tableau récapitulatif des aptitudes de l'unité -->
+        <div class="panneau" style="margin-top: 1.5rem;">
+          <div class="panneau-entete">
+            <h3>Registre des Décisions Administratives d'Aptitude en Vigueur</h3>
+          </div>
+          <div class="tableau-conteneur">
+            <table class="tableau">
+              <thead>
+                <tr>
+                  <th>Agent &amp; Matricule</th>
+                  <th>Décision Administrative</th>
+                  <th>Restriction Opérationnelle</th>
+                  <th>Échéance</th>
+                  <th>Médecin Référent</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Lieutenant Abdillahi Hassan</strong> (PND-2018-00452)</td>
+                  <td><span class="badge-aptitude apte-actif">✓ Apte au service actif</span></td>
+                  <td>Aucune restriction (port d'arme et nuit autorisés)</td>
+                  <td>01/01/2027</td>
+                  <td>MED-MIL-01</td>
+                  <td><button class="bouton bouton-secondaire bouton-petit">Mettre à jour</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Sergent Aden Omar</strong> (PND-2017-00341)</td>
+                  <td><span class="badge-aptitude inapte-arme">⚠️ Dispense Port d'Arme</span></td>
+                  <td>Exemption temporaire d'armement — affectation planton</td>
+                  <td>15/12/2026</td>
+                  <td>MED-MIL-03</td>
+                  <td><button class="bouton bouton-secondaire bouton-petit">Mettre à jour</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Brigadier Moussa Gouled</strong> (PND-2020-00812)</td>
+                  <td><span class="badge-aptitude amenagement-poste">Aménagement de Poste</span></td>
+                  <td>Service diurne uniquement, dispense de nuit (22h-06h)</td>
+                  <td>30/06/2027</td>
+                  <td>MED-MIL-02</td>
+                  <td><button class="bouton bouton-secondaire bouton-petit">Mettre à jour</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           VOLET 2 : MOTEUR DE GÉNÉRATION D'ACTES OFFICIELS PDF & SCELLEMENT SHA-256
+           ==================================================================== -->
+      <div id="vue-documents-officiels" style="display: none;">
+        <div class="panneau" style="margin-bottom: 1.5rem;">
+          <div class="panneau-entete">
+            <div>
+              <h3>Générateur d'Actes Administratifs Républicains</h3>
+              <p style="font-size: 0.85rem; color: var(--texte-clair);">
+                Production conforme aux standards de l'État djiboutien, filigrane dynamique et scellement cryptographique SHA-256
+              </p>
+            </div>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <select id="selecteur-modele-acte" class="champ-selection" onchange="actualiserApercuDocument()">
+                <option value="ARRETE_MUTATION">Arrêté Ministériel de Mutation (ARRETE_MUTATION)</option>
+                <option value="ORDRE_MISSION">Ordre de Mission de Remplacement d'Urgence (ORDRE_MISSION)</option>
+                <option value="ATTESTATION_EXERCICE">Attestation d'Exercice et de Présence (ATTESTATION_EXERCICE)</option>
+                <option value="FICHE_INDIVIDUELLE">Fiche Individuelle de Situation Administrative</option>
+              </select>
+              <button class="bouton bouton-primaire bouton-petit" onclick="imprimerActeOfficiel()">
+                🖨️ Imprimer l'Acte (PDF)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ZONE D'APERÇU DE LA FEUILLE OFFICIELLE FORMAT A4 -->
+        <div class="conteneur-apercu-acte-officiel">
+          <div id="zone-rendu-document-a4">
+            <!-- Rendu dynamique injecté par JavaScript -->
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/composants_ihm_m4.js"></script>
+  <script>
+    // Initialisation au chargement de la page
+    document.addEventListener('DOMContentLoaded', function () {
+      // 1. Attachement de l'intercepteur médical souverain
+      SIRH_M4.attacherIntercepteurMedical(
+        'champ-restriction-administrative',
+        'alerte-medicale',
+        'btn-enregistrer-aptitude',
+        'mot-medical-fautif'
+      );
+
+      // 2. Génération de l'aperçu par défaut de l'acte officiel
+      actualiserApercuDocument();
+    });
+
+    function changerOngletM4(onglet) {
+      const vueAptitude = document.getElementById('vue-aptitude-administrative');
+      const vueDocs = document.getElementById('vue-documents-officiels');
+      const btnAptitude = document.getElementById('btn-onglet-aptitude');
+      const btnDocs = document.getElementById('btn-onglet-documents');
+
+      if (onglet === 'aptitude') {
+        vueAptitude.style.display = 'block';
+        vueDocs.style.display = 'none';
+        btnAptitude.classList.add('actif');
+        btnDocs.classList.remove('actif');
+      } else {
+        vueAptitude.style.display = 'none';
+        vueDocs.style.display = 'block';
+        btnAptitude.classList.remove('actif');
+        btnDocs.classList.add('actif');
+        actualiserApercuDocument();
+      }
+    }
+
+    function testerMotMedicalInterdit() {
+      const champ = document.getElementById('champ-restriction-administrative');
+      champ.value = 'Exemption de patrouille suite à une maladie et ordonnance de traitement.';
+      // Déclencher l'événement input
+      champ.dispatchEvent(new Event('input'));
+    }
+
+    function enregistrerAptitudeAdministrative() {
+      const agent = document.getElementById('selecteur-agent-aptitude').value;
+      const decision = document.getElementById('decision-aptitude').value;
+      alert(
+        'DÉCISION D\'APTITUDE ADMINISTRATIVE ENREGISTRÉE :\n\n' +
+        '- Agent : ' + agent + '\n' +
+        '- Décision : ' + decision + '\n' +
+        '- Contrôle anti-médical : CONFORME (Aucun terme médical consigné)\n' +
+        '- Médecin militaire référent : MED-MIL-04\n' +
+        '- Registre de la Police Nationale mis à jour.'
+      );
+    }
+
+    async function actualiserApercuDocument() {
+      const modele = document.getElementById('selecteur-modele-acte').value;
+      const donneesExemple = {
+        nom_complet: 'Lieutenant Abdillahi Daher Hassan',
+        matricule: 'PND-2018-00452',
+        grade: 'Lieutenant de Police',
+        ancienne_unite: 'Commissariat Central de Djibouti-Ville — Brigade Voie Publique',
+        nouvelle_unite: 'Commissariat Régional d\'Ali-Sabieh (Commandement de Brigade)',
+        date_effet: '01 Décembre 2026',
+        poste_operationnel: 'Chef de patrouille motorisée de nuit',
+        date_vacation: '04 Novembre 2026',
+        plage_horaire: '22h00 - 06h00'
+      };
+
+      const resultat = await SIRH_M4.genererActeOfficiel(modele, donneesExemple);
+      const zoneA4 = document.getElementById('zone-rendu-document-a4');
+      zoneA4.innerHTML = resultat.html;
+    }
+
+    function imprimerActeOfficiel() {
+      window.print();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+{
+  "pays": "République de Djibouti",
+  "devise": "Unité - Égalité - Paix",
+  "institution": "Direction Générale de la Police Nationale (DGPN)",
+  "lois_reference": [
+    "Loi n° 72/AN/94/3ème L du 24 janvier 1995",
+    "Loi n° 46/AN/04/5ème L du 27 mars 2004",
+    "Loi n° 116/AN/21/8ème L du 24 mars 2021"
+  ],
+  "corps": [
+    {
+      "code": "OFFICIERS_SUPERIEURS",
+      "libelle": "Officiers de Police Supérieurs",
+      "categorie": "A1",
+      "grades": ["Colonel", "Lieutenant-Colonel", "Commandant"]
+    },
+    {
+      "code": "OFFICIERS_SUBALTERNES",
+      "libelle": "Officiers de Police Subalternes",
+      "categorie": "A2",
+      "grades": ["Capitaine", "Lieutenant"]
+    },
+    {
+      "code": "SOUS_OFFICIERS",
+      "libelle": "Sous-Officiers de Police",
+      "categorie": "B1",
+      "grades": ["Adjudant-Chef", "Adjudant", "Sergent-Chef", "Sergent"]
+    },
+    {
+      "code": "GRADES",
+      "libelle": "Gradés de Police",
+      "categorie": "C1",
+      "grades": ["Caporal-Chef", "Caporal"]
+    },
+    {
+      "code": "AGENTS",
+      "libelle": "Agents de Police",
+      "categorie": "C2",
+      "grades": ["Agent de 1ère classe", "Agent de 2ème classe", "Élève Agent"]
+    }
+  ],
+  "grades_detail": [
+    { "nom": "Colonel", "abbreviation": "Col.", "corps": "OFFICIERS_SUPERIEURS", "echelons_max": 5, "indice_base": 1200 },
+    { "nom": "Lieutenant-Colonel", "abbreviation": "Lcl.", "corps": "OFFICIERS_SUPERIEURS", "echelons_max": 5, "indice_base": 1100 },
+    { "nom": "Commandant", "abbreviation": "Cdt.", "corps": "OFFICIERS_SUPERIEURS", "echelons_max": 5, "indice_base": 950 },
+    { "nom": "Capitaine", "abbreviation": "Cap.", "corps": "OFFICIERS_SUBALTERNES", "echelons_max": 6, "indice_base": 850 },
+    { "nom": "Lieutenant", "abbreviation": "Ltn.", "corps": "OFFICIERS_SUBALTERNES", "echelons_max": 5, "indice_base": 750 },
+    { "nom": "Adjudant-Chef", "abbreviation": "Adj-C.", "corps": "SOUS_OFFICIERS", "echelons_max": 6, "indice_base": 650 },
+    { "nom": "Adjudant", "abbreviation": "Adj.", "corps": "SOUS_OFFICIERS", "echelons_max": 6, "indice_base": 580 },
+    { "nom": "Sergent-Chef", "abbreviation": "Sgt-C.", "corps": "SOUS_OFFICIERS", "echelons_max": 7, "indice_base": 520 },
+    { "nom": "Sergent", "abbreviation": "Sgt.", "corps": "SOUS_OFFICIERS", "echelons_max": 7, "indice_base": 460 },
+    { "nom": "Caporal-Chef", "abbreviation": "Cpl-C.", "corps": "GRADES", "echelons_max": 8, "indice_base": 400 },
+    { "nom": "Caporal", "abbreviation": "Cpl.", "corps": "GRADES", "echelons_max": 8, "indice_base": 360 },
+    { "nom": "Agent de 1ère classe", "abbreviation": "Agt-1.", "corps": "AGENTS", "echelons_max": 9, "indice_base": 320 },
+    { "nom": "Agent de 2ème classe", "abbreviation": "Agt-2.", "corps": "AGENTS", "echelons_max": 7, "indice_base": 280 },
+    { "nom": "Élève Agent", "abbreviation": "Elv.", "corps": "AGENTS", "echelons_max": 1, "indice_base": 220 }
+  ],
+  "unités": [
+    { "id": "U-DGPN", "code": "DGPN", "nom": "Direction Générale de la Police Nationale", "type": "DIRECTION_GENERALE", "parent_id": null },
+    { "id": "U-DRH", "code": "DRH", "nom": "Direction des Ressources Humaines et des Moyens Généraux", "type": "DIRECTION", "parent_id": "U-DGPN" },
+    { "id": "U-DSP", "code": "DSP", "nom": "Direction de la Sécurité Publique", "type": "DIRECTION", "parent_id": "U-DGPN" },
+    { "id": "U-DPF", "code": "DPF", "nom": "Direction de la Police aux Frontières", "type": "DIRECTION", "parent_id": "U-DGPN" },
+    { "id": "U-DPJ", "code": "DPJ", "nom": "Direction de la Police Judiciaire", "type": "DIRECTION", "parent_id": "U-DGPN" },
+    { "id": "U-ENP", "code": "ENP", "nom": "École Nationale de Police", "type": "DIRECTION", "parent_id": "U-DGPN" },
+    { "id": "U-CC-DJIB", "code": "CC-DJIB", "nom": "Commissariat Central de Djibouti-Ville", "type": "COMMISSARIAT", "parent_id": "U-DSP" },
+    { "id": "U-ARR-1", "code": "ARR-1-PLATEAU", "nom": "1er Arrondissement (Plateau)", "type": "COMMISSARIAT", "parent_id": "U-CC-DJIB" },
+    { "id": "U-ARR-2", "code": "ARR-2-MARABOUT", "nom": "2ème Arrondissement (Marabout)", "type": "COMMISSARIAT", "parent_id": "U-CC-DJIB" },
+    { "id": "U-ARR-3", "code": "ARR-3-AMBOULI", "nom": "3ème Arrondissement (Ambouli)", "type": "COMMISSARIAT", "parent_id": "U-CC-DJIB" },
+    { "id": "U-ARR-4", "code": "ARR-4-BALBALA-N", "nom": "4ème Arrondissement (Balbala Nord)", "type": "COMMISSARIAT", "parent_id": "U-CC-DJIB" },
+    { "id": "U-ARR-5", "code": "ARR-5-BALBALA-S", "nom": "5ème Arrondissement (Balbala Sud)", "type": "COMMISSARIAT", "parent_id": "U-CC-DJIB" },
+    { "id": "U-REG-ALI", "code": "REG-ALI-SABIEH", "nom": "Commissariat Régional d'Ali-Sabieh", "type": "COMMISSARIAT", "parent_id": "U-DSP" },
+    { "id": "U-REG-DIK", "code": "REG-DIKHIL", "nom": "Commissariat Régional de Dikhil", "type": "COMMISSARIAT", "parent_id": "U-DSP" },
+    { "id": "U-REG-TAD", "code": "REG-TADJOURAH", "nom": "Commissariat Régional de Tadjourah", "type": "COMMISSARIAT", "parent_id": "U-DSP" },
+    { "id": "U-REG-OBO", "code": "REG-OBOCK", "nom": "Commissariat Régional d'Obock", "type": "COMMISSARIAT", "parent_id": "U-DSP" },
+    { "id": "U-REG-ART", "code": "REG-ARTA", "nom": "Commissariat Régional d'Arta", "type": "COMMISSARIAT", "parent_id": "U-DSP" }
+  ],
+  "roles": [
+    "ADMIN_TECHNIQUE",
+    "ADMIN_FONCTIONNEL_RH",
+    "GESTIONNAIRE_RH",
+    "CHEF_DE_SERVICE",
+    "AGENT",
+    "AUDITEUR"
+  ],
+  "positions_statutaires": [
+    "ACTIVITE",
+    "DETACHEMENT",
+    "DISPONIBILITE",
+    "SOUS_LES_DRAPEAUX",
+    "SUSPENSION_ADMINISTRATIVE"
+  ],
+  "types_conges": [
+    { "code": "ANNUEL", "libelle": "Congé annuel ordinaire", "quota": 30, "deductible": true },
+    { "code": "MALADIE_ORDINAIRE", "libelle": "Congé de maladie ordinaire", "quota": 90, "deductible": false },
+    { "code": "MATERNITE", "libelle": "Congé de maternité", "quota": 98, "deductible": false },
+    { "code": "PATERNITE", "libelle": "Congé de paternité", "quota": 3, "deductible": false },
+    { "code": "EXCEPTIONNEL", "libelle": "Permission exceptionnelle", "quota": 10, "deductible": false }
+  ]
+}

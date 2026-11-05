@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sanctuaire Disciplinaire — Procédure Contradictoire &amp; Sanctions — Police Djiboutienne</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/styles_souverains_m4.css">
+</head>
+<body>
+  <!-- En-tête supérieur républicain -->
+  <header class="en-tete-republicain">
+    <div class="marque-institution">
+      <div class="logo-police">PND</div>
+      <div class="titre-systeme">
+        <h1>Police Nationale de Djibouti</h1>
+        <p>Direction Générale — Commission Disciplinaire &amp; Inspection Générale — Jalon M4</p>
+      </div>
+    </div>
+    <div id="profil-utilisateur-connecte" class="bloc-profil">
+      <div style="text-align: right;">
+        <div style="font-weight: 700; font-size: 0.9rem;">Colonel Abdillahi Abdi Farah</div>
+        <div style="font-size: 0.75rem; color: #CBD5E0;">Directeur Général de la Police Nationale (DGPN)</div>
+      </div>
+      <span class="badge-role" style="background: var(--djibouti-or); color: var(--djibouti-bleu-police);">Habilitation Disciplinaire</span>
+    </div>
+  </header>
+  <div class="ruban-republicain"></div>
+
+  <div class="disposition-principale">
+    <nav class="barre-navigation">
+      <a href="/portail-rh-m3.html" class="lien-nav">
+        <span>🎖️</span>
+        <span>Carrières &amp; Solde</span>
+      </a>
+      <a href="maquette_discipline_cloisonnee_m4.html" class="lien-nav actif">
+        <span>⚖️</span>
+        <span>Discipline Cloisonnée</span>
+      </a>
+      <a href="/audit.html" class="lien-nav">
+        <span>📜</span>
+        <span>Journal d'Audit SHA-256</span>
+      </a>
+    </nav>
+
+    <main class="contenu-principal">
+      <div class="entete-page">
+        <div>
+          <h2>Registre Confidentiel de Discipline &amp; Déontologie Policière</h2>
+          <p>Sanctuaire étanche : instruction contradictoire, droits de la défense (15 jours) et échelle statutaire des 3 groupes</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <label style="font-size: 0.8rem; font-weight: 700; color: var(--djibouti-bleu-police);">Simulateur de profil :</label>
+          <select id="selecteur-test-role" class="selecteur-souverain" onchange="basculerProfilSimulation(this.value)">
+            <option value="DGPN_HABILITE">DGPN / Commission Paritaire (Habilité - Accès complet)</option>
+            <option value="CHEF_SERVICE_LOCAL">Chef de Service Territorial (Non Habilité - Cloisonné)</option>
+            <option value="ADMIN_TECHNIQUE">Administrateur Technique (Non Habilité - Rejet 403)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- VUE BLOQUÉE EN CAS D'ACCÈS ILLICITE (CLOISONNEMENT FORCÉ) -->
+      <div id="ecran-acces-bloque" style="display: none; background: #fef2f2; border: 2px solid #b91c1c; border-radius: 8px; padding: 2.5rem; text-align: center; margin: 2rem 0;">
+        <div style="font-size: 3.5rem; margin-bottom: 1rem;">⛔</div>
+        <h3 style="color: #991b1b; font-size: 1.5rem; font-weight: 800; margin-bottom: 0.75rem;">
+          ACCÈS INTERDIT (HTTP 403) — SANCTUAIRE DISCIPLINAIRE CLOISONNÉ
+        </h3>
+        <p style="color: #7f1d1d; max-width: 650px; margin: 0 auto 1.5rem auto; line-height: 1.6;">
+          Conformément aux dispositions d'ordre public de la <strong>Loi n° 116/AN/21</strong> et aux impératifs d'étanchéité républicaine,
+          la consultation des dossiers disciplinaires est strictement interdite aux échelons de commandement territorial ainsi qu'à l'administration technique.
+          Cette tentative d'accès non autorisée a été automatiquement enregistrée au journal d'audit cryptographique inaltérable.
+        </p>
+        <span class="badge-role" style="background: #991b1b; color: #fff; padding: 0.5rem 1rem;">
+          Infraction bloquée et tracée sous l'identifiant AUDIT-DISC-BLOC-403
+        </span>
+      </div>
+
+      <!-- VUE AUTORISÉE (DIRECTION GÉNÉRALE ET COMMISSION PARITAIRE) -->
+      <div id="conteneur-vue-autorisee">
+        <div class="sanctuaire-disciplinaire">
+          <!-- Bandeau solennel confidentiel défense -->
+          <div class="bandeau-confidentiel-defense">
+            <div class="titre-defense">
+              <span>🔒</span>
+              <div>
+                <h3>DIFFUSION STRICTEMENT RESTREINTE — COMMISSION DE DISCIPLINE</h3>
+                <small style="color: #fca5a5;">Garantie légale du secret déontologique et présomption d'innocence</small>
+              </div>
+            </div>
+            <span class="badge-habilitation-dgpn">Accès Réservé DGPN</span>
+          </div>
+
+          <!-- Frise de la procédure contradictoire en 3 phases -->
+          <div class="frise-procedure-contradictoire">
+            <div class="etape-procedure terminee">
+              <div class="numero-cercle">1</div>
+              <span class="titre-etape">Signalement &amp; Allégation</span>
+              <span class="delai-garantie">Fait notifié le 10/10/2026</span>
+            </div>
+            <div class="etape-procedure active">
+              <div class="numero-cercle">2</div>
+              <span class="titre-etape">Instruction Contradictoire</span>
+              <span class="delai-garantie" style="color: #dc2626; font-weight: 700;">Délai de défense (15j) : 18 jours écoulés (Prêt)</span>
+            </div>
+            <div class="etape-procedure">
+              <div class="numero-cercle">3</div>
+              <span class="titre-etape">Délibération &amp; Arrêté</span>
+              <span class="delai-garantie">Saisine de la commission paritaire</span>
+            </div>
+          </div>
+
+          <!-- Dossier en cours d'instruction contradictoire -->
+          <div style="padding: 1.5rem;">
+            <div class="fiche-vacance-inopinee" style="border-left-color: var(--djibouti-rouge); background: #fff5f5;">
+              <div>
+                <h4 style="margin: 0 0 0.5rem 0; color: #991b1b; font-size: 1.1rem;">
+                  Dossier d'Instruction : Réf. DISC-2026-008
+                </h4>
+                <p style="margin: 0; font-size: 0.9rem; color: #334155;">
+                  Fonctionnaire concerné : <strong>Capitaine Omar Robleh Hassan</strong> (Matricule : <strong>PND-2012-00084</strong>)<br>
+                  Corps : Officiers de Police Subalternes | Unité : Division Judiciaire de Balbala
+                </p>
+                <div style="margin-top: 0.5rem; font-size: 0.85rem; color: #64748b;">
+                  Communication officielle du dossier intégral : <strong>12 Octobre 2026</strong> avec accusé de réception.<br>
+                  Assistance : Me Ali Hassan, avocat au Barreau de Djibouti désigné par l'agent.
+                </div>
+              </div>
+              <div style="text-align: right;">
+                <span class="pastille-statut" style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5;">
+                  Phase 2 : Instruction Contradictoire
+                </span>
+                <div style="font-size: 0.8rem; color: #16a34a; font-weight: 700; margin-top: 0.5rem;">
+                  ✓ Droit de communication de 15 jours respecté
+                </div>
+              </div>
+            </div>
+
+            <!-- Formulaire de Saisie de Délibération & Sanction Statutaire -->
+            <div class="panneau" style="margin-top: 1.5rem; border: 1px solid #cbd5e1;">
+              <div class="panneau-entete" style="background: #f8fafc;">
+                <div>
+                  <h4 style="margin: 0; color: var(--djibouti-bleu-police);">Prononcé de la Décision Disciplinaire (Loi 116/AN/21)</h4>
+                  <small style="color: #64748b;">Enregistrement de la sanction conforme au barème des 3 groupes légaux</small>
+                </div>
+              </div>
+
+              <div style="padding: 1.25rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+                  <div>
+                    <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.35rem;">
+                      Groupe Statutaire de Sanction :
+                    </label>
+                    <select id="selecteur-groupe-sanction" class="champ-selection" style="width: 100%;" onchange="mettreAJourNaturesSanction(this.value)">
+                      <option value="GROUPE_1">1er Groupe — Avertissement ou Blâme</option>
+                      <option value="GROUPE_2" selected>2ème Groupe — Radiation avancement, Abaissement d'échelon, Exclusion temporaire</option>
+                      <option value="GROUPE_3">3ème Groupe — Rétrogradation, Retraite d'office, Révocation</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.35rem;">
+                      Nature Exacte de la Mesure :
+                    </label>
+                    <select id="selecteur-nature-sanction" class="champ-selection" style="width: 100%;">
+                      <option value="RADIATION_TABLEAU">Radiation du tableau d'avancement pour l'année courante</option>
+                      <option value="ABAISSEMENT_ECHELON">Abaissement d'un échelon indiciaire</option>
+                      <option value="EXCLUSION_TEMPORAIRE">Exclusion temporaire de fonctions (8 jours avec retenue)</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.35rem;">
+                      Date d'Effet :
+                    </label>
+                    <input type="date" class="champ-texte" id="date-effet-sanction" value="2026-11-15" style="width: 100%;">
+                  </div>
+
+                  <div>
+                    <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.35rem;">
+                      Référence de l'Arrêté Officiel :
+                    </label>
+                    <input type="text" class="champ-texte" id="ref-arrete-sanction" value="Arrêté n° 2026-118/MSI/DGPN" style="width: 100%;">
+                  </div>
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+                  <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.35rem;">
+                    Motifs de Fait et Délibération de la Commission Paritaire :
+                  </label>
+                  <textarea class="champ-texte" rows="3" style="width: 100%;" placeholder="Considérations déontologiques, manquements établis et garanties de la défense..."></textarea>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+                  <button class="bouton bouton-secondaire" onclick="alert('Dossier classé sans suite pour extinction des griefs.')">
+                    Classer sans suite
+                  </button>
+                  <button class="bouton bouton-primaire" onclick="enregistrerSanctionOfficielle()">
+                    ⚖️ Enregistrer et Notifier l'Arrêté de Sanction
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Registre des 3 Groupes de Sanctions de la Police Djiboutienne -->
+          <div style="background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 1.5rem;">
+            <h4 style="margin: 0 0 1rem 0; color: var(--djibouti-bleu-police);">
+              Échelle Statutaire des Sanctions Disciplinaires (Lois 48/AN/72 et 116/AN/21)
+            </h4>
+
+            <div class="grille-groupes-sanctions" style="padding: 0;">
+              <!-- Groupe 1 -->
+              <div class="carte-groupe-sanction groupe-1">
+                <span class="badge-groupe badge-groupe-1">1er Groupe : Sanctions Morales</span>
+                <p style="font-size: 0.85rem; color: #334155; margin: 0 0 0.5rem 0;">
+                  - Avertissement écrit<br>
+                  - Blâme inscrit au dossier
+                </p>
+                <div style="font-size: 0.75rem; color: #16a34a; font-weight: 700; border-top: 1px dashed #cbd5e1; padding-top: 0.4rem;">
+                  ✓ Effacement automatique après 36 mois de bonne conduite
+                </div>
+              </div>
+
+              <!-- Groupe 2 -->
+              <div class="carte-groupe-sanction groupe-2">
+                <span class="badge-groupe badge-groupe-2">2ème Groupe : Incidences de Carrière</span>
+                <p style="font-size: 0.85rem; color: #334155; margin: 0 0 0.5rem 0;">
+                  - Radiation du tableau d'avancement<br>
+                  - Abaissement d'échelon<br>
+                  - Exclusion temporaire (1 à 15 jours)
+                </p>
+                <div style="font-size: 0.75rem; color: #92400e; font-weight: 700; border-top: 1px dashed #cbd5e1; padding-top: 0.4rem;">
+                  Avis préalable obligatoire de la Commission Paritaire
+                </div>
+              </div>
+
+              <!-- Groupe 3 -->
+              <div class="carte-groupe-sanction groupe-3">
+                <span class="badge-groupe badge-groupe-3">3ème Groupe : Mesures Majeures</span>
+                <p style="font-size: 0.85rem; color: #7f1d1d; margin: 0 0 0.5rem 0;">
+                  - Rétrogradation de grade<br>
+                  - Mise à la retraite d'office<br>
+                  - Révocation sans suspension de pension
+                </p>
+                <div style="font-size: 0.75rem; color: #991b1b; font-weight: 700; border-top: 1px dashed #cbd5e1; padding-top: 0.4rem;">
+                  Compétence exclusive du Ministre de l'Intérieur
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/composants_ihm_m4.js"></script>
+  <script>
+    function basculerProfilSimulation(profil) {
+      const vueAutorisee = document.getElementById('conteneur-vue-autorisee');
+      const vueBloquee = document.getElementById('ecran-acces-bloque');
+
+      if (profil === 'DGPN_HABILITE') {
+        vueAutorisee.style.display = 'block';
+        vueBloquee.style.display = 'none';
+      } else {
+        vueAutorisee.style.display = 'none';
+        vueBloquee.style.display = 'block';
+      }
+    }
+
+    function mettreAJourNaturesSanction(groupe) {
+      const selecteur = document.getElementById('selecteur-nature-sanction');
+      selecteur.innerHTML = '';
+
+      if (groupe === 'GROUPE_1') {
+        selecteur.innerHTML = `
+          <option value="AVERTISSEMENT">Avertissement écrit</option>
+          <option value="BLAME">Blâme inscrit au dossier individuel</option>
+        `;
+      } else if (groupe === 'GROUPE_2') {
+        selecteur.innerHTML = `
+          <option value="RADIATION_TABLEAU">Radiation du tableau d'avancement pour l'année courante</option>
+          <option value="ABAISSEMENT_ECHELON">Abaissement d'un échelon indiciaire</option>
+          <option value="EXCLUSION_TEMPORAIRE">Exclusion temporaire de fonctions (1 à 15 jours)</option>
+        `;
+      } else {
+        selecteur.innerHTML = `
+          <option value="RETROGRADATION">Rétrogradation au grade inférieur</option>
+          <option value="RETRAITE_OFFICE">Mise à la retraite d'office</option>
+          <option value="REVOCATION">Révocation définitive sans suspension des droits à pension</option>
+        `;
+      }
+    }
+
+    function enregistrerSanctionOfficielle() {
+      const groupe = document.getElementById('selecteur-groupe-sanction').value;
+      const ref = document.getElementById('ref-arrete-sanction').value;
+      alert(
+        'SANCTION DISCIPLINAIRE ENREGISTRÉE AVEC SUCCÈS :\n\n' +
+        '- Référence : ' + ref + '\n' +
+        '- Groupe : ' + groupe + '\n' +
+        '- Procédure contradictoire de 15 jours vérifiée : CONFORME\n' +
+        '- Inscription inaltérable au registre d\'audit de la Police Nationale.'
+      );
+    }
+  </script>
+</body>
+</html>

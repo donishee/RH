@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recrutement Agent — SIRH Police Nationale de Djibouti</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="en-tete-republicain">
+    <div class="marque-institution">
+      <div class="logo-police">PND</div>
+      <div class="titre-systeme">
+        <h1>Police Nationale de Djibouti</h1>
+        <p>Recrutement et Nomination Initiale d'un Fonctionnaire de Police</p>
+      </div>
+    </div>
+    <div id="profil-utilisateur-connecte" class="bloc-profil"></div>
+  </header>
+
+  <div class="disposition-principale">
+    <nav id="menu-navigation-laterale" class="barre-navigation"></nav>
+
+    <main class="contenu-principal">
+      <div class="entete-page">
+        <div>
+          <h2>Création d'un Nouveau Dossier de Policier</h2>
+          <p>Enregistrement administratif, attribution du matricule et scellement de l'affectation initiale</p>
+        </div>
+        <a href="/agents.html" class="bouton bouton-secondaire">Retour à l'annuaire</a>
+      </div>
+
+      <div id="zone-notification" class="alerte" style="display: none;"></div>
+
+      <div class="panneau">
+        <form id="formulaire-creation-agent">
+          <!-- Section 1 : État Civil -->
+          <h3 style="color: var(--police-primaire); margin-bottom: 1rem; border-bottom: 1px solid var(--bordure); padding-bottom: 0.5rem;">
+            1. État Civil & Identité Nationale
+          </h3>
+          <div class="grille-formulaire">
+            <div class="groupe-formulaire">
+              <label for="champ-nom">Nom de famille *</label>
+              <input type="text" id="champ-nom" class="champ-saisie" required placeholder="Ex: HASSAN">
+            </div>
+            <div class="groupe-formulaire">
+              <label for="champ-prenom">Prénom(s) *</label>
+              <input type="text" id="champ-prenom" class="champ-saisie" required placeholder="Ex: Ibrahim">
+            </div>
+            <div class="groupe-formulaire">
+              <label for="champ-date-naissance">Date de naissance *</label>
+              <input type="date" id="champ-date-naissance" class="champ-saisie" required>
+            </div>
+            <div class="groupe-formulaire">
+              <label for="champ-lieu-naissance">Lieu de naissance</label>
+              <input type="text" id="champ-lieu-naissance" class="champ-saisie" placeholder="Ex: Djibouti-Ville">
+            </div>
+            <div class="groupe-formulaire">
+              <label for="champ-genre">Genre républicain *</label>
+              <select id="champ-genre" class="champ-selection" required>
+                <option value="MASCULIN">Masculin</option>
+                <option value="FEMININ">Féminin</option>
+              </select>
+            </div>
+            <div class="groupe-formulaire">
+              <label for="champ-nid">Numéro de carte nationale d'identité (NID) *</label>
+              <input type="text" id="champ-nid" class="champ-saisie" required placeholder="Ex: NID-920514-001">
+            </div>
+            <div class="groupe-formulaire">
+              <label for="champ-situation">Situation familiale</label>
+              <select id="champ-situation" class="champ-selection">
+                <option value="CELIBATAIRE">Célibataire</option>
+                <option value="MARIE">Marié(e)</option>
+                <option value="DIVORCE">Divorcé(e)</option>
+                <option value="VEUF">Veuf / Veuve</option>
+              </select>
+            </div>
+            <div class="groupe-formulaire">
+              <label for="champ-enfants">Nombre d'enfants à charge</label>
+              <input type="number" id="champ-enfants" class="champ-saisie" min="0" value="0">
+            </div>
+          </div>
+
+          <!-- Section 2 : Statut & Carrière -->
+          <h3 style="color: var(--police-primaire); margin: 1.5rem 0 1rem 0; border-bottom: 1px solid var(--bordure); padding-bottom: 0.5rem;">
+            2. Carrière Policière & Immatriculation
+          </h3>
+          <div class="grille-formulaire">
+            <div class="groupe-formulaire">
+              <label for="champ-matricule">Matricule national (Format: PND-YYYY-XXXXX) *</label>
+              <input type="text" id="champ-matricule" class="champ-saisie" required placeholder="Ex: PND-2026-00501" pattern="^PND-\d{4}-\d{5}$">
+              <small style="color: var(--texte-clair);">Exige le préfixe PND, l'année sur 4 chiffres et 5 chiffres de rang.</small>
+            </div>
+            <div class="groupe-formulaire">
+              <label for="champ-date-recrutement">Date d'incorporation / recrutement *</label>
+              <input type="date" id="champ-date-recrutement" class="champ-saisie" required>
+            </div>
+            <div class="groupe-formulaire">
+              <label for="champ-corps">Corps statutaire *</label>
+              <select id="champ-corps" class="champ-selection" required>
+                <option value="AGENTS">Agents de Police</option>
+                <option value="GRADES">Gradés de Police</option>
+                <option value="SOUS_OFFICIERS">Sous-Officiers de Police</option>
+                <option value="OFFICIERS_SUBALTERNES">Officiers Subalternes</option>
+                <option value="OFFICIERS_SUPERIEURS">Officiers Supérieurs</option>
+              </select>
+            </div>
+            <div class="groupe-formulaire">
+              <label for="champ-grade">Grade initial *</label>
+              <input type="text" id="champ-grade" class="champ-saisie" required value="Agent de 1ère classe">
+            </div>
+            <div class="groupe-formulaire">
+              <label for="champ-echelon">Échelon initial</label>
+              <input type="number" id="champ-echelon" class="champ-saisie" min="1" max="10" value="1">
+            </div>
+            <div class="groupe-formulaire">
+              <label for="champ-indice">Indice indiciaire de solde *</label>
+              <input type="number" id="champ-indice" class="champ-saisie" required value="320">
+            </div>
+          </div>
+
+          <!-- Section 3 : Affectation initiale -->
+          <h3 style="color: var(--police-primaire); margin: 1.5rem 0 1rem 0; border-bottom: 1px solid var(--bordure); padding-bottom: 0.5rem;">
+            3. Affectation Initiale
+          </h3>
+          <div class="grille-formulaire">
+            <div class="groupe-formulaire">
+              <label for="champ-unite">Unité d'affectation initiale *</label>
+              <select id="champ-unite" class="champ-selection" required>
+                <option value="">Sélectionner une unité...</option>
+              </select>
+            </div>
+            <div class="groupe-formulaire">
+              <label for="champ-telephone-pro">Téléphone professionnel</label>
+              <input type="text" id="champ-telephone-pro" class="champ-saisie" placeholder="Ex: +253 21 35 10 05">
+            </div>
+            <div class="groupe-formulaire">
+              <label for="champ-email-pro">Adresse électronique professionnelle</label>
+              <input type="email" id="champ-email-pro" class="champ-saisie" placeholder="prenom.nom@police.dj">
+            </div>
+          </div>
+
+          <!-- Section 4 : Champs Personnalisés Dynamiques Form Builder -->
+          <div id="zone-champs-dynamiques" style="display: none;">
+            <h3 style="color: var(--police-primaire); margin: 1.5rem 0 1rem 0; border-bottom: 1px solid var(--bordure); padding-bottom: 0.5rem;">
+              4. Paramètres & Champs Personnalisés du Dossier (Form Builder)
+            </h3>
+            <div id="conteneur-champs-dynamiques" class="grille-formulaire"></div>
+          </div>
+
+          <div style="margin-top: 2rem; display: flex; justify-content: flex-end; gap: 1rem;">
+            <button type="button" id="bouton-reinitialiser" class="bouton bouton-secondaire">
+              Réinitialiser
+            </button>
+            <button type="button" id="bouton-soumettre" class="bouton bouton-primaire" onclick="enregistrerPolicier()">
+              Enregistrer et nommer le policier
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+  <script>
+    let champsActifs = [];
+
+    async function initialiserFormulaire() {
+      // 1. Charger les unités
+      const resUnites = await window.SIRH_API.listerUnites();
+      const selectUnite = document.getElementById('champ-unite');
+      (resUnites.unites || []).forEach(u => {
+        const opt = document.createElement('option');
+        opt.value = u.id;
+        opt.textContent = `${u.code} — ${u.nom} (${u.region_administrative})`;
+        selectUnite.appendChild(opt);
+      });
+
+      // 2. Charger les nomenclatures et les champs personnalisés dynamiques de l'entité AGENT
+      let listesValeursDisponibles = [];
+      try {
+        const resListes = await window.SIRH_API.listerListesValeurs();
+        listesValeursDisponibles = resListes.listes || [];
+      } catch (err) {
+        console.error('Erreur chargement listes de valeurs :', err);
+      }
+
+      const resChamps = await window.SIRH_API.listerChamps('AGENT');
+      champsActifs = resChamps.champs || [];
+
+      if (champsActifs.length > 0) {
+        document.getElementById('zone-champs-dynamiques').style.display = 'block';
+        const conteneur = document.getElementById('conteneur-champs-dynamiques');
+        conteneur.innerHTML = champsActifs.map(c => {
+          let champInput = '';
+          if (c.type_donnee === 'NOMBRE') {
+            champInput = `<input type="number" id="dynamique-${c.code_champ}" class="champ-saisie" ${c.est_obligatoire ? 'required' : ''}>`;
+          } else if (c.type_donnee === 'DATE') {
+            champInput = `<input type="date" id="dynamique-${c.code_champ}" class="champ-saisie" ${c.est_obligatoire ? 'required' : ''}>`;
+          } else if (c.type_donnee === 'BOOLEEN') {
+            champInput = `
+              <div style="display:flex; align-items:center; gap:0.5rem; padding:0.5rem 0;">
+                <input type="checkbox" id="dynamique-${c.code_champ}" style="width:18px; height:18px;">
+                <span>Oui / Actif</span>
+              </div>
+            `;
+          } else if (c.type_donnee === 'LISTE') {
+            const listeAssociee = listesValeursDisponibles.find(l => l.id === c.liste_valeurs_id || l.code === c.liste_valeurs_id);
+            const optionsHtml = listeAssociee && listeAssociee.elements
+              ? listeAssociee.elements.map(e => `<option value="${e.code_element}">${e.libelle}</option>`).join('')
+              : '';
+            champInput = `
+              <select id="dynamique-${c.code_champ}" class="champ-selection" ${c.est_obligatoire ? 'required' : ''}>
+                <option value="">Sélectionner une option...</option>
+                ${optionsHtml}
+              </select>
+            `;
+          } else if (c.type_donnee === 'PIECE_JOINTE') {
+            champInput = `<input type="file" id="dynamique-${c.code_champ}" class="champ-saisie" ${c.est_obligatoire ? 'required' : ''}>`;
+          } else {
+            champInput = `<input type="text" id="dynamique-${c.code_champ}" class="champ-saisie" ${c.est_obligatoire ? 'required' : ''} placeholder="${c.aide_saisie || ''}">`;
+          }
+
+          return `
+            <div class="groupe-formulaire">
+              <label for="dynamique-${c.code_champ}">${c.libelle} ${c.est_obligatoire ? '*' : ''}</label>
+              ${champInput}
+              ${c.aide_saisie ? `<small style="color:var(--texte-clair);">${c.aide_saisie}</small>` : ''}
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Restauration du brouillon volatile
+      const brouillon = window.SIRH_BROUILLONS.recuperer('agent_creation');
+      if (brouillon) {
+        Object.keys(brouillon).forEach(k => {
+          const el = document.getElementById(k);
+          if (el) el.value = brouillon[k];
+        });
+      }
+
+      // Sauvegarde automatique volatile toutes les 5 secondes
+      setInterval(() => {
+        const sauvegarde = {
+          'champ-nom': document.getElementById('champ-nom').value,
+          'champ-prenom': document.getElementById('champ-prenom').value,
+          'champ-matricule': document.getElementById('champ-matricule').value,
+          'champ-nid': document.getElementById('champ-nid').value
+        };
+        window.SIRH_BROUILLONS.sauvegarder('agent_creation', sauvegarde);
+      }, 5000);
+    }
+
+    async function enregistrerPolicier() {
+      const notif = document.getElementById('zone-notification');
+      const btn = document.getElementById('bouton-soumettre');
+      notif.style.display = 'none';
+
+      // Collecter les valeurs des champs dynamiques
+      const valeursChamps = {};
+      champsActifs.forEach(c => {
+        const el = document.getElementById(`dynamique-${c.code_champ}`);
+        if (el) {
+          if (c.type_donnee === 'BOOLEEN') {
+            valeursChamps[c.code_champ] = el.checked;
+          } else if (c.type_donnee === 'PIECE_JOINTE') {
+            if (el.files && el.files[0]) {
+              valeursChamps[c.code_champ] = el.files[0].name;
+            }
+          } else if (el.value) {
+            valeursChamps[c.code_champ] = el.value;
+          }
+        }
+      });
+
+      const payload = {
+        nom: document.getElementById('champ-nom').value.trim(),
+        prenom: document.getElementById('champ-prenom').value.trim(),
+        date_naissance: document.getElementById('champ-date-naissance').value,
+        lieu_naissance: document.getElementById('champ-lieu-naissance').value.trim(),
+        genre: document.getElementById('champ-genre').value,
+        numero_carte_nationale: document.getElementById('champ-nid').value.trim(),
+        situation_familiale: document.getElementById('champ-situation').value,
+        nombre_enfants: parseInt(document.getElementById('champ-enfants').value, 10) || 0,
+        matricule: document.getElementById('champ-matricule').value.trim(),
+        date_recrutement: document.getElementById('champ-date-recrutement').value,
+        corps: document.getElementById('champ-corps').value,
+        grade_actuel: document.getElementById('champ-grade').value.trim(),
+        echelon_actuel: parseInt(document.getElementById('champ-echelon').value, 10) || 1,
+        indice_solde: parseInt(document.getElementById('champ-indice').value, 10) || 320,
+        unite_actuelle_id: document.getElementById('champ-unite').value,
+        telephone_professionnel: document.getElementById('champ-telephone-pro').value.trim(),
+        email_professionnel: document.getElementById('champ-email-pro').value.trim(),
+        valeurs_champs: valeursChamps
+      };
+
+      btn.disabled = true;
+      btn.textContent = 'Enregistrement en cours...';
+
+      try {
+        const res = await window.SIRH_API.creerAgent(payload);
+        window.SIRH_BROUILLONS.purger('agent_creation');
+        notif.className = 'alerte alerte-succes';
+        notif.textContent = `Succès : Policier matriculé sous le numéro ${res.agent.matricule} et affecté avec succès. Redirection...`;
+        notif.style.display = 'block';
+        setTimeout(() => {
+          window.location.href = `/agent-fiche.html?id=${res.agent.id}`;
+        }, 1500);
+      } catch (err) {
+        notif.className = 'alerte alerte-erreur';
+        notif.textContent = `Erreur : ${err.message}`;
+        notif.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Enregistrer et nommer le policier';
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', initialiserFormulaire);
+  </script>
+</body>
+</html>

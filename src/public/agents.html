@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Annuaire des Effectifs — SIRH Police Nationale de Djibouti</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="en-tete-republicain">
+    <div class="marque-institution">
+      <div class="logo-police">PND</div>
+      <div class="titre-systeme">
+        <h1>Police Nationale de Djibouti</h1>
+        <p>Annuaire National des Fonctionnaires et Agents de Police</p>
+      </div>
+    </div>
+    <div id="profil-utilisateur-connecte" class="bloc-profil"></div>
+  </header>
+
+  <div class="disposition-principale">
+    <nav id="menu-navigation-laterale" class="barre-navigation"></nav>
+
+    <main class="contenu-principal">
+      <div class="entete-page">
+        <div>
+          <h2>Annuaire et Fiches Individuelles des Policiers</h2>
+          <p>Gestion et consultation des états de service du personnel selon votre périmètre</p>
+        </div>
+        <div id="actions-annuaire">
+          <a href="/agent-creation.html" id="bouton-recruter" class="bouton bouton-primaire" style="display: none;">
+            ➕ Recruter un agent
+          </a>
+        </div>
+      </div>
+
+      <!-- Filtres et recherche -->
+      <div class="panneau" style="padding: 1.25rem;">
+        <div class="grille-formulaire">
+          <div class="groupe-formulaire" style="margin-bottom: 0;">
+            <label for="recherche-texte">Recherche par matricule, nom ou prénom</label>
+            <input type="text" id="recherche-texte" class="champ-saisie" placeholder="Ex: Hassan, Ibrahim ou PND-2020-00142">
+          </div>
+          <div class="groupe-formulaire" style="margin-bottom: 0;">
+            <label for="filtre-corps">Filtrer par corps statutaire</label>
+            <select id="filtre-corps" class="champ-selection">
+              <option value="">Tous les corps</option>
+              <option value="OFFICIERS_SUPERIEURS">Officiers Supérieurs</option>
+              <option value="OFFICIERS_SUBALTERNES">Officiers Subalternes</option>
+              <option value="SOUS_OFFICIERS">Sous-Officiers</option>
+              <option value="GRADES">Gradés</option>
+              <option value="AGENTS">Agents</option>
+            </select>
+          </div>
+          <div style="display: flex; align-items: flex-end;">
+            <button id="bouton-filtrer" class="bouton bouton-secondaire" style="width: 100%;">
+              Rechercher
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tableau des agents -->
+      <div class="panneau">
+        <div class="panneau-entete">
+          <h3>Effectifs répertoriés (<span id="compteur-total">0</span>)</h3>
+        </div>
+        <div class="tableau-conteneur">
+          <table class="tableau-donnees">
+            <thead>
+              <tr>
+                <th>Matricule</th>
+                <th>Identité (Nom & Prénom)</th>
+                <th>Corps & Grade</th>
+                <th>Unité d'affectation</th>
+                <th>Statut</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="corps-tableau-agents">
+              <tr>
+                <td colspan="6" style="text-align: center; color: var(--texte-clair); padding: 2rem;">
+                  Chargement des dossiers agents...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+  <script>
+    async function chargerAgents() {
+      const session = window.SIRH_API.obtenirSessionLocale();
+      if (!session) return;
+
+      if (session.role === 'GESTIONNAIRE_RH') {
+        document.getElementById('bouton-recruter').style.display = 'inline-flex';
+      }
+
+      const recherche = document.getElementById('recherche-texte').value.trim();
+      const corps = document.getElementById('filtre-corps').value;
+
+      const opts = {};
+      if (recherche) opts.recherche = recherche;
+      if (corps) opts.corps = corps;
+
+      try {
+        const res = await window.SIRH_API.listerAgents(opts);
+        const agents = res.agents || [];
+        document.getElementById('compteur-total').textContent = res.total || agents.length;
+
+        const tbody = document.getElementById('corps-tableau-agents');
+        if (agents.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Aucun policier trouvé selon les critères et votre périmètre d\'accès.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = agents.map(a => `
+          <tr>
+            <td><strong>${a.matricule}</strong></td>
+            <td>${a.nom.toUpperCase()} ${a.prenom}</td>
+            <td>
+              <div><strong>${a.grade_actuel}</strong></div>
+              <small style="color: var(--texte-clair);">${a.corps.replace(/_/g, ' ')}</small>
+            </td>
+            <td>
+              <div>${a.nom_unite || a.unite_actuelle_id}</div>
+              <small style="color: var(--texte-clair); font-weight: 600;">${a.code_unite || ''}</small>
+            </td>
+            <td>
+              <span class="pastille-statut statut-actif">${a.statut_administratif.replace(/_/g, ' ')}</span>
+            </td>
+            <td>
+              <div style="display: flex; gap: 0.5rem;">
+                <a href="/agent-fiche.html?id=${encodeURIComponent(a.id)}" class="bouton bouton-secondaire bouton-petit">
+                  Fiche
+                </a>
+                ${session.role === 'GESTIONNAIRE_RH' ? `
+                  <a href="/mutations.html?agent_id=${encodeURIComponent(a.id)}" class="bouton bouton-avertissement bouton-petit">
+                    Muter
+                  </a>
+                ` : ''}
+              </div>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        document.getElementById('corps-tableau-agents').innerHTML = `
+          <tr><td colspan="6" style="text-align: center; color: var(--erreur-texte); padding: 1.5rem;">
+            Erreur lors du chargement des agents : ${err.message}
+          </td></tr>
+        `;
+      }
+    }
+
+    document.getElementById('bouton-filtrer').addEventListener('click', chargerAgents);
+    document.getElementById('recherche-texte').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') chargerAgents();
+    });
+    document.addEventListener('DOMContentLoaded', chargerAgents);
+  </script>
+</body>
+</html>

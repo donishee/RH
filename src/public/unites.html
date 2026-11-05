@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unités & Organigramme — SIRH Police Nationale de Djibouti</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="en-tete-republicain">
+    <div class="marque-institution">
+      <div class="logo-police">PND</div>
+      <div class="titre-systeme">
+        <h1>Police Nationale de Djibouti</h1>
+        <p>Référentiel des 17 Unités Organisationnelles et Territoriales</p>
+      </div>
+    </div>
+    <div id="profil-utilisateur-connecte" class="bloc-profil"></div>
+  </header>
+
+  <div class="disposition-principale">
+    <nav id="menu-navigation-laterale" class="barre-navigation"></nav>
+
+    <main class="contenu-principal">
+      <div class="entete-page">
+        <div>
+          <h2>Organigramme et Référentiel des Unités</h2>
+          <p>Structure territoriale des directions, commissariats urbains et postes régionaux</p>
+        </div>
+        <div id="actions-unites"></div>
+      </div>
+
+      <!-- Filtres par région -->
+      <div class="panneau" style="padding: 1rem 1.25rem;">
+        <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+          <label style="font-weight: 600; font-size: 0.85rem;">Filtrer par région administrative :</label>
+          <select id="filtre-region" class="champ-selection" style="max-width: 250px;">
+            <option value="">Toutes les régions (17 unités)</option>
+            <option value="DJIBOUTI">Djibouti-Ville (Arrondissements & Directions)</option>
+            <option value="ALI_SABIEH">Ali-Sabieh</option>
+            <option value="DIKHIL">Dikhil</option>
+            <option value="TADJOURAH">Tadjourah</option>
+            <option value="OBOCK">Obock</option>
+            <option value="ARTA">Arta</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Tableau des unités -->
+      <div class="panneau">
+        <div class="tableau-conteneur">
+          <table class="tableau-donnees">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Désignation officielle</th>
+                <th>Type d'unité</th>
+                <th>Région</th>
+                <th>Unité de rattachement</th>
+                <th>Effectifs actifs</th>
+                <th>Détails</th>
+              </tr>
+            </thead>
+            <tbody id="corps-tableau-unites">
+              <tr>
+                <td colspan="7" style="text-align: center; color: var(--texte-clair); padding: 2rem;">
+                  Chargement des unités en cours...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Panneau de détail d'arborescence -->
+      <div id="panneau-details-unite" class="panneau" style="display: none;">
+        <div class="panneau-entete">
+          <h3 id="titre-detail-unite">Détails de l'unité</h3>
+          <button class="bouton bouton-secondaire bouton-petit" onclick="fermerDetails()">Fermer</button>
+        </div>
+        <div id="contenu-detail-unite"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+  <script>
+    let toutesLesUnites = [];
+
+    async function chargerUnites() {
+      const filtre = document.getElementById('filtre-region').value;
+      const opts = filtre ? { region: filtre } : {};
+      const res = await window.SIRH_API.listerUnites(opts);
+      toutesLesUnites = res.unites || [];
+      afficherTableau(toutesLesUnites);
+    }
+
+    function afficherTableau(unites) {
+      const tbody = document.getElementById('corps-tableau-unites');
+      if (unites.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 1.5rem;">Aucune unité trouvée.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = unites.map(u => `
+        <tr>
+          <td><strong>${u.code}</strong></td>
+          <td>${u.nom}</td>
+          <td><span class="badge-role" style="background:#E2E8F0; color:#1A202C;">${u.type_unite}</span></td>
+          <td>${u.region_administrative}</td>
+          <td>${u.nom_unite_parente || '<em style="color:#A0AEC0;">Direction suprême</em>'}</td>
+          <td><strong>${u.effectif_actif || 0}</strong> agent(s)</td>
+          <td>
+            <button class="bouton bouton-secondaire bouton-petit" onclick="afficherArborescence('${u.id}')">
+              Arborescence
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function afficherArborescence(uniteId) {
+      const panneau = document.getElementById('panneau-details-unite');
+      const titre = document.getElementById('titre-detail-unite');
+      const contenu = document.getElementById('contenu-detail-unite');
+
+      const unite = toutesLesUnites.find(u => u.id === uniteId);
+      titre.textContent = unite ? `${unite.nom} (${unite.code})` : 'Détails de l\'unité';
+
+      try {
+        const res = await window.SIRH_API.obtenirArborescenceUnite(uniteId);
+        const sousArbre = res.arborescence || [];
+
+        contenu.innerHTML = `
+          <div style="margin-bottom: 1rem;">
+            <strong>Sous-arborescence hiérarchique descendante (${sousArbre.length} entité(s) subordonnée(s)) :</strong>
+          </div>
+          <ul style="padding-left: 1.5rem; line-height: 1.8;">
+            ${sousArbre.map(sa => `
+              <li style="margin-left: ${(sa.niveau - 1) * 20}px;">
+                <strong>${sa.code}</strong> — ${sa.nom} 
+                <span class="badge-role" style="background:#EDF2F7; color:#4A5568; font-size: 0.7rem;">${sa.type_unite}</span>
+                <span style="color: var(--police-secondaire); font-size: 0.8rem; margin-left: 0.5rem;">(${sa.effectif_actif || 0} agents)</span>
+              </li>
+            `).join('')}
+          </ul>
+        `;
+        panneau.style.display = 'block';
+        panneau.scrollIntoView({ behavior: 'smooth' });
+      } catch (err) {
+        contenu.innerHTML = `<p style="color: var(--erreur-texte);">Erreur lors de la récupération de l'arborescence : ${err.message}</p>`;
+        panneau.style.display = 'block';
+      }
+    }
+
+    function fermerDetails() {
+      document.getElementById('panneau-details-unite').style.display = 'none';
+    }
+
+    document.getElementById('filtre-region').addEventListener('change', chargerUnites);
+    document.addEventListener('DOMContentLoaded', chargerUnites);
+  </script>
+</body>
+</html>

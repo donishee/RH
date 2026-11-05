@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIRH — Police Nationale de Djibouti</title>
+  <script>
+    (function() {
+      const sessionBrute = localStorage.getItem('sirh_session_active');
+      if (sessionBrute) {
+        try {
+          const session = JSON.parse(sessionBrute);
+          if (session.role === 'AGENT') {
+            window.location.replace('/portail-agent.html');
+          } else if (session.role === 'CHEF_DE_SERVICE') {
+            window.location.replace('/portail-chef.html');
+          } else if (session.role === 'GESTIONNAIRE_RH') {
+            window.location.replace('/portail-rh.html');
+          } else {
+            window.location.replace('/tableau-de-bord.html');
+          }
+        } catch (e) {
+          window.location.replace('/tableau-de-bord.html');
+        }
+      } else {
+        window.location.replace('/connexion.html');
+      }
+    })();
+  </script>
+</head>
+<body style="font-family: sans-serif; text-align: center; padding-top: 50px;">
+  <p>Redirection vers le portail sécurisé de la Police Nationale...</p>
+</body>
+</html>

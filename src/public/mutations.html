@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mutations & Mouvements — SIRH Police Nationale de Djibouti</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="en-tete-republicain">
+    <div class="marque-institution">
+      <div class="logo-police">PND</div>
+      <div class="titre-systeme">
+        <h1>Police Nationale de Djibouti</h1>
+        <p>Gestion des Arrêtés de Mutation et Mouvements Territoriaux</p>
+      </div>
+    </div>
+    <div id="profil-utilisateur-connecte" class="bloc-profil"></div>
+  </header>
+
+  <div class="disposition-principale">
+    <nav id="menu-navigation-laterale" class="barre-navigation"></nav>
+
+    <main class="contenu-principal">
+      <div class="entete-page">
+        <div>
+          <h2>Ordre de Mutation et Clôture d'Affectation</h2>
+          <p>Transaction atomique de transfert garantissant la conservation intégrale de l'historique de l'agent</p>
+        </div>
+        <a href="/agents.html" class="bouton bouton-secondaire">Annuaire des agents</a>
+      </div>
+
+      <div id="zone-notification" class="alerte" style="display: none;"></div>
+
+      <div class="panneau">
+        <form id="formulaire-mutation">
+          <div class="panneau-entete">
+            <h3>Saisie d'un arrêté ministériel de mutation</h3>
+          </div>
+
+          <div class="grille-formulaire">
+            <!-- Choix de l'agent -->
+            <div class="groupe-formulaire" style="grid-column: 1 / -1;">
+              <label for="select-agent">Fonctionnaire de police à muter *</label>
+              <select id="select-agent" class="champ-selection" required>
+                <option value="">Sélectionner un agent...</option>
+              </select>
+            </div>
+
+            <!-- Affectation courante (affichage passif) -->
+            <div class="groupe-formulaire" style="grid-column: 1 / -1; background: #F8FAFC; padding: 0.75rem 1rem; border-radius: 4px; border: 1px dashed var(--bordure);">
+              <label style="color: var(--texte-clair); margin-bottom: 0.25rem;">Affectation active actuelle :</label>
+              <div id="resume-affectation-actuelle" style="font-weight: 600; color: var(--police-primaire);">
+                Veuillez sélectionner un policier ci-dessus.
+              </div>
+            </div>
+
+            <!-- Nouvelle unité -->
+            <div class="groupe-formulaire">
+              <label for="select-nouvelle-unite">Nouvelle unité de rattachement *</label>
+              <select id="select-nouvelle-unite" class="champ-selection" required>
+                <option value="">Sélectionner la nouvelle unité...</option>
+              </select>
+            </div>
+
+            <!-- Nouveau poste -->
+            <div class="groupe-formulaire">
+              <label for="select-nouveau-poste">Poste budgétaire (Optionnel)</label>
+              <select id="select-nouveau-poste" class="champ-selection">
+                <option value="">Poste standard de l'unité</option>
+              </select>
+            </div>
+
+            <!-- Type de mouvement -->
+            <div class="groupe-formulaire">
+              <label for="select-type-mouvement">Type de mouvement statutaire *</label>
+              <select id="select-type-mouvement" class="champ-selection" required>
+                <option value="MUTATION">Mutation territoriale ordinaire</option>
+                <option value="PROMOTION">Mutation suite à promotion de grade</option>
+                <option value="AFFECTATION_TEMPORAIRE">Affectation temporaire / Mission</option>
+                <option value="INTERIM">Intérim de commandement</option>
+              </select>
+            </div>
+
+            <!-- Date d'effet -->
+            <div class="groupe-formulaire">
+              <label for="champ-date-effet">Date d'effet officielle de la mutation *</label>
+              <input type="date" id="champ-date-effet" class="champ-saisie" required>
+            </div>
+
+            <!-- Référence arrêté -->
+            <div class="groupe-formulaire" style="grid-column: 1 / -1;">
+              <label for="champ-reference-arrete">Référence de l'arrêté ministériel ou de la décision DGPN *</label>
+              <input type="text" id="champ-reference-arrete" class="champ-saisie" required placeholder="Ex: Arrêté n° 2026-088/MIN-INT/DGPN portant mutation territoriale">
+            </div>
+
+            <!-- Motif -->
+            <div class="groupe-formulaire" style="grid-column: 1 / -1;">
+              <label for="champ-motif">Motif circonstancié du mouvement *</label>
+              <textarea id="champ-motif" class="champ-texte" rows="3" required placeholder="Préciser les nécessités de service, restructurations ou demandes de l'intéressé..."></textarea>
+            </div>
+          </div>
+
+          <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 1rem;">
+            <button type="button" id="bouton-valider-mutation" class="bouton bouton-primaire" onclick="validerMutation()">
+              Enregistrer la mutation et clôturer l'affectation précédente
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+  <script>
+    let agentsDisponibles = [];
+    let unitesDisponibles = [];
+
+    async function initialiserPage() {
+      // 1. Charger les agents
+      const resAgents = await window.SIRH_API.listerAgents({ limite: 100 });
+      agentsDisponibles = resAgents.agents || [];
+      const selectAgent = document.getElementById('select-agent');
+      agentsDisponibles.forEach(a => {
+        const opt = document.createElement('option');
+        opt.value = a.id;
+        opt.textContent = `${a.matricule} — ${a.nom.toUpperCase()} ${a.prenom} (${a.grade_actuel})`;
+        selectAgent.appendChild(opt);
+      });
+
+      // Présélection si agent_id dans l'URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const preAgentId = urlParams.get('agent_id');
+      if (preAgentId) {
+        selectAgent.value = preAgentId;
+        afficherResumeAgent(preAgentId);
+      }
+
+      // 2. Charger les unités
+      const resUnites = await window.SIRH_API.listerUnites();
+      unitesDisponibles = resUnites.unites || [];
+      const selectUnite = document.getElementById('select-nouvelle-unite');
+      unitesDisponibles.forEach(u => {
+        const opt = document.createElement('option');
+        opt.value = u.id;
+        opt.textContent = `${u.code} — ${u.nom} (${u.region_administrative})`;
+        selectUnite.appendChild(opt);
+      });
+
+      // Date par défaut = aujourd'hui
+      document.getElementById('champ-date-effet').value = new Date().toISOString().split('T')[0];
+    }
+
+    function afficherResumeAgent(agentId) {
+      const resume = document.getElementById('resume-affectation-actuelle');
+      const agent = agentsDisponibles.find(a => a.id === agentId);
+      if (!agent) {
+        resume.textContent = "Veuillez sélectionner un policier ci-dessus.";
+        return;
+      }
+
+      resume.innerHTML = `
+        <span>Matricule : <strong>${agent.matricule}</strong></span> — 
+        <span>Grade : <strong>${agent.grade_actuel}</strong></span> — 
+        <span>Unité actuelle : <strong>${agent.nom_unite || agent.unite_actuelle_id}</strong></span>
+      `;
+    }
+
+    document.getElementById('select-agent').addEventListener('change', (e) => {
+      afficherResumeAgent(e.target.value);
+    });
+
+    document.getElementById('select-nouvelle-unite').addEventListener('change', async (e) => {
+      const uniteId = e.target.value;
+      const selectPoste = document.getElementById('select-nouveau-poste');
+      selectPoste.innerHTML = '<option value="">Poste standard de l\'unité</option>';
+      if (uniteId) {
+        const resPostes = await window.SIRH_API.listerPostes({ unite_id: uniteId });
+        (resPostes.postes || []).forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p.id;
+          opt.textContent = `${p.code_poste} — ${p.intitule} (${p.grade_requis})`;
+          selectPoste.appendChild(opt);
+        });
+      }
+    });
+
+    async function validerMutation() {
+      const notif = document.getElementById('zone-notification');
+      const btn = document.getElementById('bouton-valider-mutation');
+      notif.style.display = 'none';
+
+      const payload = {
+        agent_id: document.getElementById('select-agent').value,
+        nouvelle_unite_id: document.getElementById('select-nouvelle-unite').value,
+        nouveau_poste_id: document.getElementById('select-nouveau-poste').value || undefined,
+        type_mouvement: document.getElementById('select-type-mouvement').value,
+        date_debut: document.getElementById('champ-date-effet').value,
+        motif_mouvement: document.getElementById('champ-motif').value.trim(),
+        reference_arrete_ou_decision: document.getElementById('champ-reference-arrete').value.trim()
+      };
+
+      btn.disabled = true;
+      btn.textContent = 'Enregistrement de la mutation...';
+
+      try {
+        await window.SIRH_API.muterAgent(payload);
+        notif.className = 'alerte alerte-succes';
+        notif.textContent = 'Succès : Mutation enregistrée avec succès. L\'ancienne affectation est scellée et le dossier est transféré.';
+        notif.style.display = 'block';
+        setTimeout(() => {
+          window.location.href = `/agent-fiche.html?id=${payload.agent_id}`;
+        }, 1500);
+      } catch (err) {
+        notif.className = 'alerte alerte-erreur';
+        notif.textContent = `Erreur : ${err.message}`;
+        notif.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Enregistrer la mutation et clôturer l\'affectation précédente';
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', initialiserPage);
+  </script>
+</body>
+</html>

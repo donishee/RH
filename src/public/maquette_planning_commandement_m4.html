@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commandement Opérationnel — Planning 24/7 &amp; Remplacements — Police Djiboutienne</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/styles_souverains_m4.css">
+</head>
+<body>
+  <!-- En-tête supérieur républicain -->
+  <header class="en-tete-republicain">
+    <div class="marque-institution">
+      <div class="logo-police">PND</div>
+      <div class="titre-systeme">
+        <h1>Police Nationale de Djibouti</h1>
+        <p>Poste de Commandement — Planning Opérationnel 24/7 &amp; Remplacements d'Urgence — Jalon M4</p>
+      </div>
+    </div>
+    <div id="profil-utilisateur-connecte" class="bloc-profil">
+      <div style="text-align: right;">
+        <div style="font-weight: 700; font-size: 0.9rem;">Commandant Mohamed Ali Warsama</div>
+        <div style="font-size: 0.75rem; color: #CBD5E0;">Commissariat Central de Djibouti-Ville</div>
+      </div>
+      <span class="badge-role">Chef de Service</span>
+    </div>
+  </header>
+  <div class="ruban-republicain"></div>
+
+  <div class="disposition-principale">
+    <nav class="barre-navigation">
+      <a href="/tableau-de-bord.html" class="lien-nav">
+        <span>📊</span>
+        <span>Tableau de bord</span>
+      </a>
+      <a href="/portail-chef.html" class="lien-nav">
+        <span>⚖️</span>
+        <span>Visas des Congés</span>
+      </a>
+      <a href="maquette_planning_commandement_m4.html" class="lien-nav actif">
+        <span>🕒</span>
+        <span>Planning 24/7 &amp; Gardes</span>
+      </a>
+      <a href="/portail-chef-m3.html" class="lien-nav">
+        <span>🎖️</span>
+        <span>Qualifications &amp; Notations</span>
+      </a>
+      <a href="/agents.html" class="lien-nav">
+        <span>👮</span>
+        <span>Effectifs de l'unité</span>
+      </a>
+    </nav>
+
+    <main class="contenu-principal">
+      <div class="entete-page">
+        <div>
+          <h2>Gestion Opérationnelle des Vacations 24/7</h2>
+          <p>Tableaux de service par brigade, détection de sous-effectif et assistant de remplacement d'urgence</p>
+        </div>
+        <div>
+          <span class="badge-role" style="font-size: 0.85rem; padding: 0.4rem 0.8rem;">
+            Unité : Commissariat Central (Brigade A de Quart)
+          </span>
+        </div>
+      </div>
+
+      <!-- BANDEAU D'ALERTE DE SOUS-EFFECTIF OPÉRATIONNEL -->
+      <div id="bandeau-alerte-effectif" class="bandeau-alerte-sous-effectif">
+        <div class="contenu-alerte">
+          <div class="icone-alerte">⚠️</div>
+          <div class="texte-alerte">
+            <h4>ALERTE OPÉRATIONNELLE : SEUIL MINIMAL DE SÉCURITÉ NON ATTEINT</h4>
+            <p>
+              Vacation de Nuit du Mercredi 04 Novembre (22h00 - 06h00) : <strong>2 agents présents sur 4 requis</strong> (taux de couverture : 50%).
+              Risque de rupture de patrouille motorisée. Remplacement impératif requis.
+            </p>
+          </div>
+        </div>
+        <div>
+          <button class="bouton bouton-danger" onclick="ouvrirAssistantRemplacement('VAC-NUIT-04NOV', 'Sergent Aden Omar', 'Patrouille Motorisée Nuit')">
+            🚨 Déclencher Remplacement d'Urgence
+          </button>
+        </div>
+      </div>
+
+      <!-- JAUGES DE COUVERTURE D'EFFECTIF PAR VACATION -->
+      <div class="bloc-effectif-supervision">
+        <!-- Matin 3x8 -->
+        <div class="carte-jauge-effectif">
+          <div class="entete-jauge">
+            <span class="titre-vacation">Vacation Matin (06h - 14h)</span>
+            <span class="valeur-ratio" style="color: #16a34a;">6 / 6 Agents</span>
+          </div>
+          <div class="conteneur-barre-progression">
+            <div class="barre-progression-effectif barre-conforme" style="width: 100%;"></div>
+          </div>
+          <small style="color: #64748b;">Taux de couverture : 100% — Situation optimale</small>
+        </div>
+
+        <!-- Après-midi 3x8 -->
+        <div class="carte-jauge-effectif">
+          <div class="entete-jauge">
+            <span class="titre-vacation">Vacation Après-midi (14h - 22h)</span>
+            <span class="valeur-ratio" style="color: #16a34a;">5 / 5 Agents</span>
+          </div>
+          <div class="conteneur-barre-progression">
+            <div class="barre-progression-effectif barre-conforme" style="width: 100%;"></div>
+          </div>
+          <small style="color: #64748b;">Taux de couverture : 100% — Situation conforme</small>
+        </div>
+
+        <!-- Nuit 3x8 -->
+        <div class="carte-jauge-effectif" style="border-color: #fca5a5; background: #fff5f5;">
+          <div class="entete-jauge">
+            <span class="titre-vacation" style="color: #991b1b;">Vacation Nuit (22h - 06h)</span>
+            <span class="valeur-ratio" style="color: #dc2626;">2 / 4 Agents</span>
+          </div>
+          <div class="conteneur-barre-progression">
+            <div class="barre-progression-effectif barre-alerte" style="width: 50%;"></div>
+          </div>
+          <small style="color: #991b1b; font-weight: 700;">Sous-effectif critique : Manque 2 agents</small>
+        </div>
+
+        <!-- Garde Statique 2x12 -->
+        <div class="carte-jauge-effectif">
+          <div class="entete-jauge">
+            <span class="titre-vacation">Garde Spéciale (2x12 Jour)</span>
+            <span class="valeur-ratio" style="color: #16a34a;">4 / 4 Agents</span>
+          </div>
+          <div class="conteneur-barre-progression">
+            <div class="barre-progression-effectif barre-conforme" style="width: 100%;"></div>
+          </div>
+          <small style="color: #64748b;">Garde statique ambassades et points sensibles</small>
+        </div>
+      </div>
+
+      <!-- GRILLE INTERACTIVE DU PLANNING OPÉRATIONNEL -->
+      <div class="planning-24-7-conteneur">
+        <div class="planning-barre-outils">
+          <h3>📅 Tableau de Service Hebdomadaire — Semaine 45 (Novembre 2026)</h3>
+          <div class="planning-selecteurs">
+            <select class="selecteur-souverain" id="selecteur-commissariat">
+              <option value="CC-DJIB">Commissariat Central de Djibouti-Ville</option>
+              <option value="COM-2EME">2ème Arrondissement (Balbala)</option>
+              <option value="COM-3EME">3ème Arrondissement</option>
+            </select>
+            <select class="selecteur-souverain" id="selecteur-regime">
+              <option value="3X8">Régime 3x8 (Matin / Après-midi / Nuit)</option>
+              <option value="2X12">Régime Spécial 2x12 (Garde Statique)</option>
+              <option value="ASTREINTE">Astreintes &amp; Permanences</option>
+            </select>
+            <button class="bouton bouton-secondaire bouton-petit" onclick="actualiserGrillePlanning()">🔄 Actualiser</button>
+          </div>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table class="grille-planning-tableau">
+            <thead>
+              <tr>
+                <th class="colonne-jour">Vacation &amp; Créneau</th>
+                <th>Mercredi 04 Nov</th>
+                <th>Jeudi 05 Nov</th>
+                <th>Vendredi 06 Nov</th>
+                <th>Samedi 07 Nov</th>
+                <th>Dimanche 08 Nov</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Matin 06h00 - 14h00 -->
+              <tr>
+                <td style="font-weight: 700; background: #f8fafc;">
+                  ☀️ Matin (06h - 14h)<br>
+                  <small style="color: #64748b; font-weight: normal;">Cycle 3x8 — Patrouille &amp; Accueil</small>
+                </td>
+                <td>
+                  <div class="carte-agent-creneau">
+                    <span class="nom-agent">Capitaine Farah Idriss</span>
+                    <div class="details-agent">
+                      <span class="pastille-statut en-service">En service</span>
+                      <span class="insigne-opj">OPJ</span>
+                    </div>
+                  </div>
+                  <div class="carte-agent-creneau">
+                    <span class="nom-agent">Sergent-chef Daher Ali</span>
+                    <div class="details-agent">
+                      <span class="pastille-statut en-service">En service</span>
+                      <span class="insigne-tir-valide">Tir OK</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="carte-agent-creneau">
+                    <span class="nom-agent">Lieutenant Abdillahi Hassan</span>
+                    <div class="details-agent">
+                      <span class="pastille-statut en-service">En service</span>
+                      <span class="insigne-opj">OPJ</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="carte-agent-creneau">
+                    <span class="nom-agent">Adjudant Yacin Guelleh</span>
+                    <div class="details-agent">
+                      <span class="pastille-statut en-service">En service</span>
+                      <span class="insigne-tir-valide">Tir OK</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="carte-agent-creneau">
+                    <span class="nom-agent">Capitaine Farah Idriss</span>
+                    <div class="details-agent">
+                      <span class="pastille-statut en-service">En service</span>
+                      <span class="insigne-opj">OPJ</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="carte-agent-creneau">
+                    <span class="nom-agent">Sergent-chef Daher Ali</span>
+                    <div class="details-agent">
+                      <span class="pastille-statut en-service">En service</span>
+                      <span class="insigne-tir-valide">Tir OK</span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Après-midi 14h00 - 22h00 -->
+              <tr>
+                <td style="font-weight: 700; background: #f8fafc;">
+                  🌤️ Après-midi (14h - 22h)<br>
+                  <small style="color: #64748b; font-weight: normal;">Cycle 3x8 — Voie Publique</small>
+                </td>
+                <td>
+                  <div class="carte-agent-creneau">
+                    <span class="nom-agent">Lieutenant Bilal Houssein</span>
+                    <div class="details-agent">
+                      <span class="pastille-statut en-service">En service</span>
+                      <span class="insigne-opj">OPJ</span>
+                    </div>
+                  </div>
+                  <div class="carte-agent-creneau">
+                    <span class="nom-agent">Brigadier Moussa Gouled</span>
+                    <div class="details-agent">
+                      <span class="pastille-statut en-service">En service</span>
+                      <span class="insigne-tir-valide">Tir OK</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="carte-agent-creneau">
+                    <span class="nom-agent">Sergent Omar Barkad</span>
+                    <div class="details-agent">
+                      <span class="pastille-statut en-service">En service</span>
+                      <span class="insigne-tir-valide">Tir OK</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="carte-agent-creneau">
+                    <span class="nom-agent">Lieutenant Bilal Houssein</span>
+                    <div class="details-agent">
+                      <span class="pastille-statut en-service">En service</span>
+                      <span class="insigne-opj">OPJ</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="carte-agent-creneau">
+                    <span class="nom-agent">Brigadier Moussa Gouled</span>
+                    <div class="details-agent">
+                      <span class="pastille-statut en-service">En service</span>
+                      <span class="insigne-tir-valide">Tir OK</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="carte-agent-creneau">
+                    <span class="nom-agent">Sergent Omar Barkad</span>
+                    <div class="details-agent">
+                      <span class="pastille-statut en-service">En service</span>
+                      <span class="insigne-tir-valide">Tir OK</span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Nuit 22h00 - 06h00 (Zone avec Alerte de Vacance) -->
+              <tr style="background: #fef2f2;">
+                <td style="font-weight: 700; border-left: 4px solid var(--djibouti-rouge);">
+                  🌙 Nuit (22h - 06h)<br>
+                  <small style="color: #991b1b; font-weight: 700;">8h Nuit — Seuil Min : 4</small>
+                </td>
+                <td>
+                  <!-- Poste 1 : Couvert -->
+                  <div class="carte-agent-creneau">
+                    <span class="nom-agent">Lieutenant Daher Ahmed (Chef de Poste)</span>
+                    <div class="details-agent">
+                      <span class="pastille-statut en-service">En service</span>
+                      <span class="insigne-opj">OPJ</span>
+                    </div>
+                  </div>
+                  <!-- Poste 2 : Couvert -->
+                  <div class="carte-agent-creneau">
+                    <span class="nom-agent">Agent Ismael Robleh (Planton)</span>
+                    <div class="details-agent">
+                      <span class="pastille-statut en-service">En service</span>
+                      <span class="insigne-tir-valide">Tir OK</span>
+                    </div>
+                  </div>
+                  <!-- Poste 3 : VACANT / Absent inopiné -->
+                  <div class="carte-agent-creneau" style="border-color: #dc2626; background: #fee2e2;">
+                    <span class="nom-agent" style="color: #991b1b;">Sergent Aden Omar (Absent)</span>
+                    <div class="details-agent">
+                      <span class="pastille-statut remplace">Absent Inopiné</span>
+                      <button class="bouton bouton-danger bouton-petit" style="padding: 0.15rem 0.4rem; font-size: 0.7rem;" onclick="ouvrirAssistantRemplacement('VAC-NUIT-04NOV', 'Sergent Aden Omar', 'Patrouille Motorisée')">
+                        Remplacer
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="carte-agent-creneau">
+                    <span class="nom-agent">Lieutenant Daher Ahmed</span>
+                    <div class="details-agent">
+                      <span class="pastille-statut en-service">En service</span>
+                      <span class="insigne-opj">OPJ</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="carte-agent-creneau">
+                    <span class="nom-agent">Lieutenant Bilal Houssein</span>
+                    <div class="details-agent">
+                      <span class="pastille-statut en-service">En service</span>
+                      <span class="insigne-opj">OPJ</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="carte-agent-creneau">
+                    <span class="nom-agent">Adjudant Yacin Guelleh</span>
+                    <div class="details-agent">
+                      <span class="pastille-statut en-service">En service</span>
+                      <span class="insigne-tir-valide">Tir OK</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="carte-agent-creneau">
+                    <span class="nom-agent">Lieutenant Daher Ahmed</span>
+                    <div class="details-agent">
+                      <span class="pastille-statut en-service">En service</span>
+                      <span class="insigne-opj">OPJ</span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Repos Récupérateur & Astreintes -->
+              <tr>
+                <td style="font-weight: 700; background: #f8fafc;">
+                  💤 Repos Récupérateur<br>
+                  <small style="color: #64748b;">Statutaire (Min 11h consécutives)</small>
+                </td>
+                <td colspan="5">
+                  <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="pastille-statut repos-recuperateur">Sergent-chef Daher Ali (16h repos)</span>
+                    <span class="pastille-statut repos-recuperateur">Lieutenant Abdillahi Hassan (14h repos)</span>
+                    <span class="pastille-statut conge-valide">Brigadier Osman Barkat (Congé annuel)</span>
+                    <span class="pastille-statut astreinte-operationnelle">Adjudant Yacin Guelleh (Astreinte 24h)</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ASSISTANT DE REMPLACEMENT D'URGENCE (PANNEAU DÉPLIABLE) -->
+      <div id="volet-remplacement" class="volet-remplacement-urgence" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--djibouti-or); padding-bottom: 0.75rem; margin-bottom: 1rem;">
+          <h3 style="margin: 0; color: var(--djibouti-bleu-police); display: flex; align-items: center; gap: 0.5rem;">
+            <span>🚨</span>
+            <span>Assistant de Sélection et Désignation de Remplaçant d'Urgence</span>
+          </h3>
+          <button class="bouton bouton-secondaire bouton-petit" onclick="fermerAssistantRemplacement()">✖ Fermer</button>
+        </div>
+
+        <div class="fiche-vacance-inopinee">
+          <div>
+            <strong>Poste à pourvoir immédiatement :</strong> <span id="label-poste-vacant">Patrouille Motorisée Nuit</span><br>
+            <strong>Créneau :</strong> Vacation de Nuit (22h00 - 06h00) | <strong>Titulaire absent :</strong> <span id="label-agent-absent">Sergent Aden Omar</span><br>
+            <strong>Exigences statutaires :</strong> Certificat de tir valide, permis d'intervention, repos préalable &ge; 11 heures.
+          </div>
+          <div>
+            <span class="badge-role" style="background: var(--djibouti-rouge); color: #fff;">Urgence Opérationnelle</span>
+          </div>
+        </div>
+
+        <h4>Candidats Disponibles et Éligibles (Classés par conformité statutaire) :</h4>
+
+        <div class="liste-remplacants-eligibles">
+          <!-- Candidat 1 : Optimal (100%) -->
+          <div class="carte-remplacant-candidat hautement-compatible">
+            <div>
+              <div style="font-weight: 700; font-size: 0.95rem; color: var(--djibouti-bleu-police);">
+                Sergent-chef Daher Ali (Matricule : PND-2016-00214)
+              </div>
+              <div style="font-size: 0.8rem; color: #475569; margin-top: 0.2rem;">
+                Affectation : Commissariat Central (Même unité) | Grade : Sous-officier compatible
+              </div>
+              <div style="display: flex; gap: 0.4rem; margin-top: 0.4rem; flex-wrap: wrap;">
+                <span class="badge-conformite-repos">✓ Repos légal respecté : 16h consécutives (&ge; 11h)</span>
+                <span class="insigne-tir-valide">✓ Tir valide (expire dans 180 j)</span>
+                <span class="pastille-statut astreinte-operationnelle">Astreinte opérationnelle active</span>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-weight: 800; color: #16a34a; font-size: 1.1rem; margin-bottom: 0.35rem;">
+                Score : 100%
+              </div>
+              <button class="bouton bouton-primaire bouton-petit" onclick="confirmerDesignationRemplacant('Sergent-chef Daher Ali', 'PND-2016-00214')">
+                📋 Désigner et Émettre Ordre de Mission
+              </button>
+            </div>
+          </div>
+
+          <!-- Candidat 2 : Éligible secondaire -->
+          <div class="carte-remplacant-candidat">
+            <div>
+              <div style="font-weight: 700; font-size: 0.95rem; color: var(--djibouti-bleu-police);">
+                Adjudant Yacin Guelleh (Matricule : PND-2015-00109)
+              </div>
+              <div style="font-size: 0.8rem; color: #475569; margin-top: 0.2rem;">
+                Affectation : Commissariat Central | Grade : Sous-officier supérieur
+              </div>
+              <div style="display: flex; gap: 0.4rem; margin-top: 0.4rem; flex-wrap: wrap;">
+                <span class="badge-conformite-repos">✓ Repos légal respecté : 12h consécutives (&ge; 11h)</span>
+                <span class="insigne-tir-valide">✓ Tir valide</span>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-weight: 800; color: #ca8a04; font-size: 1.1rem; margin-bottom: 0.35rem;">
+                Score : 85%
+              </div>
+              <button class="bouton bouton-secondaire bouton-petit" onclick="confirmerDesignationRemplacant('Adjudant Yacin Guelleh', 'PND-2015-00109')">
+                Désigner en second choix
+              </button>
+            </div>
+          </div>
+
+          <!-- Candidat 3 : NON ÉLIGIBLE (Exclusion automatique) -->
+          <div class="carte-remplacant-candidat incompatible">
+            <div>
+              <div style="font-weight: 700; font-size: 0.95rem; color: #991b1b;">
+                Brigadier Moussa Gouled (Matricule : PND-2020-00812) — NON ÉLIGIBLE
+              </div>
+              <div style="font-size: 0.8rem; color: #7f1d1d; margin-top: 0.2rem;">
+                Fin de service précédente : Mercredi 04 Nov à 22h00
+              </div>
+              <div style="display: flex; gap: 0.4rem; margin-top: 0.4rem; flex-wrap: wrap;">
+                <span class="badge-non-conforme-repos">⛔ REJET STRICT : Repos physiologique insuffisant (0h &lt; 11h)</span>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <span class="pastille-statut" style="background: #fee2e2; color: #991b1b; border: 1px solid #f87171;">
+                Interdiction légale
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/composants_ihm_m4.js"></script>
+  <script>
+    function actualiserGrillePlanning() {
+      alert('Planning opérationnel 24/7 actualisé avec succès pour le Commissariat Central.');
+    }
+
+    function ouvrirAssistantRemplacement(idVacation, agentAbsent, poste) {
+      document.getElementById('label-agent-absent').textContent = agentAbsent;
+      document.getElementById('label-poste-vacant').textContent = poste;
+      document.getElementById('volet-remplacement').style.display = 'block';
+      document.getElementById('volet-remplacement').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function fermerAssistantRemplacement() {
+      document.getElementById('volet-remplacement').style.display = 'none';
+    }
+
+    function confirmerDesignationRemplacant(nomRemplacant, matricule) {
+      const confirmation = confirm(
+        'CONFIRMATION DE REMPLACEMENT OPÉRATIONNEL D\'URGENCE :\n\n' +
+        'Désigner le fonctionnaire ' + nomRemplacant + ' (' + matricule + ') pour assurer la vacation de nuit ?\n\n' +
+        '- Repos obligatoire de 11h vérifié : CONFORME\n' +
+        '- Aptitude au tir : VALIDE\n' +
+        '- Un ordre de mission officiel sera généré et tracé au journal d\'audit.'
+      );
+      if (confirmation) {
+        alert('Remplacement validé avec succès ! Ordre de mission officiel transmis et vacation mise à jour.');
+        fermerAssistantRemplacement();
+        document.getElementById('bandeau-alerte-effectif').style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>

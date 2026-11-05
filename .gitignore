@@ -1,0 +1,20 @@
+# Dépendances
+node_modules/
+
+# Compilation
+dist/
+
+# Fichiers journaux
+*.log
+npm-debug.log*
+
+# Environnement local
+.env
+.env.local
+
+# Scaffolding interne des sous-agents
+.agents/
+
+# Fichiers système
+.DS_Store
+Thumbs.db

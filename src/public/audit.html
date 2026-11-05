@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Journal d'Audit SHA-256 — SIRH Police Nationale de Djibouti</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="en-tete-republicain">
+    <div class="marque-institution">
+      <div class="logo-police">PND</div>
+      <div class="titre-systeme">
+        <h1>Police Nationale de Djibouti</h1>
+        <p>Traçabilité Forensique & Registre Inaltérable d'Audit Chaîné SHA-256</p>
+      </div>
+    </div>
+    <div id="profil-utilisateur-connecte" class="bloc-profil"></div>
+  </header>
+
+  <div class="disposition-principale">
+    <nav id="menu-navigation-laterale" class="barre-navigation"></nav>
+
+    <main class="contenu-principal">
+      <div class="entete-page">
+        <div>
+          <h2>Inspection Forensique du Journal d'Audit</h2>
+          <p>Registre immuable append-only scellé cryptographiquement par chaîne de blocs interne</p>
+        </div>
+        <button id="btn-verifier-chaine" class="bouton bouton-primaire" onclick="verifierChaine()">
+          ⛓️ Vérifier l'intégrité de la chaîne
+        </button>
+      </div>
+
+      <div id="zone-notification" class="alerte" style="display: none;"></div>
+
+      <!-- Tableau des logs -->
+      <div class="panneau">
+        <div class="panneau-entete">
+          <h3>Entrées d'audit enregistrées (<span id="compteur-audit">0</span>)</h3>
+        </div>
+        <div class="tableau-conteneur">
+          <table class="tableau-donnees">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Horodatage (UTC)</th>
+                <th>Opérateur</th>
+                <th>Rôle</th>
+                <th>Action</th>
+                <th>Cible</th>
+                <th>Statut</th>
+                <th>Empreinte SHA-256 courante</th>
+              </tr>
+            </thead>
+            <tbody id="corps-tableau-audit">
+              <tr><td colspan="8" style="text-align: center; padding: 2rem;">Chargement du journal d'audit...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+  <script>
+    async function chargerAudit() {
+      const res = await window.SIRH_API.listerJournauxAudit({ limite: 50 });
+      const logs = res.journaux || [];
+      document.getElementById('compteur-audit').textContent = res.total || logs.length;
+
+      const tbody = document.getElementById('corps-tableau-audit');
+      if (logs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 2rem;">Aucun enregistrement d\'audit.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = logs.map(l => `
+        <tr>
+          <td><strong>#${l.id}</strong></td>
+          <td><small>${l.horodatage.replace('T', ' ').slice(0, 19)}</small></td>
+          <td>${l.nom_utilisateur}</td>
+          <td><span class="badge-role" style="background:#EDF2F7; color:#2D3748; font-size:0.75rem;">${l.role_utilise}</span></td>
+          <td><code>${l.action_type}</code></td>
+          <td>${l.entite_cible}</td>
+          <td>
+            <span class="pastille-statut ${l.statut_operation === 'SUCCES' ? 'statut-actif' : 'statut-refuse'}">
+              ${l.statut_operation}
+            </span>
+          </td>
+          <td><code style="font-size:0.75rem; color:#4A5568;">${l.empreinte_courante.slice(0, 16)}...</code></td>
+        </tr>
+      `).join('');
+    }
+
+    async function verifierChaine() {
+      const btn = document.getElementById('btn-verifier-chaine');
+      const notif = document.getElementById('zone-notification');
+      btn.disabled = true;
+      btn.textContent = 'Calcul cryptographique en cours...';
+
+      try {
+        const res = await window.SIRH_API.verifierChaineAudit();
+        if (res.intégrité_conforme) {
+          notif.className = 'alerte alerte-succes';
+          notif.textContent = `Intégrité certifiée : La chaîne cryptographique est 100% conforme sur l'intégralité des ${res.nombre_entrees} entrées. Aucune rupture ni altération détectée.`;
+        } else {
+          notif.className = 'alerte alerte-erreur';
+          notif.textContent = `Alerte de sécurité : Rupture ou falsification détectée (${(res.anomalies || []).length} anomalies).`;
+        }
+        notif.style.display = 'block';
+      } catch (err) {
+        notif.className = 'alerte alerte-erreur';
+        notif.textContent = `Erreur lors de la vérification : ${err.message}`;
+        notif.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '⛓️ Vérifier l\'intégrité de la chaîne';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', chargerAudit);
+  </script>
+</body>
+</html>

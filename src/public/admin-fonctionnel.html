@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administration Fonctionnelle — SIRH Police Nationale de Djibouti</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .onglets-navigation {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 2px solid var(--bordure);
+      margin-bottom: 1.5rem;
+    }
+    .onglet-btn {
+      padding: 0.75rem 1.25rem;
+      font-weight: 600;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      color: var(--texte-secondaire);
+      font-size: 0.95rem;
+    }
+    .onglet-btn.actif {
+      color: var(--police-primaire);
+      border-bottom-color: var(--police-primaire);
+    }
+  </style>
+</head>
+<body>
+  <header class="en-tete-republicain">
+    <div class="marque-institution">
+      <div class="logo-police">PND</div>
+      <div class="titre-systeme">
+        <h1>Police Nationale de Djibouti</h1>
+        <p>Console d'Administration Fonctionnelle et Moteur de Métadonnées (Form Builder)</p>
+      </div>
+    </div>
+    <div id="profil-utilisateur-connecte" class="bloc-profil"></div>
+  </header>
+
+  <div class="disposition-principale">
+    <nav id="menu-navigation-laterale" class="barre-navigation"></nav>
+
+    <main class="contenu-principal">
+      <div class="entete-page">
+        <div>
+          <h2>Paramétrage RH, Form Builder & Versions</h2>
+          <p>Configuration dynamique sans redéploiement et sans altération des données</p>
+        </div>
+      </div>
+
+      <div id="zone-notification" class="alerte" style="display: none;"></div>
+
+      <!-- Navigation par onglets -->
+      <div class="onglets-navigation">
+        <button id="btn-onglet-formbuilder" class="onglet-btn actif" onclick="changerOnglet('formbuilder')">
+          ⚙️ Générateur de Formulaires (Form Builder)
+        </button>
+        <button id="btn-onglet-listes" class="onglet-btn" onclick="changerOnglet('listes')">
+          🏷️ Référentiels & Listes de Valeurs
+        </button>
+        <button id="btn-onglet-versions" class="onglet-btn" onclick="changerOnglet('versions')">
+          🔄 Versions & Rollback sans Perte
+        </button>
+      </div>
+
+      <!-- Onglet 1 : Form Builder -->
+      <div id="contenu-onglet-formbuilder">
+        <!-- Ajout d'un nouveau champ -->
+        <div class="panneau">
+          <div class="panneau-entete">
+            <h3>Ajouter un champ personnalisé au dossier policier</h3>
+          </div>
+          <form id="formulaire-ajout-champ">
+            <div class="grille-formulaire">
+              <div class="groupe-formulaire">
+                <label for="fb-entite">Entité cible *</label>
+                <select id="fb-entite" class="champ-selection" required>
+                  <option value="AGENT">Dossier Agent de Police</option>
+                  <option value="DEMANDE_CONGE">Demande de Congé</option>
+                  <option value="AFFECTATION">Affectation & Mutation</option>
+                </select>
+              </div>
+
+              <div class="groupe-formulaire">
+                <label for="fb-code">Code technique invariant (snake_case) *</label>
+                <input type="text" id="fb-code" class="champ-saisie" required placeholder="Ex: numero_casier_armurerie">
+                <small style="color: var(--texte-clair);">Exclut les colonnes système et tout terme de santé.</small>
+              </div>
+
+              <div class="groupe-formulaire">
+                <label for="fb-libelle">Libellé en français *</label>
+                <input type="text" id="fb-libelle" class="champ-saisie" required placeholder="Ex: Numéro de casier armurerie">
+              </div>
+
+              <div class="groupe-formulaire">
+                <label for="fb-type">Type de champ (6 types) *</label>
+                <select id="fb-type" class="champ-selection" required>
+                  <option value="TEXTE">1. Texte libre</option>
+                  <option value="DATE">2. Date</option>
+                  <option value="NOMBRE">3. Nombre numérique</option>
+                  <option value="LISTE">4. Liste déroulante</option>
+                  <option value="BOOLEEN">5. Case à cocher (Vrai / Faux)</option>
+                  <option value="PIECE_JOINTE">6. Document / Pièce jointe</option>
+                </select>
+              </div>
+
+              <div class="groupe-formulaire" id="groupe-fb-liste-valeurs" style="display: none;">
+                <label for="fb-liste-valeurs">Liste de valeurs de référence *</label>
+                <select id="fb-liste-valeurs" class="champ-selection">
+                  <option value="">Sélectionner une nomenclature de référence...</option>
+                </select>
+                <small style="color: var(--texte-clair);">Nomenclature administrable dans l'onglet « Listes de valeurs ».</small>
+              </div>
+
+              <div class="groupe-formulaire" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 1.5rem;">
+                <input type="checkbox" id="fb-obligatoire" style="width: 18px; height: 18px;">
+                <label for="fb-obligatoire" style="margin-bottom: 0;">Ce champ est obligatoire</label>
+              </div>
+
+              <div class="groupe-formulaire">
+                <label for="fb-ordre">Ordre d'affichage</label>
+                <input type="number" id="fb-ordre" class="champ-saisie" value="10">
+              </div>
+
+              <div class="groupe-formulaire" style="grid-column: 1 / -1;">
+                <label for="fb-aide">Aide à la saisie (infobulle explicative)</label>
+                <input type="text" id="fb-aide" class="champ-saisie" placeholder="Ex: Renseigner le numéro d'emplacement au magasin d'armes">
+              </div>
+            </div>
+
+            <div style="margin-top: 1rem; display: flex; justify-content: flex-end;">
+              <button type="button" class="bouton bouton-primaire" onclick="validerAjoutChamp()">
+                Créer et intégrer le champ
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Liste des champs actifs -->
+        <div class="panneau">
+          <div class="panneau-entete">
+            <h3>Champs configurés dans le système</h3>
+          </div>
+          <div class="tableau-conteneur">
+            <table class="tableau-donnees">
+              <thead>
+                <tr>
+                  <th>Ordre</th>
+                  <th>Entité</th>
+                  <th>Code invariant</th>
+                  <th>Libellé officiel</th>
+                  <th>Type</th>
+                  <th>Obligatoire</th>
+                  <th>Statut</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="corps-tableau-champs">
+                <tr><td colspan="8" style="text-align: center; padding: 1.5rem;">Chargement des champs...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Onglet 2 : Listes de valeurs -->
+      <div id="contenu-onglet-listes" style="display: none;">
+        <div class="panneau">
+          <div class="panneau-entete">
+            <h3>Référentiels et Nomenclatures éditables</h3>
+          </div>
+          <div id="conteneur-listes-valeurs">
+            <p style="color: var(--texte-clair); padding: 1rem;">Chargement des listes de valeurs...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Onglet 3 : Versions & Rollback -->
+      <div id="contenu-onglet-versions" style="display: none;">
+        <!-- Publication d'un nouveau snapshot -->
+        <div class="panneau">
+          <div class="panneau-entete">
+            <h3>Publier une nouvelle version de configuration RH</h3>
+          </div>
+          <form id="formulaire-publication-version" style="display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 300px;">
+              <label for="champ-commentaire-version" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.35rem;">
+                Commentaire de l'évolution (Traçabilité) *
+              </label>
+              <input type="text" id="champ-commentaire-version" class="champ-saisie" required placeholder="Ex: Ajout du champ pointure et mise à jour de la nomenclature des grades">
+            </div>
+            <button type="button" class="bouton bouton-primaire" onclick="validerPublicationVersion()">
+              Publier le snapshot
+            </button>
+          </form>
+        </div>
+
+        <!-- Catalogue des versions -->
+        <div class="panneau">
+          <div class="panneau-entete">
+            <h3>Historique immuable des versions de configuration</h3>
+          </div>
+          <div class="tableau-conteneur">
+            <table class="tableau-donnees">
+              <thead>
+                <tr>
+                  <th>Version</th>
+                  <th>Date d'enregistrement</th>
+                  <th>Commentaire de publication</th>
+                  <th>Statut</th>
+                  <th>Action de Rollback</th>
+                </tr>
+              </thead>
+              <tbody id="corps-tableau-versions">
+                <tr><td colspan="5" style="text-align: center; padding: 1.5rem;">Chargement des versions...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+  <script>
+    function changerOnglet(nom) {
+      ['formbuilder', 'listes', 'versions'].forEach(onglet => {
+        document.getElementById(`contenu-onglet-${onglet}`).style.display = (onglet === nom) ? 'block' : 'none';
+        document.getElementById(`btn-onglet-${onglet}`).className = `onglet-btn ${onglet === nom ? 'actif' : ''}`;
+      });
+      if (nom === 'formbuilder') chargerChamps();
+      else if (nom === 'listes') chargerListes();
+      else if (nom === 'versions') chargerVersions();
+    }
+
+    async function chargerChamps() {
+      const res = await window.SIRH_API.listerChamps();
+      const champs = res.champs || [];
+      const tbody = document.getElementById('corps-tableau-champs');
+      if (champs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:1.5rem;">Aucun champ personnalisé défini.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = champs.map(c => `
+        <tr>
+          <td><strong>${c.ordre_affichage}</strong></td>
+          <td><span class="badge-role" style="background:#EDF2F7; color:#2D3748;">${c.entite_cible}</span></td>
+          <td><code>${c.code_champ}</code></td>
+          <td>${c.libelle}</td>
+          <td><span class="badge-role" style="background:#E2E8F0; color:#1A202C;">${c.type_donnee}</span></td>
+          <td>${c.est_obligatoire ? '<strong style="color:var(--erreur-texte);">Oui</strong>' : 'Non'}</td>
+          <td><span class="pastille-statut ${c.est_actif ? 'statut-actif' : 'statut-archive'}">${c.est_actif ? 'Actif' : 'Désactivé'}</span></td>
+          <td>
+            <button class="bouton bouton-secondaire bouton-petit" onclick="basculerEtatChamp('${c.id}', ${!c.est_actif})">
+              ${c.est_actif ? 'Désactiver' : 'Réactiver'}
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function basculerEtatChamp(champId, nouvelEtat) {
+      await window.SIRH_API.modifierChamp(champId, { est_actif: nouvelEtat });
+      chargerChamps();
+    }
+
+    async function chargerListes() {
+      const res = await window.SIRH_API.listerListesValeurs();
+      const listes = res.listes || [];
+      const conteneur = document.getElementById('conteneur-listes-valeurs');
+      if (listes.length === 0) {
+        conteneur.innerHTML = '<p style="color:var(--texte-clair); padding:1rem;">Aucune liste de valeurs.</p>';
+        return;
+      }
+      conteneur.innerHTML = listes.map(l => `
+        <div style="background:#F8FAFC; border:1px solid var(--bordure); border-radius:6px; padding:1rem; margin-bottom:1rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+            <div>
+              <strong style="color:var(--police-primaire); font-size:1.05rem;">${l.libelle}</strong>
+              <code style="margin-left:0.5rem; color:var(--texte-clair);">${l.code}</code>
+            </div>
+            <button class="bouton bouton-secondaire bouton-petit" onclick="ajouterElementPrompt('${l.code}')">
+              ➕ Ajouter un élément
+            </button>
+          </div>
+          <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
+            ${(l.elements || []).map(e => `
+              <span style="background:#FFFFFF; border:1px solid var(--bordure); padding:0.25rem 0.6rem; border-radius:4px; font-size:0.85rem;">
+                ${e.libelle} <small style="color:var(--texte-clair);">(${e.code_element})</small>
+              </span>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function ajouterElementPrompt(codeListe) {
+      const libelle = prompt(`Ajout à la liste ${codeListe} :\nVeuillez saisir le libellé en français :`);
+      if (!libelle) return;
+      const codeElement = prompt("Veuillez saisir le code technique (ex: NOUVEAU_GRADE) :", libelle.toUpperCase().replace(/[\s-']/g, '_'));
+      if (!codeElement) return;
+
+      try {
+        await window.SIRH_API.ajouterElementListe(codeListe, { code_element: codeElement, libelle });
+        chargerListes();
+      } catch (e) {
+        alert("Erreur lors de l'ajout : " + e.message);
+      }
+    }
+
+    async function chargerVersions() {
+      const res = await window.SIRH_API.listerVersions();
+      const versions = res.versions || [];
+      const tbody = document.getElementById('corps-tableau-versions');
+      if (versions.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:1.5rem;">Aucune version enregistrée.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = versions.map(v => `
+        <tr>
+          <td><strong>${v.numero_version}</strong></td>
+          <td>${v.date_creation.split('T')[0]}</td>
+          <td>${v.commentaire_evolution}</td>
+          <td>
+            <span class="pastille-statut ${v.est_version_courante ? 'statut-actif' : 'statut-archive'}">
+              ${v.est_version_courante ? 'Version active' : 'Archivée'}
+            </span>
+          </td>
+          <td>
+            ${!v.est_version_courante ? `
+              <button class="bouton bouton-avertissement bouton-petit" onclick="declencherRollback('${v.numero_version}')">
+                Restaurer (Rollback)
+              </button>
+            ` : '<em style="color:#047857; font-size:0.85rem;">En production</em>'}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function declencherRollback(versionCible) {
+      const motif = prompt(`Confirmation du Rollback vers ${versionCible} :\nUn motif justificatif d'au moins 10 caractères est requis :`);
+      if (!motif) return;
+      if (motif.trim().length < 10) {
+        alert("Erreur : Le motif doit comporter au moins 10 caractères.");
+        return;
+      }
+
+      const notif = document.getElementById('zone-notification');
+      try {
+        const res = await window.SIRH_API.rollbackVersion(versionCible, motif);
+        notif.className = 'alerte alerte-succes';
+        notif.textContent = `Succès : Configuration restaurée vers ${versionCible}. Nouvelle version publiée : ${res.version_active}. Données agents préservées sans perte.`;
+        notif.style.display = 'block';
+        chargerVersions();
+      } catch (err) {
+        notif.className = 'alerte alerte-erreur';
+        notif.textContent = `Erreur : ${err.message}`;
+        notif.style.display = 'block';
+      }
+    }
+
+    // Gestion de l'affichage dynamique du sélecteur de listes de valeurs
+    async function initialiserSelecteurListes() {
+      const selectType = document.getElementById('fb-type');
+      const groupeListe = document.getElementById('groupe-fb-liste-valeurs');
+      const selectListe = document.getElementById('fb-liste-valeurs');
+
+      selectType.addEventListener('change', async () => {
+        if (selectType.value === 'LISTE') {
+          groupeListe.style.display = 'block';
+          if (selectListe.options.length <= 1) {
+            try {
+              const res = await window.SIRH_API.listerListesValeurs();
+              const listes = res.listes || [];
+              selectListe.innerHTML = '<option value="">Sélectionner une nomenclature de référence...</option>' +
+                listes.map(l => `<option value="${l.id}">${l.libelle} (${l.code})</option>`).join('');
+            } catch (err) {
+              console.error('Erreur chargement listes de valeurs :', err);
+            }
+          }
+        } else {
+          groupeListe.style.display = 'none';
+        }
+      });
+    }
+
+    // Fonction d'ajout de champ
+    async function validerAjoutChamp() {
+      const notif = document.getElementById('zone-notification');
+      notif.style.display = 'none';
+
+      const typeDonnee = document.getElementById('fb-type').value;
+      const listeValeursId = typeDonnee === 'LISTE' ? (document.getElementById('fb-liste-valeurs').value || undefined) : undefined;
+
+      const payload = {
+        entite_cible: document.getElementById('fb-entite').value,
+        code_champ: document.getElementById('fb-code').value.trim(),
+        libelle: document.getElementById('fb-libelle').value.trim(),
+        type_donnee: typeDonnee,
+        liste_valeurs_id: listeValeursId,
+        est_obligatoire: document.getElementById('fb-obligatoire').checked,
+        ordre_affichage: parseInt(document.getElementById('fb-ordre').value, 10) || 10,
+        aide_saisie: document.getElementById('fb-aide').value.trim()
+      };
+
+      try {
+        await window.SIRH_API.ajouterChamp(payload);
+        notif.className = 'alerte alerte-succes';
+        notif.textContent = 'Succès : Champ personnalisé créé et immédiatement disponible dans les formulaires.';
+        notif.style.display = 'block';
+        document.getElementById('fb-code').value = '';
+        document.getElementById('fb-libelle').value = '';
+        document.getElementById('fb-aide').value = '';
+        document.getElementById('fb-type').value = 'TEXTE';
+        document.getElementById('groupe-fb-liste-valeurs').style.display = 'none';
+        document.getElementById('fb-liste-valeurs').value = '';
+        chargerChamps();
+      } catch (err) {
+        notif.className = 'alerte alerte-erreur';
+        notif.textContent = `Erreur : ${err.message}`;
+        notif.style.display = 'block';
+      }
+    }
+
+    // Fonction de publication de version
+    async function validerPublicationVersion() {
+      const notif = document.getElementById('zone-notification');
+      notif.style.display = 'none';
+      const comm = document.getElementById('champ-commentaire-version').value.trim();
+
+      if (!comm) {
+        notif.className = 'alerte alerte-erreur';
+        notif.textContent = 'Erreur : Un commentaire explicatif est requis.';
+        notif.style.display = 'block';
+        return;
+      }
+
+      try {
+        const res = await window.SIRH_API.publierVersion(comm);
+        notif.className = 'alerte alerte-succes';
+        notif.textContent = `Succès : Version ${res.version.numero_version} scellée et publiée avec succès.`;
+        notif.style.display = 'block';
+        document.getElementById('champ-commentaire-version').value = '';
+        chargerVersions();
+      } catch (err) {
+        notif.className = 'alerte alerte-erreur';
+        notif.textContent = `Erreur : ${err.message}`;
+        notif.style.display = 'block';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      chargerChamps();
+      initialiserSelecteurListes();
+    });
+  </script>
+</body>
+</html>

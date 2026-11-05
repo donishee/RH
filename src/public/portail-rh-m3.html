@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Direction des Ressources Humaines — Carrières, Qualifications &amp; Solde — Police Djiboutienne</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/styles_souverains_m3.css">
+</head>
+<body>
+  <!-- En-tête supérieur républicain -->
+  <header class="en-tete-republicain">
+    <div class="marque-institution">
+      <div class="logo-police">PND</div>
+      <div class="titre-systeme">
+        <h1>Police Nationale de Djibouti</h1>
+        <p>Direction Générale — Direction des Ressources Humaines (DRH) — Jalon M3</p>
+      </div>
+    </div>
+    <div id="profil-utilisateur-connecte" class="bloc-profil">
+      <div style="text-align: right;">
+        <div style="font-weight: 700; font-size: 0.9rem;">Commandant Houssein Barkad Robleh</div>
+        <div style="font-size: 0.75rem; color: #CBD5E0;">Directeur des Ressources Humaines (DGPN)</div>
+      </div>
+      <span class="badge-role">Gestionnaire RH</span>
+    </div>
+  </header>
+  <div class="ruban-republicain"></div>
+
+  <div class="disposition-principale">
+    <nav class="barre-navigation">
+      <a href="/portail-rh.html" class="lien-nav">
+        <span>⚖️</span>
+        <span>Validation des Congés</span>
+      </a>
+      <a href="maquette_portail_rh_m3.html" class="lien-nav actif">
+        <span>🎖️</span>
+        <span>Carrières, Solde &amp; Formations</span>
+      </a>
+      <a href="/agents.html" class="lien-nav">
+        <span>👮</span>
+        <span>Dossiers agents (National)</span>
+      </a>
+      <a href="/mutations.html" class="lien-nav">
+        <span>🔄</span>
+        <span>Affectations &amp; Mutations</span>
+      </a>
+      <a href="/unites.html" class="lien-nav">
+        <span>🏛️</span>
+        <span>Organigramme des unités</span>
+      </a>
+    </nav>
+
+    <main class="contenu-principal">
+      <div class="entete-page">
+        <div>
+          <h2>Gestion Centrale des Carrières, Notations &amp; Solde</h2>
+          <p>Tableaux d'avancement, enregistrement des décrets, registre des habilitations, péréquation des notes et export de solde sécurisé</p>
+        </div>
+        <div>
+          <span class="badge-role" style="font-size: 0.85rem; padding: 0.4rem 0.8rem;">Compétence Nationale DGPN</span>
+        </div>
+      </div>
+
+      <!-- Navigation par onglets DRH M3 -->
+      <div class="onglets-navigation-m3">
+        <button id="btn-drh-avancement" class="onglet-btn-m3 actif" onclick="changerVueDRH('avancement')">
+          📈 Carrières &amp; Tableau d'Avancement
+        </button>
+        <button id="btn-drh-positions" class="onglet-btn-m3" onclick="changerVueDRH('positions')">
+          🏛️ Gestionnaire des Positions Statutaires
+        </button>
+        <button id="btn-drh-formations" class="onglet-btn-m3" onclick="changerVueDRH('formations')">
+          🛡️ Formations &amp; Habilitations OPJ/APJ
+        </button>
+        <button id="btn-drh-notations" class="onglet-btn-m3" onclick="changerVueDRH('notations')">
+          ⭐ Péréquation des Notes &amp; Recours
+        </button>
+        <button id="btn-drh-solde" class="onglet-btn-m3" onclick="changerVueDRH('solde')">
+          💰 Préparation &amp; Export Sécurisé de Solde
+        </button>
+      </div>
+
+      <!-- ====================================================================
+           ONGLET 1 : GESTION DES CARRIÈRES & TABLEAU D'AVANCEMENT ANNUEL
+           ==================================================================== -->
+      <div id="vue-drh-avancement">
+        <!-- Simulateur d'éligibilité au choix / grand choix -->
+        <div class="panneau">
+          <div class="panneau-entete">
+            <div>
+              <h3>Simulateur d'Éligibilité au Tableau d'Avancement Annuel (Campagne 2026)</h3>
+              <p style="font-size: 0.85rem; color: var(--texte-clair);">
+                Filtrage statutaire automatisé selon l'ancienneté, les notes triennales et l'absence de sanction (Loi 46/AN/04 &amp; 116/AN/21)
+              </p>
+            </div>
+            <button class="bouton bouton-primaire bouton-petit" onclick="ouvrirModaleNouvelArrete()">
+              ➕ Enregistrer un Arrêté d'Avancement
+            </button>
+          </div>
+
+          <!-- Filtres de simulation -->
+          <div class="panneau-filtres-avancement">
+            <div class="groupe-formulaire" style="margin-bottom: 0;">
+              <label for="filtre-corps-avancement">Corps statutaire</label>
+              <select id="filtre-corps-avancement" class="champ-selection" onchange="appliquerSimulationAvancement()">
+                <option value="TOUS">Tous les corps statutaires</option>
+                <option value="OFFICIERS">Officiers de Police (Supérieurs &amp; Subalternes)</option>
+                <option value="SOUS_OFFICIERS">Sous-Officiers de Police</option>
+                <option value="GRADES_AGENTS">Gradés &amp; Agents de Police</option>
+              </select>
+            </div>
+
+            <div class="groupe-formulaire" style="margin-bottom: 0;">
+              <label for="filtre-mode-avancement">Modalité d'avancement</label>
+              <select id="filtre-mode-avancement" class="champ-selection" onchange="appliquerSimulationAvancement()">
+                <option value="TOUS">Toutes les modalités</option>
+                <option value="GRAND_CHOIX">Grand Choix (Note triennale ≥ 16,0 / 20)</option>
+                <option value="ANCIENNETE">Ancienneté Maximale (Sans condition de note)</option>
+                <option value="NON_ELIGIBLE">Non Éligibles (Ancienneté ou note insuffisante)</option>
+              </select>
+            </div>
+
+            <div class="groupe-formulaire" style="margin-bottom: 0;">
+              <label for="filtre-seuil-note">Seuil de note Grand Choix</label>
+              <input type="number" id="filtre-seuil-note" class="champ-saisie" value="16.0" step="0.5" min="10" max="20" onchange="appliquerSimulationAvancement()">
+            </div>
+
+            <button class="bouton bouton-secondaire" onclick="appliquerSimulationAvancement()">
+              🔍 Lancer la Simulation
+            </button>
+          </div>
+
+          <!-- Tableau des résultats de la simulation -->
+          <div class="tableau-conteneur">
+            <table class="tableau-donnees">
+              <thead>
+                <tr>
+                  <th>Matricule</th>
+                  <th>Fonctionnaire</th>
+                  <th>Grade Actuel</th>
+                  <th>Échelon</th>
+                  <th>Indice</th>
+                  <th>Ancienneté</th>
+                  <th>Note Moyenne (3 ans)</th>
+                  <th>Statut Disciplinaire</th>
+                  <th>Éligibilité Projetée</th>
+                  <th>Action Statutaire</th>
+                </tr>
+              </thead>
+              <tbody id="corps-tableau-simulateur-avancement">
+                <!-- Rempli dynamiquement -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           ONGLET 2 : GESTIONNAIRE DES POSITIONS ADMINISTRATIVES STATUTAIRES
+           ==================================================================== -->
+      <div id="vue-drh-positions" style="display: none;">
+        <div class="panneau">
+          <div class="panneau-entete">
+            <div>
+              <h3>Gestionnaire des Positions Administratives des Policiers</h3>
+              <p style="font-size: 0.85rem; color: var(--texte-clair);">
+                Mise en détachement, mise en disponibilité, sous les drapeaux, suspension conservatoire et réintégration
+              </p>
+            </div>
+            <button class="bouton bouton-primaire bouton-petit" onclick="ouvrirModaleChangementPosition()">
+              ➕ Déclarer un Changement de Position
+            </button>
+          </div>
+
+          <!-- Chiffres clés des positions nationales -->
+          <div class="grille-indicateurs" style="margin-bottom: 1.25rem;">
+            <div class="carte-indicateur" style="border-top: 3px solid var(--djibouti-vert);">
+              <span class="libelle">En Activité</span>
+              <span class="valeur" style="color: var(--djibouti-vert);">425 Policiers</span>
+              <span class="sous-texte">97.2% des effectifs opérationnels</span>
+            </div>
+            <div class="carte-indicateur" style="border-top: 3px solid var(--djibouti-bleu-ciel);">
+              <span class="libelle">En Détachement</span>
+              <span class="valeur" style="color: var(--djibouti-bleu-survol);">7 Policiers</span>
+              <span class="sous-texte">Interpol, Ambassades, Ministères</span>
+            </div>
+            <div class="carte-indicateur" style="border-top: 3px solid var(--djibouti-or);">
+              <span class="libelle">En Disponibilité</span>
+              <span class="valeur" style="color: var(--djibouti-or);">4 Policiers</span>
+              <span class="sous-texte">Traitement et avancement suspendus</span>
+            </div>
+            <div class="carte-indicateur" style="border-top: 3px solid var(--erreur-texte);">
+              <span class="libelle">Suspensions conservatoires</span>
+              <span class="valeur" style="color: var(--erreur-texte);">1 Policier</span>
+              <span class="sous-texte">Traitement réduit à 50% / Arme retirée</span>
+            </div>
+          </div>
+
+          <table class="tableau-donnees">
+            <thead>
+              <tr>
+                <th>Matricule</th>
+                <th>Fonctionnaire</th>
+                <th>Grade</th>
+                <th>Position Statutaire</th>
+                <th>Organisme d'Accueil / Motif</th>
+                <th>Date Début</th>
+                <th>Date Fin Prévue</th>
+                <th>Maintien Avancement</th>
+                <th>Réf. Décision</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>PND-2014-00118</strong></td>
+                <td><strong>Cdt. Yonis Farah Abdi</strong></td>
+                <td>Commandant</td>
+                <td><span class="badge-position position-detachement">Détachement</span></td>
+                <td>Bureau Régional INTERPOL Afrique Orientale</td>
+                <td>01/09/2024</td>
+                <td>31/08/2027</td>
+                <td><span style="color:var(--succes-texte); font-weight:700;">Oui (100%)</span></td>
+                <td>DÉC-2024-0512/PR</td>
+                <td>
+                  <button class="bouton bouton-secondaire bouton-petit" onclick="reintegrerAgent('PND-2014-00118')">
+                    🔄 Réintégrer
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>PND-2019-00504</strong></td>
+                <td><strong>Sgt. Amina Hassan Guelleh</strong></td>
+                <td>Sergent</td>
+                <td><span class="badge-position position-disponibilite">Disponibilité</span></td>
+                <td>Convenances personnelles (Études de Droit)</td>
+                <td>01/10/2025</td>
+                <td>30/09/2026</td>
+                <td><span style="color:var(--erreur-texte); font-weight:700;">Non (Suspendu)</span></td>
+                <td>ARR-2025-0219/MI</td>
+                <td>
+                  <button class="bouton bouton-secondaire bouton-petit" onclick="reintegrerAgent('PND-2019-00504')">
+                    🔄 Réintégrer
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>PND-2020-00671</strong></td>
+                <td><strong>Agt-2. Liban Daoud Obsieh</strong></td>
+                <td>Agent 2e classe</td>
+                <td><span class="badge-position position-suspension">Suspension</span></td>
+                <td>Mesure conservatoire d'urgence (Enquête administrative)</td>
+                <td>12/12/2025</td>
+                <td>12/04/2026</td>
+                <td><span style="color:var(--erreur-texte); font-weight:700;">Gelé (50% solde)</span></td>
+                <td>ARR-2025-0988/DGPN</td>
+                <td>
+                  <button class="bouton bouton-danger bouton-petit" onclick="leverSuspension('PND-2020-00671')">
+                    ⚖️ Statuer
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           ONGLET 3 : FORMATIONS & HABILITATIONS OPJ / APJ
+           ==================================================================== -->
+      <div id="vue-drh-formations" style="display: none;">
+        <div class="panneau">
+          <div class="panneau-entete">
+            <div>
+              <h3>Registre Central des Formations &amp; Attribution des Habilitations</h3>
+              <p style="font-size: 0.85rem; color: var(--texte-clair);">
+                Agrément des cartes d'OPJ, APJ, brevets de tir et stages de l'École Nationale de Police (ENP)
+              </p>
+            </div>
+            <button class="bouton bouton-primaire bouton-petit" onclick="ouvrirModaleNouvelleHabilitation()">
+              ➕ Attribuer une Habilitation OPJ / APJ
+            </button>
+          </div>
+
+          <div class="grille-formulaire" style="margin-bottom: 1.25rem;">
+            <div class="carte-indicateur">
+              <span class="libelle">Effectif National OPJ Actif</span>
+              <span class="valeur" style="color: var(--djibouti-bleu-police);">78 Officiers</span>
+              <span class="sous-texte">Agréés près la Cour d'Appel</span>
+            </div>
+            <div class="carte-indicateur">
+              <span class="libelle">Effectif National APJ Actif</span>
+              <span class="valeur" style="color: var(--djibouti-vert);">210 Gradés &amp; Agents</span>
+              <span class="sous-texte">Compétence procès-verbale</span>
+            </div>
+            <div class="carte-indicateur">
+              <span class="libelle">Sessions de Tir Programmées ENP</span>
+              <span class="valeur" style="color: var(--djibouti-or);">4 Sessions</span>
+              <span class="sous-texte">Campagne annuelle de recyclage</span>
+            </div>
+          </div>
+
+          <h4 style="font-size: 0.95rem; color: var(--djibouti-bleu-police); margin-bottom: 0.75rem;">
+            Dernières Habilitations et Certifications Enregistrées
+          </h4>
+          <table class="tableau-donnees">
+            <thead>
+              <tr>
+                <th>N° Certificat / Carte</th>
+                <th>Fonctionnaire Titulaire</th>
+                <th>Grade</th>
+                <th>Type d'Habilitation</th>
+                <th>Organisme Émetteur</th>
+                <th>Date Délivrance</th>
+                <th>Échéance</th>
+                <th>Statut Légal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>OPJ-DJ-2026-0012</code></td>
+                <td><strong>Cap. Fathia Daher Youssouf</strong></td>
+                <td>Capitaine</td>
+                <td><span class="badge-opj-officiel">OPJ</span> Officier de Police Judiciaire</td>
+                <td>Parquet Général près la Cour d'Appel</td>
+                <td>10/01/2026</td>
+                <td>Permanent</td>
+                <td><span class="pastille-statut statut-actif">Agréé Actif</span></td>
+              </tr>
+              <tr>
+                <td><code>APJ-DJ-2026-0045</code></td>
+                <td><strong>Sgt. Bilal Ahmed Nour</strong></td>
+                <td>Sergent</td>
+                <td><span class="badge-apj-officiel">APJ</span> Agent de Police Judiciaire</td>
+                <td>École Nationale de Police</td>
+                <td>15/01/2026</td>
+                <td>Permanent</td>
+                <td><span class="pastille-statut statut-actif">Agréé Actif</span></td>
+              </tr>
+              <tr>
+                <td><code>TIR-2026-0814</code></td>
+                <td><strong>Lcl. Hassan Idriss Goudal</strong></td>
+                <td>Lieutenant-Colonel</td>
+                <td>Certificat de Tir Réglementaire</td>
+                <td>École Nationale de Police</td>
+                <td>05/01/2026</td>
+                <td>05/01/2027</td>
+                <td><span class="pastille-statut statut-actif">Valide 365j</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           ONGLET 4 : PÉRÉQUATION DES NOTATIONS & VOIES DE RECOURS
+           ==================================================================== -->
+      <div id="vue-drh-notations" style="display: none;">
+        <div class="panneau">
+          <div class="panneau-entete">
+            <div>
+              <h3>Commission Centrale de Péréquation &amp; Instruction des Recours</h3>
+              <p style="font-size: 0.85rem; color: var(--texte-clair);">
+                Harmonisation nationale des notes, validation définitive et instruction des recours administratifs (15 jours)
+              </p>
+            </div>
+            <span class="badge-role" style="background:#002b49; color:#fff;">Campagne 2025 Clôturée</span>
+          </div>
+
+          <div class="grille-indicateurs" style="margin-bottom: 1.25rem;">
+            <div class="carte-indicateur">
+              <span class="libelle">Moyenne Nationale Proposée</span>
+              <span class="valeur" style="color: var(--djibouti-bleu-police);">16,42 / 20</span>
+              <span class="sous-texte">Sur 437 agents évalués</span>
+            </div>
+            <div class="carte-indicateur">
+              <span class="libelle">Notes Validées Définitivement</span>
+              <span class="valeur" style="color: var(--djibouti-vert);">429 Validées</span>
+              <span class="sous-texte">98.2% d'acceptation sans recours</span>
+            </div>
+            <div class="carte-indicateur" style="border-top: 3px solid var(--alerte-texte);">
+              <span class="libelle">Recours Gracieux en Instance</span>
+              <span class="valeur" style="color: var(--alerte-texte);">3 Recours</span>
+              <span class="sous-texte">Délai statutaire d'instruction : 15 jours</span>
+            </div>
+          </div>
+
+          <h4 style="font-size: 0.95rem; color: var(--djibouti-bleu-police); margin-bottom: 0.75rem;">
+            Registre des Recours Gracieux Portés Devant la Commission DRH
+          </h4>
+          <table class="tableau-donnees">
+            <thead>
+              <tr>
+                <th>Réf. Recours</th>
+                <th>Fonctionnaire</th>
+                <th>Unité</th>
+                <th>Note Initiale</th>
+                <th>Date Notification</th>
+                <th>Motif de la Contestation</th>
+                <th>Arbitrage Commission</th>
+                <th>Action DRH</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>REC-2026-001</strong></td>
+                <td><strong>Sgt. Moussa Daher Ali</strong></td>
+                <td>Commissariat Balbala Nord</td>
+                <td>13,5 / 20</td>
+                <td>12/01/2026</td>
+                <td>Contestation de l'appréciation sur l'assiduité lors des rondes de nuit</td>
+                <td><span class="pastille-statut statut-en-attente">Instruction en cours</span></td>
+                <td>
+                  <button class="bouton bouton-primaire bouton-petit" onclick="arbitrerRecours('REC-2026-001')">
+                    ⚖️ Arbitrer
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           ONGLET 5 : PRÉPARATION & EXPORT SÉCURISÉ DE SOLDE (SHA-256)
+           ==================================================================== -->
+      <div id="vue-drh-solde" style="display: none;">
+        <div class="panneau">
+          <div class="panneau-entete">
+            <div>
+              <h3>État Récapitulatif Mensuel des Éléments de Solde Policière</h3>
+              <p style="font-size: 0.85rem; color: var(--texte-clair);">
+                Consolidation indiciaire, primes de risque, astreintes et export officiel scellé vers le Trésor National
+              </p>
+            </div>
+            <div style="display: flex; gap: 0.75rem; align-items: center;">
+              <select id="select-mois-solde" class="champ-selection" style="width: auto;" onchange="actualiserTableauSolde()">
+                <option value="1">Janvier 2026</option>
+                <option value="2">Février 2026</option>
+                <option value="3">Mars 2026</option>
+                <option value="11" selected>Novembre 2026</option>
+              </select>
+              <button class="bouton bouton-primaire" onclick="genererEtScellerExportSolde()">
+                🔒 Clôturer &amp; Exporter la Solde Scellée
+              </button>
+            </div>
+          </div>
+
+          <!-- Tableau de synthèse de solde -->
+          <div class="tableau-conteneur">
+            <table class="tableau-donnees tableau-solde-synthese">
+              <thead>
+                <tr>
+                  <th>Matricule</th>
+                  <th>Fonctionnaire</th>
+                  <th>Corps &amp; Grade</th>
+                  <th>Indice</th>
+                  <th>Solde Indiciaire</th>
+                  <th>Prime de Risque</th>
+                  <th>Astreintes</th>
+                  <th>Heures Nuit</th>
+                  <th>Total Brut</th>
+                  <th>Retenues CNSS/Retr. (7.5%)</th>
+                  <th>Net à Payer (DJF)</th>
+                </tr>
+              </thead>
+              <tbody id="corps-tableau-solde-mensuelle">
+                <!-- Rempli dynamiquement -->
+              </tbody>
+              <tfoot>
+                <tr class="total-ligne">
+                  <td colspan="4">TOTAL GÉNÉRAL MASSE SALARIALE NATIONALE</td>
+                  <td id="total-solde-base">-</td>
+                  <td id="total-prime-risque">-</td>
+                  <td id="total-astreintes">-</td>
+                  <td id="total-nuit">-</td>
+                  <td id="total-brut" style="color: var(--djibouti-bleu-survol); font-size:1.05rem;">-</td>
+                  <td id="total-retenues">-</td>
+                  <td id="total-net" style="color: var(--djibouti-vert); font-size:1.15rem;">-</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          <!-- Panneau d'empreinte SHA-256 de scellement réglementaire -->
+          <div id="panneau-empreinte-scellement" class="panneau-scellement-solde" style="display: none;">
+            <h3>🛡️ Scellement Cryptographique Souverain de l'Export de Solde</h3>
+            <p style="font-size: 0.9rem; color: #cbd5e1; margin-bottom: 0.75rem;">
+              Le fichier de liquidation et de solde a été scellé selon la norme cryptographique SHA-256.
+              Cette empreinte immuable est automatiquement consignée dans le registre d'audit inaltérable.
+            </p>
+
+            <div style="font-size: 0.85rem; color: #cbd5e1; display: flex; gap: 2rem; flex-wrap: wrap;">
+              <div>Référence Export : <strong id="scellement-ref-export" style="color:#ffffff;">-</strong></div>
+              <div>Horodatage UTC : <strong id="scellement-horodatage" style="color:#ffffff;">-</strong></div>
+              <div>Opérateur RH : <strong style="color:#ffffff;">Commandant Houssein Barkad Robleh</strong></div>
+              <div>Effectif concerné : <strong id="scellement-nb-agents" style="color:#ffffff;">-</strong></div>
+            </div>
+
+            <div class="bloc-empreinte-sha256">
+              <div>
+                <span style="font-size: 0.75rem; color: #94a3b8; display: block;">EMPREINTE NUMÉRIQUE SHA-256 DU SCELLEMENT :</span>
+                <span id="texte-empreinte-sha256">Génération en cours...</span>
+              </div>
+              <button class="bouton-copier" onclick="copierEmpreinteSHA256()">📋 Copier</button>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+              <span class="pastille-statut statut-actif" style="background:#065f46; color:#ffffff;">
+                ✓ Scellé &amp; Enregistré dans le Journal d'Audit SHA-256
+              </span>
+              <button class="bouton bouton-secondaire bouton-petit" style="background:#ffffff; color:#002b49;" onclick="telechargerFichierCSVSolde()">
+                📥 Télécharger le Fichier Normé (CSV Trésor)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modale d'enregistrement d'un arrêté d'avancement -->
+  <div id="modale-arrete-avancement" class="fond-modale" style="display: none;">
+    <div class="boite-modale">
+      <div class="entete-modale">
+        <h3>Enregistrement d'un Arrêté d'Avancement d'Échelon</h3>
+        <button class="bouton-fermer-modale" onclick="fermerModaleArrete()">✕</button>
+      </div>
+      <div class="corps-modale">
+        <form id="formulaire-arrete-avancement">
+          <div class="groupe-formulaire">
+            <label for="arrete-agent-id">Fonctionnaire promu *</label>
+            <select id="arrete-agent-id" class="champ-selection" required>
+              <option value="agt-001">Lt. Abdillahi Daher Hassan (PND-2018-00452) — Actuel Éch. 3</option>
+              <option value="agt-002">Sgt-C. Kadra Moussa Rayaleh (PND-2015-00287) — Actuel Éch. 4</option>
+            </select>
+          </div>
+
+          <div class="grille-formulaire">
+            <div class="groupe-formulaire">
+              <label for="arrete-numero-officiel">Numéro de l'arrêté ministériel *</label>
+              <input type="text" id="arrete-numero-officiel" class="champ-saisie" required placeholder="Ex: ARR-2026-0042/DGPN/DRH" value="ARR-2026-0042/DGPN/DRH">
+            </div>
+            <div class="groupe-formulaire">
+              <label for="arrete-date-effet">Date d'effet officielle *</label>
+              <input type="date" id="arrete-date-effet" class="champ-saisie" required value="2026-01-01">
+            </div>
+          </div>
+
+          <div class="grille-formulaire">
+            <div class="groupe-formulaire">
+              <label for="arrete-nouvel-echelon">Nouvel échelon promu *</label>
+              <input type="number" id="arrete-nouvel-echelon" class="champ-saisie" required min="1" max="9" value="4">
+            </div>
+            <div class="groupe-formulaire">
+              <label for="arrete-nouvel-indice">Nouvel indice de solde *</label>
+              <input type="number" id="arrete-nouvel-indice" class="champ-saisie" required value="520">
+            </div>
+          </div>
+
+          <div class="groupe-formulaire">
+            <label for="arrete-mode-avancement">Mode d'avancement *</label>
+            <select id="arrete-mode-avancement" class="champ-selection" required>
+              <option value="GRAND_CHOIX">Au Grand Choix (Note triennale ≥ 16,0)</option>
+              <option value="CHOIX">Au Choix simple</option>
+              <option value="ANCIENNETE">À l'Ancienneté maximale de droit</option>
+            </select>
+          </div>
+
+          <div class="pied-modale" style="padding: 1rem 0 0 0; margin-top: 1rem;">
+            <button type="button" class="bouton bouton-secondaire" onclick="fermerModaleArrete()">Abandonner</button>
+            <button type="button" class="bouton bouton-primaire" onclick="validerEnregistrementArrete(event)">
+              ✍️ Signer &amp; Publier l'Arrêté
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/composants_ihm_m3.js"></script>
+  <script>
+    const simulationAgentsData = [
+      {
+        matricule: 'PND-2018-00452',
+        nom: 'Lt. Abdillahi Daher Hassan',
+        corps: 'OFFICIERS',
+        grade_actuel: 'Lieutenant',
+        echelon_actuel: 3,
+        indice_solde: 480,
+        anciennete_echelon_mois: 24,
+        note_moyenne_triennale: 17.5,
+        a_sanction_active_groupe_2_3: false
+      },
+      {
+        matricule: 'PND-2015-00287',
+        nom: 'Sgt-C. Kadra Moussa Rayaleh',
+        corps: 'SOUS_OFFICIERS',
+        grade_actuel: 'Sergent-Chef',
+        echelon_actuel: 4,
+        indice_solde: 580,
+        anciennete_echelon_mois: 25,
+        note_moyenne_triennale: 16.5,
+        a_sanction_active_groupe_2_3: false
+      },
+      {
+        matricule: 'PND-2021-00612',
+        nom: 'Agt-1. Omar Guelleh Iltireh',
+        corps: 'GRADES_AGENTS',
+        grade_actuel: 'Agent de 1ère classe',
+        echelon_actuel: 2,
+        indice_solde: 340,
+        anciennete_echelon_mois: 24,
+        note_moyenne_triennale: 14.5,
+        a_sanction_active_groupe_2_3: false
+      },
+      {
+        matricule: 'PND-2019-00511',
+        nom: 'Sgt. Ali Osman Robleh',
+        corps: 'SOUS_OFFICIERS',
+        grade_actuel: 'Sergent',
+        echelon_actuel: 3,
+        indice_solde: 500,
+        anciennete_echelon_mois: 31,
+        note_moyenne_triennale: 15.0,
+        a_sanction_active_groupe_2_3: false
+      },
+      {
+        matricule: 'PND-2022-00810',
+        nom: 'Cpl. Fatouma Idriss Warsama',
+        corps: 'GRADES_AGENTS',
+        grade_actuel: 'Caporal',
+        echelon_actuel: 2,
+        indice_solde: 380,
+        anciennete_echelon_mois: 14,
+        note_moyenne_triennale: 17.0,
+        a_sanction_active_groupe_2_3: false
+      },
+      {
+        matricule: 'PND-2020-00671',
+        nom: 'Agt-2. Liban Daoud Obsieh',
+        corps: 'GRADES_AGENTS',
+        grade_actuel: 'Agent de 2ème classe',
+        echelon_actuel: 2,
+        indice_solde: 300,
+        anciennete_echelon_mois: 28,
+        note_moyenne_triennale: 16.2,
+        a_sanction_active_groupe_2_3: true // Sanction bloquante
+      }
+    ];
+
+    const donneesSoldePoliciers = [
+      {
+        matricule: 'PND-2018-00452',
+        nom: 'Lt. Abdillahi Daher Hassan',
+        corps: 'OFFICIERS',
+        grade: 'Lieutenant',
+        indice: 480,
+        heures_astreinte: 4, // 4 jours
+        heures_nuit: 16,
+        region: false
+      },
+      {
+        matricule: 'PND-2015-00287',
+        nom: 'Sgt-C. Kadra Moussa Rayaleh',
+        corps: 'SOUS_OFFICIERS',
+        grade: 'Sergent-Chef',
+        indice: 580,
+        heures_astreinte: 2,
+        heures_nuit: 24,
+        region: false
+      },
+      {
+        matricule: 'PND-2021-00612',
+        nom: 'Agt-1. Omar Guelleh Iltireh',
+        corps: 'GRADES_AGENTS',
+        grade: 'Agent 1ère classe',
+        indice: 340,
+        heures_astreinte: 6,
+        heures_nuit: 32,
+        region: false
+      },
+      {
+        matricule: 'PND-2019-00511',
+        nom: 'Sgt. Ali Osman Robleh',
+        corps: 'SOUS_OFFICIERS',
+        grade: 'Sergent',
+        indice: 500,
+        heures_astreinte: 3,
+        heures_nuit: 8,
+        region: true // Commissariat Dikhil (Région Intérieur)
+      }
+    ];
+
+    let contenuDernierExportCSV = '';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      appliquerSimulationAvancement();
+      actualiserTableauSolde();
+    });
+
+    function changerVueDRH(nomVue) {
+      const vues = ['avancement', 'positions', 'formations', 'notations', 'solde'];
+      vues.forEach(v => {
+        const el = document.getElementById(`vue-drh-${v}`);
+        const btn = document.getElementById(`btn-drh-${v}`);
+        if (el) el.style.display = (v === nomVue) ? 'block' : 'none';
+        if (btn) btn.className = `onglet-btn-m3 ${v === nomVue ? 'actif' : ''}`;
+      });
+    }
+
+    function appliquerSimulationAvancement() {
+      const tbody = document.getElementById('corps-tableau-simulateur-avancement');
+      const corpsFiltre = document.getElementById('filtre-corps-avancement').value;
+      const modeFiltre = document.getElementById('filtre-mode-avancement').value;
+      const seuilNote = parseFloat(document.getElementById('filtre-seuil-note').value) || 16.0;
+
+      const resultatSimulation = window.SIRH_M3.simulerEligibiliteAvancement(simulationAgentsData, {
+        note_minimale: seuilNote,
+        duree_minimale_mois: 24
+      });
+
+      let listeFiltree = resultatSimulation;
+      if (corpsFiltre !== 'TOUS') {
+        listeFiltree = listeFiltree.filter(a => a.corps === corpsFiltre);
+      }
+      if (modeFiltre !== 'TOUS') {
+        listeFiltree = listeFiltree.filter(a => a.statut_eligibilite === modeFiltre);
+      }
+
+      tbody.innerHTML = listeFiltree.map(a => {
+        let badgeClass = 'non-eligible';
+        let libelleStatut = 'Non Promouvable';
+
+        if (a.statut_eligibilite === 'GRAND_CHOIX') {
+          badgeClass = 'eligibilite-grand-choix';
+          libelleStatut = 'Au Grand Choix (18 mois)';
+        } else if (a.statut_eligibilite === 'ANCIENNETE') {
+          badgeClass = 'eligibilite-anciennete';
+          libelleStatut = 'À l\'Ancienneté (30 mois)';
+        }
+
+        return `
+          <tr>
+            <td><strong>${a.matricule}</strong></td>
+            <td><strong>${a.nom}</strong></td>
+            <td>${a.grade_actuel}</td>
+            <td>Échelon ${a.echelon_actuel}</td>
+            <td><code>${a.indice_solde}</code></td>
+            <td><strong>${a.anciennete_echelon_mois} mois</strong></td>
+            <td>
+              <strong style="color: ${a.note_moyenne_triennale >= seuilNote ? 'var(--djibouti-vert)' : 'var(--texte-principal)'};">
+                ${a.note_moyenne_triennale.toFixed(1)} / 20
+              </strong>
+            </td>
+            <td>
+              ${a.a_sanction_active_groupe_2_3 
+                ? '<span class="pastille-statut statut-refuse">Sanction Active</span>' 
+                : '<span class="pastille-statut statut-actif">Irréprochable</span>'}
+            </td>
+            <td>
+              <span class="badge-eligibilite ${badgeClass}">
+                ${libelleStatut}
+              </span>
+              <small style="display:block; font-size:0.7rem; color:var(--texte-clair); margin-top:2px;">
+                ${a.motif_eligibilite}
+              </small>
+            </td>
+            <td>
+              ${a.statut_eligibilite !== 'NON_ELIGIBLE' ? `
+                <button class="bouton bouton-primaire bouton-petit" onclick="preparerArreteAvancement('${a.matricule}')">
+                  ✍️ Préparer Arrêté
+                </button>
+              ` : `
+                <span style="font-size:0.75rem; color:var(--texte-clair);">Ajourné</span>
+              `}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function actualiserTableauSolde() {
+      const tbody = document.getElementById('corps-tableau-solde-mensuelle');
+
+      let totBase = 0, totRisque = 0, totAst = 0, totNuit = 0, totBrut = 0, totRet = 0, totNet = 0;
+
+      tbody.innerHTML = donneesSoldePoliciers.map(p => {
+        const solde = window.SIRH_M3.calculerElementsSolde(p.indice, p.corps, p.heures_astreinte, p.heures_nuit, p.region);
+
+        totBase += solde.salaire_base;
+        totRisque += solde.prime_risque + solde.prime_eloignement;
+        totAst += solde.indemnites_astreinte;
+        totNuit += solde.indemnites_nuit;
+        totBrut += solde.total_brut;
+        totRet += solde.retenues_statutaires;
+        totNet += solde.net_a_payer;
+
+        return `
+          <tr>
+            <td><strong>${p.matricule}</strong></td>
+            <td><strong>${p.nom}</strong></td>
+            <td>${p.grade}</td>
+            <td><code>${p.indice}</code></td>
+            <td>${window.SIRH_M3.formaterMontantFrancsDjibouti(solde.salaire_base)}</td>
+            <td>
+              ${window.SIRH_M3.formaterMontantFrancsDjibouti(solde.prime_risque)}
+              ${p.region ? `<br><small style="color:var(--djibouti-or);">+25 000 DJF (Éloignement)</small>` : ''}
+            </td>
+            <td>${window.SIRH_M3.formaterMontantFrancsDjibouti(solde.indemnites_astreinte)}</td>
+            <td>${window.SIRH_M3.formaterMontantFrancsDjibouti(solde.indemnites_nuit)}</td>
+            <td><strong>${window.SIRH_M3.formaterMontantFrancsDjibouti(solde.total_brut)}</strong></td>
+            <td style="color:var(--erreur-texte);">${window.SIRH_M3.formaterMontantFrancsDjibouti(solde.retenues_statutaires)}</td>
+            <td style="color:var(--djibouti-vert); font-weight:800;">${window.SIRH_M3.formaterMontantFrancsDjibouti(solde.net_a_payer)}</td>
+          </tr>
+        `;
+      }).join('');
+
+      document.getElementById('total-solde-base').textContent = window.SIRH_M3.formaterMontantFrancsDjibouti(totBase);
+      document.getElementById('total-prime-risque').textContent = window.SIRH_M3.formaterMontantFrancsDjibouti(totRisque);
+      document.getElementById('total-astreintes').textContent = window.SIRH_M3.formaterMontantFrancsDjibouti(totAst);
+      document.getElementById('total-nuit').textContent = window.SIRH_M3.formaterMontantFrancsDjibouti(totNuit);
+      document.getElementById('total-brut').textContent = window.SIRH_M3.formaterMontantFrancsDjibouti(totBrut);
+      document.getElementById('total-retenues').textContent = window.SIRH_M3.formaterMontantFrancsDjibouti(totRet);
+      document.getElementById('total-net').textContent = window.SIRH_M3.formaterMontantFrancsDjibouti(totNet);
+    }
+
+    async function genererEtScellerExportSolde() {
+      const mois = document.getElementById('select-mois-solde').value;
+      const dateUTC = new Date().toISOString();
+      const refExport = `EXP-SOLDE-2026-${mois.padStart(2, '0')}-${Date.now().toString(36).toUpperCase()}`;
+
+      // Construction du flux CSV républicain normé
+      let csv = `REFERENCE_EXPORT;${refExport}\n`;
+      csv += `DATE_GENERATION_UTC;${dateUTC}\n`;
+      csv += `ORGANISME;POLICE_NATIONALE_DJIBOUTI\n`;
+      csv += `MATRICULE;NOM;GRADE;INDICE;SOLDE_BASE;PRIME_RISQUE;ASTREINTES;HEURES_NUIT;TOTAL_BRUT;RETENUES;NET_A_PAYER\n`;
+
+      donneesSoldePoliciers.forEach(p => {
+        const s = window.SIRH_M3.calculerElementsSolde(p.indice, p.corps, p.heures_astreinte, p.heures_nuit, p.region);
+        csv += `${p.matricule};${p.nom};${p.grade};${p.indice};${s.salaire_base};${s.prime_risque + s.prime_eloignement};${s.indemnites_astreinte};${s.indemnites_nuit};${s.total_brut};${s.retenues_statutaires};${s.net_a_payer}\n`;
+      });
+
+      contenuDernierExportCSV = csv;
+
+      // Calcul de l'empreinte SHA-256 en pur JS natif Web Crypto
+      const hashSHA256 = await window.SIRH_M3.calculerEmpreinteSHA256(csv);
+
+      document.getElementById('scellement-ref-export').textContent = refExport;
+      document.getElementById('scellement-horodatage').textContent = dateUTC;
+      document.getElementById('scellement-nb-agents').textContent = `${donneesSoldePoliciers.length} Policiers`;
+      document.getElementById('texte-empreinte-sha256').textContent = hashSHA256;
+
+      document.getElementById('panneau-empreinte-scellement').style.display = 'block';
+      document.getElementById('panneau-empreinte-scellement').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function copierEmpreinteSHA256() {
+      const hash = document.getElementById('texte-empreinte-sha256').textContent;
+      navigator.clipboard.writeText(hash).then(() => {
+        alert('Empreinte cryptographique SHA-256 copiée dans le presse-papier !');
+      });
+    }
+
+    function telechargerFichierCSVSolde() {
+      if (!contenuDernierExportCSV) return;
+      const blob = new Blob([contenuDernierExportCSV], { type: 'text/csv;charset=utf-8;' });
+      const lien = document.createElement('a');
+      lien.href = URL.createObjectURL(blob);
+      lien.download = `SOLDE_POLICE_DJIBOUTI_${Date.now()}.csv`;
+      lien.click();
+    }
+
+    function ouvrirModaleNouvelArrete() {
+      document.getElementById('modale-arrete-avancement').style.display = 'flex';
+    }
+
+    function fermerModaleArrete() {
+      document.getElementById('modale-arrete-avancement').style.display = 'none';
+    }
+
+    function preparerArreteAvancement(matricule) {
+      document.getElementById('modale-arrete-avancement').style.display = 'flex';
+    }
+
+    function validerEnregistrementArrete(e) {
+      e.preventDefault();
+      const num = document.getElementById('arrete-numero-officiel').value;
+      alert(`ARRÊTÉ ENREGISTRÉ !\nL'arrêté ministériel n° ${num} a été formellement consigné, notifié et inscrit dans le registre d'audit inaltérable.`);
+      fermerModaleArrete();
+    }
+
+    function ouvrirModaleChangementPosition() {
+      alert('[MODULE STATUTAIRE]\nOuverture de la procédure de changement de position (Détachement, Disponibilité ou Réintégration) avec vérification des droits.');
+    }
+
+    function ouvrirModaleNouvelleHabilitation() {
+      alert('[MODULE HABILITATIONS]\nFormulaire d\'enregistrement d\'une nouvelle carte d\'Officier de Police Judiciaire (OPJ) ou d\'Agent de Police Judiciaire (APJ).');
+    }
+
+    function arbitrerRecours(refRecours) {
+      alert(`[ARBITRAGE DRH]\nInstruction du recours gracieux ${refRecours} devant la commission paritaire.`);
+    }
+
+    function reintegrerAgent(matricule) {
+      alert(`[RÉINTÉGRATION STATUTAIRE]\nRéintégration de l'agent ${matricule} en position d'Activité avec rétablissement de sa rémunération et de son affectation.`);
+    }
+
+    function leverSuspension(matricule) {
+      alert(`[COMMISSION DE DISCIPLINE]\nExamen du dossier disciplinaire de l'agent ${matricule} pour décision finale.`);
+    }
+  </script>
+</body>
+</html>

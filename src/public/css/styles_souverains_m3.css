@@ -1,0 +1,562 @@
+/* ==========================================================================
+   SIRH POLICE NATIONALE DE DJIBOUTI — STYLES SOUVERAINS JALON M3
+   Lot 3 : Carrières, Promotions, Positions, Formations, Notations et Solde
+   Palette Républicaine Djiboutienne :
+     - Bleu Ciel (#2a75d3) : Ciel et Mer
+     - Vert (#12883b) : Terre et Espoir
+     - Rouge (#d72828) : Étoile d'Unité et Courage
+     - Blanc (#ffffff) : Paix
+     - Or Insigne (#c59b27) : Éclat Républicain
+     - Bleu Police (#002b49) : Force et Ordre Républicain
+   100% Autonome, CSS3 Pur, Zéro Librairie Externe, Zéro CDN
+   ========================================================================== */
+
+:root {
+  --djibouti-bleu-ciel: #2a75d3;
+  --djibouti-vert: #12883b;
+  --djibouti-rouge: #d72828;
+  --djibouti-blanc: #ffffff;
+  --djibouti-or: #c59b27;
+  --djibouti-bleu-police: #002b49;
+  --djibouti-bleu-survol: #004070;
+  --fond-clair: #f8fafc;
+  --bordure-douce: #e2e8f0;
+}
+
+/* Ruban républicain aux couleurs nationales */
+.ruban-republicain {
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    var(--djibouti-bleu-ciel) 0%,
+    var(--djibouti-bleu-ciel) 45%,
+    var(--djibouti-blanc) 45%,
+    var(--djibouti-rouge) 50%,
+    var(--djibouti-blanc) 55%,
+    var(--djibouti-vert) 55%,
+    var(--djibouti-vert) 100%
+  );
+  width: 100%;
+}
+
+/* Onglets de navigation républicains */
+.onglets-navigation-m3 {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 2px solid var(--bordure);
+  margin-bottom: 1.5rem;
+  background: var(--surface);
+  border-radius: var(--rayon-bord) var(--rayon-bord) 0 0;
+  padding: 0.25rem 0.5rem 0 0.5rem;
+  overflow-x: auto;
+}
+
+.onglet-btn-m3 {
+  padding: 0.85rem 1.4rem;
+  font-weight: 600;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  color: var(--texte-secondaire);
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease-in-out;
+  white-space: nowrap;
+}
+
+.onglet-btn-m3:hover {
+  color: var(--djibouti-bleu-police);
+  background-color: var(--fond-clair);
+}
+
+.onglet-btn-m3.actif {
+  color: var(--djibouti-bleu-police);
+  border-bottom-color: var(--djibouti-bleu-ciel);
+  font-weight: 700;
+  background-color: #f0f7ff;
+}
+
+/* ==========================================================================
+   1. FRISE CHRONOLOGIQUE D'AVANCEMENT ET PROMOTION (SOVEREIGN TIMELINE)
+   ========================================================================== */
+
+.conteneur-frise {
+  position: relative;
+  padding: 1.5rem 0.5rem;
+  margin: 1.5rem 0;
+}
+
+.frise-chronologique {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+}
+
+.frise-chronologique::before {
+  content: '';
+  position: absolute;
+  top: 26px;
+  left: 20px;
+  right: 20px;
+  height: 4px;
+  background: #cbd5e1;
+  z-index: 1;
+}
+
+.ligne-progression-frise {
+  position: absolute;
+  top: 26px;
+  left: 20px;
+  height: 4px;
+  background: linear-gradient(to right, var(--djibouti-vert), var(--djibouti-bleu-ciel));
+  z-index: 2;
+  transition: width 0.5s ease-in-out;
+}
+
+.point-frise {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 140px;
+  flex: 1;
+}
+
+.pastille-marqueur {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 4px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--texte-secondaire);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.point-frise.valide .pastille-marqueur {
+  border-color: var(--djibouti-vert);
+  color: var(--djibouti-vert);
+  background: #ecfdf5;
+}
+
+.point-frise.actuel .pastille-marqueur {
+  border-color: var(--djibouti-bleu-ciel);
+  background: var(--djibouti-bleu-police);
+  color: #ffffff;
+  transform: scale(1.15);
+  box-shadow: 0 0 0 6px rgba(42, 117, 211, 0.25);
+  animation: pulsation-souveraine 2s infinite;
+}
+
+@keyframes pulsation-souveraine {
+  0% { box-shadow: 0 0 0 0 rgba(42, 117, 211, 0.5); }
+  70% { box-shadow: 0 0 0 12px rgba(42, 117, 211, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(42, 117, 211, 0); }
+}
+
+.point-frise.futur .pastille-marqueur {
+  border-style: dashed;
+  border-color: var(--djibouti-or);
+  color: var(--djibouti-or);
+  background: #fffbeb;
+}
+
+.etiquette-frise {
+  margin-top: 0.85rem;
+  font-size: 0.85rem;
+}
+
+.etiquette-frise .titre-echelon {
+  font-weight: 700;
+  color: var(--djibouti-bleu-police);
+  display: block;
+}
+
+.etiquette-frise .indice-solde {
+  font-size: 0.75rem;
+  color: var(--texte-secondaire);
+  display: inline-block;
+  background: #edf2f7;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  margin-top: 0.2rem;
+}
+
+.etiquette-frise .date-effet {
+  font-size: 0.75rem;
+  color: var(--texte-clair);
+  display: block;
+  margin-top: 0.25rem;
+}
+
+/* ==========================================================================
+   2. BADGES DE POSITIONS ADMINISTRATIVES STATUTAIRES
+   ========================================================================== */
+
+.badge-position {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid transparent;
+}
+
+.position-activite {
+  background-color: #ecfdf5;
+  color: #047857;
+  border-color: #a7f3d0;
+}
+
+.position-detachement {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+
+.position-disponibilite {
+  background-color: #fffbeb;
+  color: #b45309;
+  border-color: #fde68a;
+}
+
+.position-drapeaux {
+  background-color: #f5f3ff;
+  color: #6d28d9;
+  border-color: #ddd6fe;
+}
+
+.position-suspension {
+  background-color: #fef2f2;
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+
+/* ==========================================================================
+   3. CARTES D'HABILITATIONS & FORMATIONS POLICIÈRES
+   ========================================================================== */
+
+.grille-cartes-qualifications {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.carte-qualification {
+  background: #ffffff;
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon-bord);
+  padding: 1.25rem;
+  box-shadow: var(--ombre);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-top: 4px solid var(--djibouti-bleu-ciel);
+}
+
+.carte-qualification.opj {
+  border-top-color: var(--djibouti-or);
+}
+
+.carte-qualification.alerte-proche {
+  border-top-color: var(--alerte-texte);
+  background-color: #fffdf7;
+}
+
+.carte-qualification.expiree {
+  border-top-color: var(--erreur-texte);
+  background-color: #fff5f5;
+}
+
+.en-tete-carte-qualif {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.insigne-qualif {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  background: #f0f7ff;
+  color: var(--djibouti-bleu-police);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  font-weight: 800;
+  border: 1px solid #bfdbfe;
+}
+
+.badge-opj-officiel {
+  background: linear-gradient(135deg, #002b49 0%, #004070 100%);
+  color: var(--djibouti-or);
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  border: 1px solid var(--djibouti-or);
+}
+
+.badge-apj-officiel {
+  background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+  color: #ffffff;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  border: 1px solid #a7f3d0;
+}
+
+.delai-recyclage-compteur {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
+
+.delai-vert {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.delai-orange {
+  background: #fffbeb;
+  color: #b45309;
+  border: 1px dashed #f59e0b;
+  animation: clignotement-doux 1.5s infinite;
+}
+
+.delai-rouge {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #ef4444;
+}
+
+@keyframes clignotement-doux {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.65; }
+}
+
+/* ==========================================================================
+   4. MODULES D'ÉVALUATION, NOTATION & INTERCEPTEUR MÉDICAL
+   ========================================================================== */
+
+.bloc-evaluation-annuelle {
+  background: #ffffff;
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon-bord);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--ombre);
+}
+
+.score-note-geante {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: var(--rayon-bord);
+  border-left: 5px solid var(--djibouti-or);
+}
+
+.chiffre-note {
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: var(--djibouti-bleu-police);
+  line-height: 1;
+}
+
+.bareme-note {
+  font-size: 1.1rem;
+  color: var(--texte-clair);
+  font-weight: 600;
+}
+
+.appreciation-cadre {
+  background: #f8fafc;
+  border-left: 3px solid var(--djibouti-bleu-ciel);
+  padding: 0.85rem 1rem;
+  font-style: italic;
+  margin-top: 0.75rem;
+  color: var(--texte-principal);
+  border-radius: 0 var(--rayon-bord) var(--rayon-bord) 0;
+}
+
+/* Intercepteur temps réel de termes médicaux dans la notation */
+.zone-saisie-interdite-medicale {
+  position: relative;
+}
+
+.champ-texte-interception.alerte-medicale {
+  border-color: var(--erreur-texte) !important;
+  background-color: #fff5f5 !important;
+  box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.2) !important;
+}
+
+.banniere-avertissement-medical {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  padding: 0.65rem 0.9rem;
+  border-radius: var(--rayon-bord);
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  line-height: 1.4;
+}
+
+.banniere-avertissement-medical strong {
+  color: #7f1d1d;
+}
+
+/* ==========================================================================
+   5. SIMULATEUR D'AVANCEMENT & TABLEAUX DRH
+   ========================================================================== */
+
+.panneau-filtres-avancement {
+  background: #f8fafc;
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon-bord);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.badge-eligibilite {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.eligibilite-grand-choix {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+}
+
+.eligibilite-anciennete {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+.non-eligible {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #cbd5e1;
+}
+
+/* ==========================================================================
+   6. MODULE SOLDE & SCEAU CRYPTOGRAPHIQUE SHA-256
+   ========================================================================== */
+
+.panneau-scellement-solde {
+  background: linear-gradient(135deg, #001a2c 0%, #002b49 100%);
+  color: #ffffff;
+  border-radius: var(--rayon-bord);
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  border: 1px solid #004070;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.panneau-scellement-solde::before {
+  content: 'PND';
+  position: absolute;
+  right: -20px;
+  bottom: -30px;
+  font-size: 9rem;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.03);
+  pointer-events: none;
+}
+
+.panneau-scellement-solde h3 {
+  color: var(--djibouti-or);
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bloc-empreinte-sha256 {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.85rem 1rem;
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85rem;
+  color: #67e8f9;
+  word-break: break-all;
+  margin: 0.75rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.bloc-empreinte-sha256 .bouton-copier {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 3px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.bloc-empreinte-sha256 .bouton-copier:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.tableau-solde-synthese th {
+  background-color: #002b49;
+  color: #ffffff;
+}
+
+.tableau-solde-synthese tr.total-ligne {
+  background-color: #f1f5f9;
+  font-weight: 700;
+  border-top: 2px solid var(--djibouti-bleu-police);
+}
