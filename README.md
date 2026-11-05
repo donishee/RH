@@ -133,3 +133,4 @@ L'application est accessible sur `http://localhost:3000` avec les comptes de dé
 - **Gestionnaire DRH** : `gestionnaire_rh` / `Police@2026!`
 - **Chef de Service (Commissariat Central)** : `chef_cc` / `Police@2026!`
 - **Agent de Police** : `agent_cc1` / `Police@2026!`
+
