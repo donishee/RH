@@ -482,8 +482,8 @@ test('Jalon M4 — Évaluation Contradictoire et Adversariale (Challenger M4)', 
         code_modele: 'ATTESTATION_PRESENCE',
         agent_id: 'agt-001',
         date_acte: '2026-11-05',
-        autorite_signataire: 'Colonel Abdillahi',
-        qualite_signataire: 'Directeur des Ressources Humaines'
+        autorite_signataire: 'Le Chef de Service des Ressources Humaines',
+        qualite_signataire: 'Chef de Service RH'
       }
     });
     assert.strictEqual(genRes.statusCode, 201);
@@ -535,8 +535,8 @@ test('Jalon M4 — Évaluation Contradictoire et Adversariale (Challenger M4)', 
         code_modele: 'ARRETE_MUTATION',
         agent_id: 'agt-002',
         date_acte: '2026-11-05',
-        autorite_signataire: 'Colonel Abdillahi Abdi Farah',
-        qualiteSignataire: 'Directeur Général de la Police Nationale',
+        autorite_signataire: 'Le Chef de Service des Ressources Humaines',
+        qualiteSignataire: 'Chef de Service RH',
         donnees_variables: {
           nouvelle_unite: 'Commissariat Central de Djibouti',
           motif_mutation: 'Nécessité de service'

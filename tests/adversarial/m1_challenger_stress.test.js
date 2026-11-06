@@ -115,7 +115,7 @@ test('CHALLENGER M1-R3-1 : Épreuves Empiriques de Concurrence, Sécurité et Au
     // Immédiatement après, une nouvelle écriture standard d'audit doit réussir sans bloquer
     const auditApresRollback = await auditService.enregistrer({
       utilisateur_id: 'usr-admin-01',
-      nom_utilisateur: 'Abdillahi Tech',
+      nom_utilisateur: 'Agent Tech',
       role_utilise: 'ADMIN_TECHNIQUE',
       adresse_ip: '127.0.0.1',
       action_type: 'POST_ROLLBACK_VERIF',

@@ -200,10 +200,10 @@ La Commission Mixte d'Homologation et de Recette émet un :
 Fait et délibéré à Djibouti-Ville, le 5 Novembre 2026, en six exemplaires originaux faisant foi.
 
 ```
-Pour la Direction Générale de la Police Nationale :
-Le Directeur Général de la Police Nationale (DGPN)
+Pour le Service des Ressources Humaines :
+Le Chef de Service des Ressources Humaines
 [Cachet Officiel & Signature]
-Colonel Abdillahi Abdi Farah
+Direction de l'Administration Générale et des RH
 
 Pour la Direction des Ressources Humaines :
 Le Directeur des Ressources Humaines (DRH)

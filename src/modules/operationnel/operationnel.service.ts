@@ -1466,8 +1466,8 @@ export class OperationnelService {
       reference,
       dateActe: new Date().toISOString().split('T')[0],
       corpsArticles: articles,
-      autoriteSignataire: 'Colonel Abdillahi Abdi Farah',
-      qualiteSignataire: 'Directeur Général de la Police Nationale',
+      autoriteSignataire: 'Le Chef de Service des Ressources Humaines',
+      qualiteSignataire: 'Chef de Service RH — Police Nationale',
       donneesVariables: donnees
     });
 

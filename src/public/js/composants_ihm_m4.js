@@ -421,8 +421,8 @@
             SCEAU OFFICIEL
           </div>
           <div class="bloc-signataire-officiel">
-            <div class="fonction-signataire">Pour le Ministre de l'Intérieur,<br>Le Directeur Général de la Police Nationale</div>
-            <div class="nom-signataire">Colonel Abdillahi Abdi Farah</div>
+            <div class="fonction-signataire">Pour l'Administration de la Police Nationale,<br>Le Chef de Service des Ressources Humaines</div>
+            <div class="nom-signataire">Chef de Service RH</div>
           </div>
         </div>
 
